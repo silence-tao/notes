@@ -107,7 +107,7 @@ docker images
 
 ![image-20210427004854294](/image-20210427004854294.png)
 
-9.卸载docker
+## 1.4 卸载docker
 
 ``` shel
 # 卸载依赖
@@ -118,4 +118,71 @@ sudo yum remove docker-ce docker-ce-cli containerd.io
 sudo rm -rf /var/lib/docker
 sudo rm -rf /var/lib/containerd
 ```
+
+# 2.Docker的常用命令
+
+## 2.1 帮助命令
+
+``` shel
+docker version		# 显示docker的版本信息
+docker info			# 显示docker的系统信息，包括镜像和容器的数量
+docker <命令> --help	# 万能命令
+```
+
+帮助文档地址：https://docs.docker.com/reference/
+
+## 2.2 镜像命令
+
+### 2.2.1 `docker images`
+
+查看所有本地主机上的镜像
+
+``` she
+[root@VM_0_9_centos /]# docker images
+REPOSITORY    TAG       IMAGE ID       CREATED       SIZE
+hello-world   latest    d1165f221234   7 weeks ago   13.3kB
+
+# 解释
+REPOSITORY		镜像的仓库源
+TAG				镜像的标签
+IMAGE ID		镜像的id
+CREATED			镜像的创建时间
+SIZE			镜像的大小
+
+# 可选项
+-a, --all             # 列出所有的镜像
+-q, --quiet           # 只显示镜像的id
+```
+
+### 2.2.2 `docker search`
+
+搜索镜像
+
+``` she
+[root@VM_0_9_centos /]# docker search mysql
+NAME     DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
+mysql    MySQL is a widely used, open-source relation??  10777     [OK]       
+mariadb  MariaDB Server is a high performing open sou??  4058      [OK]
+
+# 可选项，通过收藏来过滤
+-f, --filter filter   Filter output based on conditions provided
+    --format string   Pretty-print search using a Go template
+    --limit int       Max number of search results (default 25)
+    --no-trunc        Don't truncate output
+
+--filter=STARS=3000	  # 搜索出来的镜像就是STARS大于3000
+[root@VM_0_9_centos /]# docker search mysql --filter=STARS=3000
+NAME      DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
+mysql     MySQL is a widely used, open-source relation??  10777     [OK]       
+mariadb   MariaDB Server is a high performing open sou??  4058      [OK]       
+[root@VM_0_9_centos /]# docker search mysql --filter=STARS=5000
+NAME      DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
+mysql     MySQL is a widely used, open-source relation??  10777     [OK]       
+```
+
+
+
+
+
+## 2.3 容器命令
 

@@ -89,7 +89,7 @@ sudo systemctl start docker
 
 6.使用 `docker version` 查看是否安装成功
 
-![image-20210427003114853](F:\我的文档\学习笔记\img\image-20210427003114853.png)
+![image-20210427003114853](../img/image-20210427003114853.png)
 
 7.hello world
 
@@ -97,7 +97,7 @@ sudo systemctl start docker
 sudo docker run hello-world
 ```
 
-![image-20210427004608665](/image-20210427004608665.png)
+![image-20210427004608665](../img/image-20210427004608665.png)
 
 8.查看一下下载的hello-world镜像
 
@@ -105,7 +105,7 @@ sudo docker run hello-world
 docker images
 ```
 
-![image-20210427004854294](/image-20210427004854294.png)
+![image-20210427004854294](../img/image-20210427004854294.png)
 
 ## 1.4 卸载docker
 
@@ -179,8 +179,6 @@ mariadb   MariaDB Server is a high performing open sou??  4058      [OK]
 NAME      DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
 mysql     MySQL is a widely used, open-source relation??  10777     [OK]       
 ```
-
-
 
 
 

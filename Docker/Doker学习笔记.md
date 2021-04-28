@@ -8,6 +8,8 @@ typora-root-url: ..\img
 
 CentOS7
 
+
+
 ## 1.2 环境查看
 
 ``` shel
@@ -34,6 +36,8 @@ CENTOS_MANTISBT_PROJECT_VERSION="7"
 REDHAT_SUPPORT_PRODUCT="centos"
 REDHAT_SUPPORT_PRODUCT_VERSION="7"
 ```
+
+
 
 ## 1.3 安装
 
@@ -107,6 +111,8 @@ docker images
 
 ![image-20210427004854294](../img/image-20210427004854294.png)
 
+
+
 ## 1.4 卸载docker
 
 ``` shel
@@ -119,6 +125,8 @@ sudo rm -rf /var/lib/docker
 sudo rm -rf /var/lib/containerd
 ```
 
+
+
 # 2.Docker的常用命令
 
 ## 2.1 帮助命令
@@ -130,6 +138,8 @@ docker <命令> --help	# 万能命令
 ```
 
 帮助文档地址：https://docs.docker.com/reference/
+
+
 
 ## 2.2 镜像命令
 
@@ -180,7 +190,157 @@ NAME      DESCRIPTION                                     STARS     OFFICIAL   A
 mysql     MySQL is a widely used, open-source relation??  10777     [OK]       
 ```
 
+### 2.2.3 `docker pull`
+
+下载镜像
+
+``` shel
+# 下载镜像 docker pull <镜像名称>[:tag]
+[root@VM_0_9_centos ~]# docker pull mysql
+Using default tag: latest		# 如果不写tag，默认下载latest（最新版本）
+latest: Pulling from library/mysql
+f7ec5a41d630: Pull complete 	# 分层下载，docker image的核心，联合文件系统
+9444bb562699: Pull complete 
+6a4207b96940: Pull complete 
+181cefd361ce: Pull complete 
+8a2090759d8a: Pull complete 
+15f235e0d7ee: Pull complete 
+d870539cd9db: Pull complete 
+493aaa84617a: Pull complete 
+bfc0e534fc78: Pull complete 
+fae20d253f9d: Pull complete 
+9350664305b3: Pull complete 
+e47da95a5aab: Pull complete 
+Digest: sha256:04ee7141256e83797ea4a84a4d31b1f1bc10111c8d1bc1879d52729ccd19e20a	# 签名
+Status: Downloaded newer image for mysql:latest
+docker.io/library/mysql:latest	# 所下载docker镜像的真实地址
+
+# 下面两条命令是等价的
+docker pull mysql
+docker.io/library/mysql:latest
+
+# 指定版本下载
+[root@VM_0_9_centos ~]# docker pull mysql:5.7
+5.7: Pulling from library/mysql
+f7ec5a41d630: Already exists 
+9444bb562699: Already exists 
+6a4207b96940: Already exists 
+181cefd361ce: Already exists 
+8a2090759d8a: Already exists 
+15f235e0d7ee: Already exists 
+d870539cd9db: Already exists 
+cb7af63cbefa: Pull complete 
+151f1721bdbf: Pull complete 
+fcd19c3dd488: Pull complete 
+415af2aa5ddc: Pull complete 
+Digest: sha256:a655529fdfcbaf0ef28984d68a3e21778e061c886ff458b677391924f62fb457
+Status: Downloaded newer image for mysql:5.7
+docker.io/library/mysql:5.7
+```
+
+![image-20210428004743581](/image-20210428004743581.png)
+
+### 2.2.4 `docker rmi`
+
+删除镜像
+
+``` shel
+[root@VM_0_9_centos ~]# docker rmi -f 镜像id			# 删除指定的镜像
+[root@VM_0_9_centos ~]# docker rmi -f 镜像id 镜像id	   # 删除多个镜像
+[root@VM_0_9_centos ~]# docker rmi -f $(docker images -aq)	# 删除全部的镜像
+```
+
 
 
 ## 2.3 容器命令
+
+说明：我们有了镜像才可以创建容器，下载一个centos镜像来学习
+
+``` she
+docker pull centos
+```
+
+### 2.3.1 `docker run`
+
+新建容器并启动
+
+``` she
+docker run [可选参数] image
+
+# 参数说明
+--name="name"			# 容器的名字	如：tomcat1 tomcat2，用来区分容器
+-d						# 后台的方式运行
+-it						# 使用交互方式运行，进入容器查看内容
+-p						# 指定容器的端口 如：-p 8080:8080
+	-p		ip:主机端口:容器端口
+	-p		主机端口:容器端口（常用）
+	-p		容器端口
+	容器端口
+-P						# 随机指定端口
+
+# 测试，启动并进入容器
+[root@VM_0_9_centos ~]# docker run -it centos /bin/bash
+[root@c667332b1745 /]# ls		# 查看容器内的centos，基础版本，很多命令不完善
+bin  etc   lib	  lost+found  mnt  proc  run   srv  tmp  var
+dev  home  lib64  media       opt  root  sbin  sys  usr
+
+# 从容器中退回主机
+[root@c667332b1745 /]# exit
+exit
+[root@VM_0_9_centos ~]# ls
+env
+[root@VM_0_9_centos ~]# cd /
+[root@VM_0_9_centos /]# ls
+bin   data  etc   lib    lost+found  mnt  proc  run   srv  tmp  var
+boot  dev   home  lib64  media       opt  root  sbin  sys  usr
+```
+
+### 2.3.2 `docker ps`
+
+列出所有的运行的容器
+
+``` shell
+# docker ps 命令
+		# 列出当前运行的容器
+-a		# 列出当前运行的容器+曾经运行过的容器
+-n=?	# 显示最近创建的容器
+-q		# 只显示容器的编号
+
+[root@VM_0_9_centos /]# docker ps		# 列出当前运行的容器
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+[root@VM_0_9_centos /]# docker ps -a	# 列出当前运行的容器+曾经运行过的容器
+CONTAINER ID   IMAGE          COMMAND       CREATED         STATUS                     PORTS     NAMES
+c667332b1745   centos         "/bin/bash"   4 minutes ago   Exited (0) 2 minutes ago             beautiful_albattani
+abedd821e53d   d1165f221234   "/hello"      24 hours ago    Exited (0) 24 hours ago              boring_morse
+```
+
+### 2.3.3 `exit`
+
+退出容器
+
+``` shell
+exit	# 直接容器停止并退出
+Ctrl + P + Q	# 容器不停止退出
+```
+
+### 2.3.4 `docker rm`
+
+删除容器
+
+``` shel
+docker rm 容器id					# 删除指定的容器，不能删除正在运行的容器，如果要强制删除 rm -f
+docker rm -f $(docker ps -aq)	 # 删除所有的容器
+docker ps -a -q|xargs docker rm	 # 删除所有的容器
+```
+
+### 2.3.5 启动和停止容器的操作
+
+``` shell
+docker start 容器id		# 启动容器
+docker restart 容器id		# 重启容器
+docker stop 容器id		# 停止当前正在运行的容器
+docker kill 容器id		# 强制停止当前正在运行的容器
+```
+
+
 

@@ -166,6 +166,11 @@ Content-Length: 0
 Connection: close
 ```
 
+``` javascript
+# 请求示例
+curl -X POST "http://127.0.0.1:8002/v1/functions/testHelloWorld" -d '{"Version":"1","Description":"stubs create","Runtime":"nodejs10","Timeout":5,"MemorySize":128,"Handler":"index.handler","PodConcurrentQuota":10,"Code":"UEsDBBQAAAAAAHCjX00AAAAAAAAAAAAAAAAJABUAX19NQUNPU1gvVVgIALSf2Vu0n9lbVVQFAAG0n9lbUEsDBBQACAAIAAyjX00AAAAAAAAAAAAAAAATABUAX19NQUNPU1gvLl9pbmRleC5qc1VYCACwn9lb+J7ZW1VUBQAB+J7ZW2JgFWNnYGJg8E1MVvAPVohQgAKQGAMnAwODEQMDQx0DA5i/gYEo4BgSEgRlgnQsYGBgEEBTwogQl0rOz9VLLCjISdXLSSwuKS1OTUlJLElVDggGKXw772Y0iO5J8tAH0YAAAAD//1BLBwgOCcksZgAAALAAAABQSwMEFAAIAAgAAAAAAAAAAAAAAAAAAAAAAAgAAABpbmRleC5qc0qtKMgvKinWy0jMS8lJLVKwVdBILUvNK9FRSM7PK0mtADESc3KSEpOzNRVs7RSquRQUFOBCGnmlOTk6CkoeqTk5+Qrl+UU5KYpKmtZctdaAAAAA//9QSwcILzRMjVUAAABYAAAAUEsBAhQDFAAAAAAAcKNfTQAAAAAAAAAAAAAAAAkAFQAAAAAAAAAAQP1BAAAAAF9fTUFDT1NYL1VYCAC0n9lbtJ/ZW1VUBQABtJ/ZW1BLAQIUAxQACAAIAAyjX00OCcksZgAAALAAAAATABUAAAAAAAAAAECkgTwAAABfX01BQ09TWC8uX2luZGV4LmpzVVgIALCf2Vv4ntlbVVQFAAH4ntlbUEsBAhQAFAAIAAgAAAAAAC80TI1VAAAAWAAAAAgAAAAAAAAAAAAAAAAA+AAAAGluZGV4LmpzUEsFBgAAAAADAAMA2AAAAIMBAAAAAA=="}' -H 'X-easyfaas-Account-Id: df391b08c64c426a81645468c75163a5' -H 'Content-Type: application/json; charset=utf-8'
+```
+
 ### 3.4.1 查看函数
 
 请求示例
@@ -232,11 +237,16 @@ Connection: close
 }
 ```
 
+``` javascript
+# 请求示例
+curl -X GET "http://127.0.0.1:8002/v1/functions/brn:cloud:faas:bj:8f6e5a28c663957ea04522547a66d08f:function:testHelloWorld:1" -H 'X-easyfaas-Account-Id: df391b08c64c426a81645468c75163a5' -H 'Content-Type: application/json; charset=utf-8'
+```
+
 ### 3.4.3 运行函数
 
 向controller发起函数调用请求
 
-```
+```shell
 $ curl -X "POST" "http://<YOUR_IP>:<YOUR_CONTROLLER_PORT>/v1/functions/brn:cloud:faas:bj:8f6e5a28c663957ea04522547a66d08f:function:testHelloWorld:1/invocations"   -H 'X-easyfaas-Account-Id: df391b08c64c426a81645468c75163a5'      -H 'Content-Type: application/json; charset=utf-8'      -d $'{}'
 请求示例
 POST /v1/functions/brn:bce:cfc:bj:cd64f99c69d7c404b61de0a4f1865834:function:testHSF2:1/invocations HTTP/1.1
@@ -249,3 +259,7 @@ Connection: close
 Hello world!
 ```
 
+``` js
+# 请求示例
+curl -X POST "http://127.0.0.1:8899/v1/functions/brn:cloud:faas:bj:8f6e5a28c663957ea04522547a66d08f:function:testHelloWorld:1/invocations" -H 'X-easyfaas-Account-Id: df391b08c64c426a81645468c75163a5' -H 'Content-Type: application/json; charset=utf-8' -d $'{}'
+```

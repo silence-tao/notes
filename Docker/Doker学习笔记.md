@@ -609,8 +609,65 @@ docker inspect 容器id
 进入当前正在运行的容器
 
 ``` shel
+#方式一：
 # 命令
 docker exec -it 容器id bashShell
+
+# 测试
+[root@VM_0_9_centos ~]# docker ps
+CONTAINER ID   IMAGE   COMMAND                  CREATED      STATUS       
+1fc418891e59   centos  "/bin/sh -c 'while t??   2 days ago   Up 5 seconds 
+[root@VM_0_9_centos ~]# docker exec -it 1fc418891e59 /bin/bash
+[root@1fc418891e59 /]# ls
+bin  dev  etc  home  lib  lib64  lost+found  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+[root@1fc418891e59 /]# ps -ef
+UID        PID  PPID  C STIME TTY          TIME CMD
+root         1     0  0 14:45 ?        00:00:00 /bin/sh -c while true;do echo silence; sleep 1;done
+root        52     0  0 14:46 pts/0    00:00:00 /bin/bash
+root        74     1  0 14:46 ?        00:00:00 /usr/bin/coreutils --coreutils-prog-shebang=sleep /usr/bin/sleep 1
+root        75    52  0 14:46 pts/0    00:00:00 ps -e
+
+# 方式二：
+# 命令
+docker attach 容器id
+
+# 测试
+[root@VM_0_9_centos ~]# docker attach 1fc418891e59
+正在执行当前的代码……
+
+
+# docker exec		# 进入容器后开启一个新的终端，可以在里面操作（常用）
+# docker attach		# 进入容器正在执行的终端，不会启动新的进程
+```
+
+从容器内拷贝文件到主机上
+
+``` she
+# 命令
+docker cp 容器id:容器内路径 目的的主机路径
+
+# 测试
+[root@VM_0_9_centos ~]# docker ps
+CONTAINER ID   IMAGE     COMMAND       CREATED      STATUS              PORTS     NAMES
+7c7e85baf5b5   centos    "/bin/bash"   2 days ago   Up About a minute             focused_moore
+[root@VM_0_9_centos ~]# docker attach 7c7e85baf5b5
+[root@7c7e85baf5b5 /]# ls
+bin  dev  etc  home  lib  lib64  lost+found  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+[root@7c7e85baf5b5 /]# cd /home/
+[root@7c7e85baf5b5 home]# ls
+[root@7c7e85baf5b5 home]# touch test.java
+[root@7c7e85baf5b5 home]# exit
+exit
+[root@VM_0_9_centos ~]# docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+[root@VM_0_9_centos ~]# pwd
+/root
+[root@VM_0_9_centos ~]# cd /home/
+[root@VM_0_9_centos home]# ls
+git
+[root@VM_0_9_centos home]# docker cp 7c7e85baf5b5:/home/test.java /home/
+[root@VM_0_9_centos home]# ls
+git  test.java
 ```
 
 

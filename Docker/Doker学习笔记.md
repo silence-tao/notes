@@ -650,11 +650,15 @@ docker cp 容器id:容器内路径 目的的主机路径
 [root@VM_0_9_centos ~]# docker ps
 CONTAINER ID   IMAGE     COMMAND       CREATED      STATUS              PORTS     NAMES
 7c7e85baf5b5   centos    "/bin/bash"   2 days ago   Up About a minute             focused_moore
+
+# 进入容器内部
 [root@VM_0_9_centos ~]# docker attach 7c7e85baf5b5
 [root@7c7e85baf5b5 /]# ls
 bin  dev  etc  home  lib  lib64  lost+found  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
 [root@7c7e85baf5b5 /]# cd /home/
 [root@7c7e85baf5b5 home]# ls
+
+# 在容器内创建一个文件
 [root@7c7e85baf5b5 home]# touch test.java
 [root@7c7e85baf5b5 home]# exit
 exit
@@ -665,12 +669,238 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 [root@VM_0_9_centos ~]# cd /home/
 [root@VM_0_9_centos home]# ls
 git
+
+# 将容器内的文件拷贝出来到主机上
 [root@VM_0_9_centos home]# docker cp 7c7e85baf5b5:/home/test.java /home/
 [root@VM_0_9_centos home]# ls
 git  test.java
+
+# 拷贝是一个手动过程，可以使用 -v卷 的技术，实现自动同步
 ```
 
+## 2.4 练习
 
+### 2.4.1 安装nginx容器
 
+``` shel
+# 1.搜索镜像
+docker search nginx
 
+[root@VM_0_9_centos home]# docker search nginx
+NAME                               DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
+nginx                              Official build of Nginx.                        14798     [OK]       
+jwilder/nginx-proxy                Automated Nginx reverse proxy for docker con??  2020                 [OK]
+richarvey/nginx-php-fpm            Container running Nginx + PHP-FPM capable of??  813                  [OK]
 
+# 2.拉取镜像
+docker pull nginx
+
+[root@VM_0_9_centos home]# docker pull nginx
+Using default tag: latest
+latest: Pulling from library/nginx
+f7ec5a41d630: Pull complete 
+aa1efa14b3bf: Pull complete 
+b78b95af9b17: Pull complete 
+c7d6bca2b8dc: Pull complete 
+cf16cd8e71e0: Pull complete 
+0241c68333ef: Pull complete 
+Digest: sha256:75a55d33ecc73c2a242450a9f1cc858499d468f077ea942867e662c247b5e412
+Status: Downloaded newer image for nginx:latest
+docker.io/library/nginx:latest
+
+# 查看镜像
+[root@VM_0_9_centos home]# docker images
+REPOSITORY   TAG       IMAGE ID       CREATED        SIZE
+nginx        latest    62d49f9bab67   2 weeks ago    133MB
+
+# 3.启动容器
+docker run -d --name nginx_01 -p 8002:80 nginx
+# -d 		后台运行
+# --name	给容器起名字
+# -p		宿主机端口:容器端口
+
+# 查看容器是否启动
+[root@VM_0_9_centos home]# docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS         PORTS                                   NAMES
+87b0b1732a33   nginx     "/docker-entrypoint.??   6 seconds ago   Up 5 seconds   0.0.0.0:8002->80/tcp, :::8002->80/tcp   nginx_01
+# 访问nginx是否启动成功
+[root@VM_0_9_centos home]# curl localhost:8002
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+
+# 进入容器
+[root@VM_0_9_centos home]# docker exec -it nginx_01 /bin/bash
+root@87b0b1732a33:/# whereis nginx
+nginx: /usr/sbin/nginx /usr/lib/nginx /etc/nginx /usr/share/nginx
+root@87b0b1732a33:/# cd /etc/nginx/
+# 查看容器内的nginx目录
+root@87b0b1732a33:/etc/nginx# ls
+conf.d	fastcgi_params	koi-utf  koi-win  mime.types  modules  nginx.conf  scgi_params	uwsgi_params  win-utf
+```
+
+### 2.4.2 安装tomcat容器
+
+``` shel
+# 官方的使用
+docker run -it --rm tomcat:9.0
+
+# 我们之前的启动都是后台，停止了容器之后，容器还是可以查到
+# docker run -it --rm 镜像名称:版本		一般用来测试，用完即删除容器，但是镜像还会在
+# 如果宿主机没有对应镜像，就会下载对应镜像
+
+# 启动Tomcat
+docker run -d -p 8899:8080 --name tomcat_01 tomcat
+
+# 测试发现404
+
+# 进入容器
+[root@VM_0_9_centos home]# docker exec -it tomcat_01 /bin/bash
+root@097847154bd4:/usr/local/tomcat# pwd
+/usr/local/tomcat
+root@097847154bd4:/usr/local/tomcat# ls
+BUILDING.txt  CONTRIBUTING.md  LICENSE	NOTICE	README.md  RELEASE-NOTES  RUNNING.txt  bin  conf  lib  logs  native-jni-lib  temp  webapps  webapps.dist  work
+# 进入webapps
+root@097847154bd4:/usr/local/tomcat# cd webapps
+# 发现webapps目录是空的
+root@097847154bd4:/usr/local/tomcat/webapps# ls
+root@097847154bd4:/usr/local/tomcat/webapps#
+
+# 发现问题：1.Linux命令少了；2.没有webapps目录
+# 原因是默认下载最小的镜像，所有不必要的都剔除掉
+# 保证最小可运行的环境
+```
+
+### 2.4.3 部署es+kibana
+
+``` she
+# es 暴露的端口很多
+# es 十分的耗内存
+# es es的数据一般需要放置到安全目录！挂载
+
+# 启动es
+docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:7.6.2
+
+# 命令
+docker stats 容器id		# 查看cpu的状态
+
+# 测试es是否成功了
+[root@VM_0_9_centos home]# curl localhost:9200
+{
+  "name" : "095ff19df14e",
+  "cluster_name" : "docker-cluster",
+  "cluster_uuid" : "XDgfmsEwR3CFKMLmuXKsaQ",
+  "version" : {
+    "number" : "7.6.2",
+    "build_flavor" : "default",
+    "build_type" : "docker",
+    "build_hash" : "ef48eb35cf30adf4db14086e8aabd07ef6fb113f",
+    "build_date" : "2020-03-26T06:34:37.794943Z",
+    "build_snapshot" : false,
+    "lucene_version" : "8.4.0",
+    "minimum_wire_compatibility_version" : "6.8.0",
+    "minimum_index_compatibility_version" : "6.0.0-beta1"
+  },
+  "tagline" : "You Know, for Search"
+}
+
+# 增加内存的限制的方式启动
+docker run -d --name elasticsearch_01 -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e ES_JAVA_OPTS="-Xms64m -Xmx512m" elasticsearch:7.6.2
+
+# 执行启动命令
+[root@VM_0_9_centos home]# docker run -d --name elasticsearch_01 -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e ES_JAVA_OPTS="-Xms64m -Xmx512m" elasticsearch:7.6.2
+a66ce6c46ede990089598e46db34c7d3835d6a02a14ce91350b9dc9e74c536f2
+
+# 查看容器
+[root@VM_0_9_centos home]# docker ps
+CONTAINER ID   IMAGE                 COMMAND                  CREATED         STATUS         PORTS                                                                                  NAMES
+a66ce6c46ede   elasticsearch:7.6.2   "/usr/local/bin/dock??   3 seconds ago   Up 2 seconds   0.0.0.0:9200->9200/tcp, :::9200->9200/tcp, 0.0.0.0:9300->9300/tcp, :::9300->9300/tcp   elasticsearch_01
+
+# 查看容器内存
+[root@VM_0_9_centos home]# docker stats a66ce6c46ede
+```
+
+![image-20210501001359287](/image-20210501001359287.png)
+
+``` she
+# 测试是否成功了
+[root@VM_0_9_centos home]# curl localhost:9200
+{
+  "name" : "a66ce6c46ede",
+  "cluster_name" : "docker-cluster",
+  "cluster_uuid" : "GUyBHvvpTAW2GiO63NZDYA",
+  "version" : {
+    "number" : "7.6.2",
+    "build_flavor" : "default",
+    "build_type" : "docker",
+    "build_hash" : "ef48eb35cf30adf4db14086e8aabd07ef6fb113f",
+    "build_date" : "2020-03-26T06:34:37.794943Z",
+    "build_snapshot" : false,
+    "lucene_version" : "8.4.0",
+    "minimum_wire_compatibility_version" : "6.8.0",
+    "minimum_index_compatibility_version" : "6.0.0-beta1"
+  },
+  "tagline" : "You Know, for Search"
+}
+```
+
+## 2.5 可视化工具
+
+* portainer
+
+``` shel
+docker run -d -p 8002:9000 \ --restart=always -v /var/run/docker.sock:/var/run/docker.sock --privileged=true portainer/portainer
+```
+
+* Rancher
+
+### 2.5.1 什么是portainer？
+
+Docker图形化界面管理工具，提供了一个后台面板供我们操作
+
+``` shel
+# 命令
+docker run -d -p 8002:9000 --restart=always -v /var/run/docker.sock:/var/run/docker.sock --privileged=true portainer/portainer
+
+# 安装
+[root@VM_0_9_centos home]# docker run -d -p 8002:9000 --restart=always -v /var/run/docker.sock:/var/run/docker.sock --privileged=true portainer/portainer
+Unable to find image 'portainer/portainer:latest' locally
+latest: Pulling from portainer/portainer
+94cfa856b2b1: Pull complete 
+49d59ee0881a: Pull complete 
+a2300fd28637: Pull complete 
+Digest: sha256:fb45b43738646048a0a0cc74fcee2865b69efde857e710126084ee5de9be0f3f
+Status: Downloaded newer image for portainer/portainer:latest
+691030560f7c30b945e27c70a5109e99efaad7518bfda785c118266bb287a103
+[root@VM_0_9_centos home]# docker ps
+CONTAINER ID   IMAGE                 COMMAND        CREATED         STATUS         PORTS                                       NAMES
+691030560f7c   portainer/portainer   "/portainer"   4 seconds ago   Up 3 seconds   0.0.0.0:8002->9000/tcp, :::8002->9000/tcp   wizardly_pare
+
+# 访问测试
+```
+
+![image-20210501002913989](/image-20210501002913989.png)
+
+输入密码创建用户即可。

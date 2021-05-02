@@ -12,7 +12,7 @@ CentOS7
 
 ## 1.2 环境查看
 
-``` shel
+``` shell
 # 系统环境必须是3.10以上的
 [root@VM_0_9_centos /]# uname -r
 3.10.0-862.el7.x86_64
@@ -58,13 +58,13 @@ sudo yum remove docker \
 
 2.需要的安装包
 
-``` shel
+``` shell
 sudo yum install -y yum-utils
 ```
 
 3.设置镜像的仓库
 
-``` shel
+``` shell
 # 默认是境外的仓库，很慢不建议使用
 sudo yum-config-manager \
     --add-repo \
@@ -81,13 +81,13 @@ yum makecache fast
 
 4.安装docker docker-ce 社区版 ee 企业版
 
-``` shel
+``` shell
 sudo yum install docker-ce docker-ce-cli containerd.io
 ```
 
 5.启动docker
 
-``` she
+``` shell
 sudo systemctl start docker
 ```
 
@@ -97,7 +97,7 @@ sudo systemctl start docker
 
 7.hello world
 
-``` shel
+``` shell
 sudo docker run hello-world
 ```
 
@@ -105,7 +105,7 @@ sudo docker run hello-world
 
 8.查看一下下载的hello-world镜像
 
-``` shel
+``` shell
 docker images
 ```
 
@@ -115,7 +115,7 @@ docker images
 
 ## 1.4 卸载docker
 
-``` shel
+``` shell
 # 卸载依赖
 sudo yum remove docker-ce docker-ce-cli containerd.io
 
@@ -125,13 +125,11 @@ sudo rm -rf /var/lib/docker
 sudo rm -rf /var/lib/containerd
 ```
 
-
-
 # 2.Docker的常用命令
 
 ## 2.1 帮助命令
 
-``` shel
+``` shell
 docker version		# 显示docker的版本信息
 docker info			# 显示docker的系统信息，包括镜像和容器的数量
 docker <命令> --help	# 万能命令
@@ -147,7 +145,7 @@ docker <命令> --help	# 万能命令
 
 查看所有本地主机上的镜像
 
-``` she
+``` shell
 [root@VM_0_9_centos /]# docker images
 REPOSITORY    TAG       IMAGE ID       CREATED       SIZE
 hello-world   latest    d1165f221234   7 weeks ago   13.3kB
@@ -168,7 +166,7 @@ SIZE			镜像的大小
 
 搜索镜像
 
-``` she
+``` shell
 [root@VM_0_9_centos /]# docker search mysql
 NAME     DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
 mysql    MySQL is a widely used, open-source relation??  10777     [OK]       
@@ -194,7 +192,7 @@ mysql     MySQL is a widely used, open-source relation??  10777     [OK]
 
 下载镜像
 
-``` shel
+``` shell
 # 下载镜像 docker pull <镜像名称>[:tag]
 [root@VM_0_9_centos ~]# docker pull mysql
 Using default tag: latest		# 如果不写tag，默认下载latest（最新版本）
@@ -244,7 +242,7 @@ docker.io/library/mysql:5.7
 
 删除镜像
 
-``` shel
+``` shell
 [root@VM_0_9_centos ~]# docker rmi -f 镜像id			# 删除指定的镜像
 [root@VM_0_9_centos ~]# docker rmi -f 镜像id 镜像id	   # 删除多个镜像
 [root@VM_0_9_centos ~]# docker rmi -f $(docker images -aq)	# 删除全部的镜像
@@ -256,7 +254,7 @@ docker.io/library/mysql:5.7
 
 说明：我们有了镜像才可以创建容器，下载一个centos镜像来学习
 
-``` she
+``` shell
 docker pull centos
 ```
 
@@ -264,7 +262,7 @@ docker pull centos
 
 新建容器并启动
 
-``` she
+``` shell
 docker run [可选参数] image
 
 # 参数说明
@@ -327,7 +325,7 @@ Ctrl + P + Q	# 容器不停止退出
 
 删除容器
 
-``` shel
+``` shell
 docker rm 容器id					# 删除指定的容器，不能删除正在运行的容器，如果要强制删除 rm -f
 docker rm -f $(docker ps -aq)	 # 删除所有的容器
 docker ps -a -q|xargs docker rm	 # 删除所有的容器
@@ -346,7 +344,7 @@ docker kill 容器id		# 强制停止当前正在运行的容器
 
 后台启动容器
 
-``` shel
+``` shell
 # 命令
 docker run -d 镜像名		# 后台启动容器
 
@@ -360,7 +358,7 @@ docker run -d 镜像名		# 后台启动容器
 
 查看日志
 
-``` shel
+``` shell
 # 查看容器日志
 docker logs -f -t -n --tail 容器id
 
@@ -379,7 +377,7 @@ CONTAINER ID   IMAGE
 
 查看容器中的进程信息
 
-``` shel
+``` shell
 # 命令
 docker top 容器id
 
@@ -391,7 +389,7 @@ root                23763               17262               0                   
 
 查看镜像的元数据
 
-``` shel
+``` javascript
 # 命令
 docker inspect 容器id
 
@@ -608,7 +606,7 @@ docker inspect 容器id
 
 进入当前正在运行的容器
 
-``` shel
+``` shell
 # 命令
 docker exec -it 容器id bashShell
 ```

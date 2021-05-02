@@ -9,7 +9,7 @@ typora-copy-images-to: ..\img
 
 ## 1.1 查看系统内核
 
-``` shel
+``` shell
 [root@VM_0_9_centos /]# uname -r
 3.10.0-862.el7.x86_64
 ```
@@ -18,7 +18,7 @@ typora-copy-images-to: ..\img
 
 在升级内核之前，先升级软件包（非必要）
 
-``` shel
+``` shell
 yum update -y
 ```
 
@@ -26,14 +26,14 @@ yum update -y
 
 1.先导入elrepo的key，然后安装elrepo的yum源
 
-``` shel
+``` shell
 [root@VM_0_9_centos /]# rpm -import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
 [root@VM_0_9_centos /]# rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm
 ```
 
 2.仓库启用后，可以使用下面的命令列出可用的内核相关包
 
-``` shel
+``` shell
 yum --disablerepo="*" --enablerepo="elrepo-kernel" list available
 ```
 
@@ -41,7 +41,7 @@ yum --disablerepo="*" --enablerepo="elrepo-kernel" list available
 
 上图可以看到，长期维护版本lt为5.4，最新主线稳定版ml为5.12，接下来使用命令安装最新稳定内核
 
-``` she
+``` shell
 yum -y --enablerepo=elrepo-kernel install kernel-ml
 ```
 
@@ -53,7 +53,7 @@ yum -y --enablerepo=elrepo-kernel install kernel-ml
 
 github地址：https://github.com/baidu/EasyFaaS
 
-``` shel
+``` shell
 # 创建EasyFaaS代码目录
 [root@VM_0_9_centos github]# mkdir EasyFaaS
 [root@VM_0_9_centos github]# cd EasyFaaS/
@@ -83,7 +83,7 @@ Initialized empty Git repository in /root/github/EasyFaaS/.git/
 - **RUNTIME_TAG**: runner-runtime组件镜像tag, 完整镜像ID为${easyfaas_REPO}/runner-runtime:{$CONTROLLER_TAG}
 - **REGISTRY_TAG**: 本地mock函数仓库组件tag, 完整镜像ID为${easyfaas_REPO}//func-registry:{$CONTROLLER_TAG}
 
-``` shel
+``` shell
 # env文件配置 示例
 $ cat ./scripts/docker-compose/compose-local/.env 
 CONTROLLER_EXPORT_PORT=8899
@@ -102,7 +102,7 @@ REGISTRY_TAG=demo1.0
 
 运行如下命令启动服务，并运行docker ps查看组件是否正确运行： 其中controller组件容器，funclet组件容器及func-registry组件容器为常驻容器， 查看容器是否正常运行
 
-``` shel
+``` shell
 $ cd ./scripts/docker-compose/compose-local/
 $ sh app_control.sh start
 ```
@@ -123,7 +123,7 @@ $ sh app_control.sh start
 
 首先编写一个简单的nodejs10的hello world 函数代码,代码存储在index.js文件中 备注： 您也可以直接跳过此步骤，直接运行1.1和1.2，直接运行1.3
 
-```
+```shell
 $ cat index.js 
 exports.handler = (event, context, callback) => {
     callback(null, "Hello world!");
@@ -132,7 +132,7 @@ exports.handler = (event, context, callback) => {
 
 #### 2.打包函数代码并获得其base64编码
 
-```
+```shell
 $ zip code.zip index.js 
 $ base64 code.zip 
 UEsDBBQAAAAIAAxDX00vNEyNUAAAAFgAAAAIABwAaW5kZXguanNVVAkAA/ie2VuKQthfdXgLAAEE
@@ -146,7 +146,7 @@ AAAAAAEAAQBOAAAAkgAAAAAA
 
 请求body中Code字段填入上一步骤中获得的base64编码
 
-```
+```shell
 $ curl -X POST "http://<YOUR_IP>:<YOUR_FUNC_REGISTRY_PORT>/v1/functions/testHelloWorld" -d '{"Version":"1","Description":"stubs create","Runtime":"nodejs10","Timeout":5,"MemorySize":128,"Handler":"index.handler","PodConcurrentQuota":10,"Code":"UEsDBBQAAAAAAHCjX00AAAAAAAAAAAAAAAAJABUAX19NQUNPU1gvVVgIALSf2Vu0n9lbVVQFAAG0n9lbUEsDBBQACAAIAAyjX00AAAAAAAAAAAAAAAATABUAX19NQUNPU1gvLl9pbmRleC5qc1VYCACwn9lb+J7ZW1VUBQAB+J7ZW2JgFWNnYGJg8E1MVvAPVohQgAKQGAMnAwODEQMDQx0DA5i/gYEo4BgSEgRlgnQsYGBgEEBTwogQl0rOz9VLLCjISdXLSSwuKS1OTUlJLElVDggGKXw772Y0iO5J8tAH0YAAAAD//1BLBwgOCcksZgAAALAAAABQSwMEFAAIAAgAAAAAAAAAAAAAAAAAAAAAAAgAAABpbmRleC5qc0qtKMgvKinWy0jMS8lJLVKwVdBILUvNK9FRSM7PK0mtADESc3KSEpOzNRVs7RSquRQUFOBCGnmlOTk6CkoeqTk5+Qrl+UU5KYpKmtZctdaAAAAA//9QSwcILzRMjVUAAABYAAAAUEsBAhQDFAAAAAAAcKNfTQAAAAAAAAAAAAAAAAkAFQAAAAAAAAAAQP1BAAAAAF9fTUFDT1NYL1VYCAC0n9lbtJ/ZW1VUBQABtJ/ZW1BLAQIUAxQACAAIAAyjX00OCcksZgAAALAAAAATABUAAAAAAAAAAECkgTwAAABfX01BQ09TWC8uX2luZGV4LmpzVVgIALCf2Vv4ntlbVVQFAAH4ntlbUEsBAhQAFAAIAAgAAAAAAC80TI1VAAAAWAAAAAgAAAAAAAAAAAAAAAAA+AAAAGluZGV4LmpzUEsFBgAAAAADAAMA2AAAAIMBAAAAAA=="}' -H 'X-easyfaas-Account-Id: df391b08c64c426a81645468c75163a5'   -H 'Content-Type: application/json; charset=utf-8'
 请求示例
 POST /v1/functions/testHelloWorld HTTP/1.1
@@ -166,7 +166,7 @@ Content-Length: 0
 Connection: close
 ```
 
-``` javascript
+``` shell
 # 请求示例
 curl -X POST "http://127.0.0.1:8002/v1/functions/testHelloWorld" -d '{"Version":"1","Description":"stubs create","Runtime":"nodejs10","Timeout":5,"MemorySize":128,"Handler":"index.handler","PodConcurrentQuota":10,"Code":"UEsDBBQAAAAAAHCjX00AAAAAAAAAAAAAAAAJABUAX19NQUNPU1gvVVgIALSf2Vu0n9lbVVQFAAG0n9lbUEsDBBQACAAIAAyjX00AAAAAAAAAAAAAAAATABUAX19NQUNPU1gvLl9pbmRleC5qc1VYCACwn9lb+J7ZW1VUBQAB+J7ZW2JgFWNnYGJg8E1MVvAPVohQgAKQGAMnAwODEQMDQx0DA5i/gYEo4BgSEgRlgnQsYGBgEEBTwogQl0rOz9VLLCjISdXLSSwuKS1OTUlJLElVDggGKXw772Y0iO5J8tAH0YAAAAD//1BLBwgOCcksZgAAALAAAABQSwMEFAAIAAgAAAAAAAAAAAAAAAAAAAAAAAgAAABpbmRleC5qc0qtKMgvKinWy0jMS8lJLVKwVdBILUvNK9FRSM7PK0mtADESc3KSEpOzNRVs7RSquRQUFOBCGnmlOTk6CkoeqTk5+Qrl+UU5KYpKmtZctdaAAAAA//9QSwcILzRMjVUAAABYAAAAUEsBAhQDFAAAAAAAcKNfTQAAAAAAAAAAAAAAAAkAFQAAAAAAAAAAQP1BAAAAAF9fTUFDT1NYL1VYCAC0n9lbtJ/ZW1VUBQABtJ/ZW1BLAQIUAxQACAAIAAyjX00OCcksZgAAALAAAAATABUAAAAAAAAAAECkgTwAAABfX01BQ09TWC8uX2luZGV4LmpzVVgIALCf2Vv4ntlbVVQFAAH4ntlbUEsBAhQAFAAIAAgAAAAAAC80TI1VAAAAWAAAAAgAAAAAAAAAAAAAAAAA+AAAAGluZGV4LmpzUEsFBgAAAAADAAMA2AAAAIMBAAAAAA=="}' -H 'X-easyfaas-Account-Id: df391b08c64c426a81645468c75163a5' -H 'Content-Type: application/json; charset=utf-8'
 ```
@@ -175,7 +175,7 @@ curl -X POST "http://127.0.0.1:8002/v1/functions/testHelloWorld" -d '{"Version":
 
 请求示例
 
-```
+```shell
 $ curl -X GET "http://<YOUR_IP>:<YOUR_FUNC_REGISTRY_PORT>/v1/functions/brn:cloud:faas:bj:8f6e5a28c663957ea04522547a66d08f:function:testHelloWorld:1" -H 'X-easyfaas-Account-Id: df391b08c64c426a81645468c75163a5'   -H 'Content-Type: application/json; charset=utf-8' 
 
 GET /v1/functions/testHelloWorld HTTP/1.1
@@ -185,7 +185,7 @@ Connection: close
 
 响应结果
 
-```
+```javascript
 {
   "Code": {
     "_": {},
@@ -237,7 +237,7 @@ Connection: close
 }
 ```
 
-``` javascript
+``` shell
 # 请求示例
 curl -X GET "http://127.0.0.1:8002/v1/functions/brn:cloud:faas:bj:8f6e5a28c663957ea04522547a66d08f:function:testHelloWorld:1" -H 'X-easyfaas-Account-Id: df391b08c64c426a81645468c75163a5' -H 'Content-Type: application/json; charset=utf-8'
 ```
@@ -259,7 +259,7 @@ Connection: close
 Hello world!
 ```
 
-``` js
+``` shell
 # 请求示例
 curl -X POST "http://127.0.0.1:8899/v1/functions/brn:cloud:faas:bj:8f6e5a28c663957ea04522547a66d08f:function:testHelloWorld:1/invocations" -H 'X-easyfaas-Account-Id: df391b08c64c426a81645468c75163a5' -H 'Content-Type: application/json; charset=utf-8' -d $'{}'
 ```

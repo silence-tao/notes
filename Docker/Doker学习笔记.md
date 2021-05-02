@@ -1,7 +1,3 @@
----
-typora-root-url: ..\img
----
-
 # 1.安装Docker
 
 ## 1.1 环境准备
@@ -236,7 +232,7 @@ Status: Downloaded newer image for mysql:5.7
 docker.io/library/mysql:5.7
 ```
 
-![image-20210428004743581](/image-20210428004743581.png)
+![image-20210428004743581](../img/image-20210428004743581.png)
 
 ### 2.2.4 `docker rmi`
 
@@ -840,7 +836,7 @@ a66ce6c46ede   elasticsearch:7.6.2   "/usr/local/bin/dock??   3 seconds ago   Up
 [root@VM_0_9_centos home]# docker stats a66ce6c46ede
 ```
 
-![image-20210501001359287](/image-20210501001359287.png)
+![image-20210501001359287](../img/image-20210501001359287.png)
 
 ``` shell
 # 测试是否成功了
@@ -899,6 +895,6 @@ CONTAINER ID   IMAGE                 COMMAND        CREATED         STATUS      
 # 访问测试
 ```
 
-![image-20210501002913989](/image-20210501002913989.png)
+![image-20210501002913989](../img/image-20210501002913989.png)
 
 输入密码创建用户即可。

@@ -1,8 +1,3 @@
----
-typora-root-url: ..\img
-typora-copy-images-to: ..\img
----
-
 # 1.升级内核
 
 [CentOS 7/6系统升级内核版本](https://cloud.tencent.com/developer/article/1472857)
@@ -37,7 +32,7 @@ yum update -y
 yum --disablerepo="*" --enablerepo="elrepo-kernel" list available
 ```
 
-![image-20210428163457592](/image-20210428163457592.png)
+![image-20210428163457592](../img/image-20210428163457592.png)
 
 上图可以看到，长期维护版本lt为5.4，最新主线稳定版ml为5.12，接下来使用命令安装最新稳定内核
 
@@ -66,7 +61,7 @@ Initialized empty Git repository in /root/github/EasyFaaS/.git/
 [root@VM_0_9_centos EasyFaaS]# git pull
 ```
 
-![image-20210428171925915](/image-20210428171925915.png)
+![image-20210428171925915](../img/image-20210428171925915.png)
 
 ## 2.2 设置运行参数
 
@@ -109,7 +104,7 @@ $ sh app_control.sh start
 
 查看服务是否正常运行
 
-![image-20210428173014849](/image-20210428173014849.png)
+![image-20210428173014849](../img/image-20210428173014849.png)
 
 ## 3.4 操作运行
 

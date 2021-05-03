@@ -899,3 +899,79 @@ CONTAINER ID   IMAGE                 COMMAND        CREATED         STATUS      
 
 输入密码创建用户即可。
 
+# 3.Docker镜像
+
+## 3.1 镜像是什么
+
+## 3.2 Docker镜像的加载原理
+
+## 3.3 分层概念
+
+## 3.4 commit镜像
+
+如何提交一个自己的镜像
+
+``` shell
+docker commit 		# 提交容器成为一个新的副本
+
+# 命令和git原来类似
+docker commit -m="提交的描述信息" -a="作者" 容器id 目标镜像名:[TAG]
+```
+
+实战测试
+
+``` shell
+# 1.启动一个默认的tomcat
+[root@VM_0_9_centos ~]# docker run -it -p 8002:8080 tomcat
+Using CATALINA_BASE:   /usr/local/tomcat
+Using CATALINA_HOME:   /usr/local/tomcat
+Using CATALINA_TMPDIR: /usr/local/tomcat/temp
+Using JRE_HOME:        /usr/local/openjdk-11
+Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar
+
+# 2.发现这个默认的tomcat 是没有webapps应用，镜像的原因，官方的镜像默认webapps下面是没有文件的
+[root@VM_0_9_centos ~]# docker exec -it 920ff4db1ea4 /bin/bash
+root@920ff4db1ea4:/usr/local/tomcat# cd webapps
+root@920ff4db1ea4:/usr/local/tomcat/webapps# ls
+
+# 3.可以自己拷贝进去
+root@920ff4db1ea4:/usr/local/tomcat# ls
+BUILDING.txt  CONTRIBUTING.md  LICENSE  NOTICE  README.md  RELEASE-NOTES  RUNNING.txt  bin  conf  lib  logs  native-jni-lib  temp  webapps  webapps.dist  work
+root@920ff4db1ea4:/usr/local/tomcat# cp -r webapps.dist/* webapps
+root@920ff4db1ea4:/usr/local/tomcat# cd webapps
+root@920ff4db1ea4:/usr/local/tomcat/webapps# ls
+ROOT  docs  examples  host-manager  manager
+
+# 4.将修改后的容器通过commit提交为一个镜像，以后可以直接使用这个镜像
+```
+
+![image-20210503181253704](../img/image-20210503181253704.png)
+
+如果要保存当前容器的状态，就可以通过commit来提交，获得一个新的镜像，有点像虚拟机的镜像。
+
+# 4.容器数据卷
+
+
+
+# 5.DokcerFile
+
+
+
+# 6.Docker 网络
+
+
+
+# 7.企业实战
+
+## 7.1 Docker Compose
+
+
+
+## 7.2 Docker Swarm
+
+
+
+## 7.3 CI/CD jenkins
+
+
+

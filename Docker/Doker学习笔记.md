@@ -951,9 +951,261 @@ ROOT  docs  examples  host-manager  manager
 
 # 4.容器数据卷
 
+## 4.1什么是容器数据卷
 
+如果数据都在容器中，那么我们容器删除了，数据就会丢失，**需求：数据可以持久化**
+
+MySQL，容器删除了，数据就全没了，**需求：MySQL 数据可以存储在本地**
+
+容器之间可以有一个数据共享的技术，Docker 容器中产生的数据，同步到本地
+
+这就是卷技术，目录的挂载，将我的容器内的目录，挂载到 Linux 上面
+
+**总结：容器的持久化和同步操作，容器间也是可以数据共享的**。
+
+## 4.2 使用数据卷
+
+> 方式一：直接使用命令的方式来挂载	-v
+
+``` shell
+docker run -it -v 主机的目录地址:容器的目录地址
+
+# 测试
+[root@VM_0_9_centos home]# docker run -it -v /home/test:/home centos /bin/bash
+
+# 启动之后可以通过 docker inspect 容器id 命令查看容器详细看看是否挂载成功
+```
+
+![image-20210505134316577](../img/image-20210505134316577.png)
+
+## 4.3 实战：安装MySQL
+
+思考：MySQL的数据持久化问题
+
+``` shell
+# 获取镜像
+docker pull mysql:5.7
+
+# 运行容器，需要做数据挂载！
+[root@VM_0_9_centos home]# docker run -d -p 8002:3306 -v /home/mysql/conf:/etc/mysql/conf.d -v /home/mysql/data/:/var/lib/mysql
+
+# 安装启动 MySQL ，需要配置密码，官方配置方式
+docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag
+
+# mysql 完整启动命令
+# -d 后台运行
+# -p 端口映射
+# -v 卷挂载
+# -e 环境配置
+# --name 容器名称
+[root@VM_0_9_centos home]# docker run -d -p 8002:3306 -v /home/mysql/conf:/etc/mysql/conf.d -v /home/mysql/data/:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 --name mysql_01 mysql:5.7
+```
+
+启动成功之后，我们在本地使用 sqlyog 来连接测试，sqlyog 连接到服务器的 8002，8002 和容器内的 3306 端口映射，连接成功
+
+![image-20210505141457017](../img/image-20210505141457017.png)
+
+在本地测试创建一个数据库 test，查看路径是否成功映射
+
+![image-20210505142007205](../img/image-20210505142007205.png)
+
+假设我们将容器删除
+
+![image-20210505142403972](../img/image-20210505142403972.png)
+
+发现挂载在本地的数据卷依旧没有丢失，这就实现了容器持久化功能
+
+## 4.4 具名和匿名挂载
+
+``` shell
+# 匿名挂载
+# -v 容器内路径
+# -P 随机ip映射
+docker run -d -P --name nginx_02 -v /ect/nginx nginx
+
+# 查看所有 volume 的情况
+[root@VM_0_9_centos mysql]# docker volume ls
+DRIVER    VOLUME NAME
+local     564aa630b97047f9c658013d4c6897792516e444f7714b783701e5b8228c1ac8	# 匿名卷挂载
+local     a902979d3f0ddf4d5841da5d79e5f6e9fd51f33b3f33a54f1f9478b6156952de
+local     eaaf4bcf2f3dd23ff2f2b3f30c143c1593d169bb4154f9402ceb44453172a902
+
+# 具名挂载
+# -v 卷名:容器内路径
+docker run -d -P --name nginx_03 -v juming_nginx:/etc/nginx nginx
+# 测试
+[root@VM_0_9_centos mysql]# docker run -d -P --name nginx_03 -v juming_nginx:/etc/nginx nginx
+56883947fac1952feda2e28986fc668deefdf378a33a4c6ec67080bc2669db13
+[root@VM_0_9_centos mysql]# docker volume ls
+DRIVER    VOLUME NAME
+local     juming_nginx
+
+# 查看一下这个卷
+docker volume inspect 卷名
+# 测试
+[root@VM_0_9_centos mysql]# docker volume inspect juming_nginx
+[
+    {
+        "CreatedAt": "2021-05-05T14:33:40+08:00",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/juming_nginx/_data",
+        "Name": "juming_nginx",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+
+所有的docker容器内的卷，没有指定目录的情况下，都是在 /var/lib/docker/volumes/卷名/_data 目录下
+我们通过具名挂载可以方便的找到我们的一个卷，大多数情况都是使用具名挂载
+
+# 如何确定是具名挂载还是匿名挂载，还是指定路径挂载
+# -v 容器内路径				 	 # 匿名挂载
+# -v 卷名:容器内路径				# 具名挂载
+# -v /宿主机路径:容器内路径		  # 指定路径挂载
+
+# 扩展
+# 通过 -v 容器内路径：ro rw 改变读写权限
+# ro readonly 只读
+# rw readwrite 可读可写
+
+# 一旦这个设置了容器的权限，容器对我们挂载出来的内容就有限定了
+docker run -d -P --name nginx_xx -v juming-nginx:/etc/nginx:ro nginx
+docker run -d -P --name nginx_xx -v juming-nginx:/etc/nginx:rw nginx
+
+# ro 只要看到 ro 就说明这个路径只能通过宿主机来操作，容器内是无法操作的
+```
+
+## 4.5 初始 Dockerfile
+
+Dockerfile 就是用来构建 docker 镜像的构建五年级，命令脚本，通过这个脚本可以生成一个镜像，镜像是一层一层的，脚本是一个一个的命令，每个命令都是一层
+
+``` shell
+# 创建一个 dockerfile 文件，名字可以随机，建议 dockerfile
+# 文件中的内容 指令（大写） 参数
+FROM centos
+
+VOLUME ["volume01","volume02"]
+
+CMD echo "----end----"
+CMD /bin/bash
+
+# 这里的每个命令，就是镜像的一层
+```
+
+![image-20210505150730859](../img/image-20210505150730859.png)
+
+启动自己创建的镜像
+
+![image-20210505151424075](../img/image-20210505151424075.png)
+
+这个卷和外部一定有一个同步的目录与之对应
+
+![image-20210505151552374](../img/image-20210505151552374.png)
+
+查看一下挂载路径
+
+![image-20210505151944400](../img/image-20210505151944400.png)
+
+这种方式我们未来使用十分多，因为我们通常会构建自己的镜像，假设构建镜像时候没有挂载卷，要手动镜像挂载 `-v 卷名:容器内路径`
+
+## 4.6 数据卷容器
+
+容器数据卷原理图
+
+![image-20210505152656978](../img/image-20210505152656978.png)
+
+先启动一个父容器
+
+``` shell
+# 命令
+docker run -it --name docker_02 66937a85ab2c
+```
+
+
+
+![image-20210505153740977](../img/image-20210505153740977.png)
+
+再启动一个容器通过 `--volumes-from` 让它挂载到 docker_01 上
+
+``` shell
+# 命令
+docker run -it --name docker_02 --volumes-from docker_01 66937a85ab2c
+```
+
+
+
+![image-20210505154634882](../img/image-20210505154634882.png)
+
+还可以再创建一个容器让它挂载在 docker_2 上
+
+``` shell
+# 命令
+docker run -it --name docker_03 --volumes-from docker_02 66937a85ab2c
+```
+
+![image-20210505155231118](../img/image-20210505155231118.png)
+
+``` shell
+# 多个 MySQL 实现数据共享
+
+docker run -d -p 8002:3306 -v /etc/mysql/conf.d -v /var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 --name mysql_01 mysql:5.7
+
+docker run -d -p 8002:3306 --volume-form mysql_01 -e MYSQL_ROOT_PASSWORD=123456 --name mysql_02 mysql:5.7
+
+# 这样就可以实现两个 MySQL 容器数据共享
+```
+
+## 4.7 总结
+
+容器之间配置的信息传递，数据卷容器的生命周期一直持续到没有容器使用为止，但是一旦持久化到了本地，本地的数据是不会删除的。
 
 # 5.DokcerFile
+
+## 5.1 DockerFile 介绍
+
+dockerfile 是用来构建 docker 镜像的文件，命令参数文件。
+
+构建步骤：
+
+1. 编写一个 dockerfile 文件；
+2. `docker build` 构建一个镜像；
+3. `docker run` 运行镜像；
+4. `docker push` 发布镜像（DockerHub、阿里云镜像仓库）。
+
+查看一下官方是怎么做的，在 [hub.docker.com](https://hub.docker.com/) 搜索 centos ，然后点击跳转到 centos 7 镜像的 GitHub 地址：
+
+![image-20210505162003869](../img/image-20210505162003869.png)
+
+跳转到 centos 7 镜像的 GitHub 地址，里面有一个 dockerfile 文件：
+
+![image-20210505161743869](../img/image-20210505161743869.png)
+
+发现很多官方的镜像都是基础包，很多功能都没有，我们通常会搭建自己的镜像。
+
+## 5.2 DockerFile 的构建过程
+
+DockerFile 命令
+
+![Dockerfile 命令](../img/image-20210505163616661.png)
+
+基础知识：
+
+1. 每个保留关键字（指令）都必须是大写字母；
+2. 执行从上到下顺序执行；
+3. \# 表示注释；
+4. 每一个指令都会创建提交一个新的镜像层，并提交。
+
+![docker 镜像层](../img/image-20210505164028429.png)
+
+dockerfile 是面向开发的，我们以后要发布项目，做镜像，就需要编写 dockerfile 文件，这个文件十分简单，Docker 镜像逐渐成为企业交付的标准，必须要掌握。
+
+步骤：开发，部署，运维
+
+- DockerFile：构建文件，定义了一切的步骤，源代码
+
+- DockerImages：通过 DockerFile 构建生成的镜像，最终发布和运行的产品
+- Docker 容器：容器就是镜像运行起来通过服务器
 
 
 

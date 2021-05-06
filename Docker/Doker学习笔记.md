@@ -1207,6 +1207,355 @@ dockerfile 是面向开发的，我们以后要发布项目，做镜像，就需
 - DockerImages：通过 DockerFile 构建生成的镜像，最终发布和运行的产品
 - Docker 容器：容器就是镜像运行起来通过服务器
 
+## 5.3 DockerFile指令
+
+**关键字：**
+
+``` shell
+FROM 		# 基础镜像，当前新镜像是基于哪个镜像的
+MAINTAINER 	# 镜像维护者的姓名混合邮箱地址（姓名 + 邮箱）
+RUN 		# 容器构建时需要运行的命令
+EXPOSE 		# 当前容器对外保留出的端口
+WORKDIR 	# 指定在创建容器后，终端默认登录的进来工作目录，一个落脚点
+ENV 		# 用来在构建镜像过程中设置环境变量
+ADD 		# 将宿主机目录下的文件拷贝进镜像且ADD命令会自动处理URL和解压tar压缩包
+COPY 		# 类似ADD，拷贝文件和目录到镜像中！
+VOLUME 		# 容器数据卷，用于数据保存和持久化工作
+CMD 		# 指定一个容器启动时要运行的命令，dockerFile中可以有多个CMD指令，但只有最后一个生效！
+ENTRYPOINT 	# 指定一个容器启动时要运行的命令！和CMD一样，但是ENTRYPOINT可以追加命令
+ONBUILD 	# 当构建一个被继承的DockerFile时运行命令，父镜像在被子镜像继承后，父镜像的ONBUILD被触发
+```
+
+![image-20210506232229061](../img/image-20210506232229061.png)
+
+## 5.4 实战测试
+
+Docker Hub 中 99% 的镜像都是从这个基础镜像 `FROM scratch` 过来的，然后配置需要的软件来进行构建
+
+![image-20210506234027979](../img/image-20210506234027979.png)
+
+### 5.4.1 创建一个自己的centos
+
+``` shell
+# 1.编写 DockerFile 的文件
+[root@VM_0_9_centos dockerfile]# cat dockerfile-centos 
+FROM centos
+MAINTAINER Silence<taogu2010@yeah.net>
+
+ENV MYPATH /user/local
+WORKDIR $MYPATH
+
+RUN yum -y install vim
+RUN yum -y install net-tools
+
+EXPOSE 80
+
+CMD echo $MYPATH
+CMD echo "----end----"
+CMD /bin/bash
+
+# 2.通过这个文件构建镜像
+# 命令 docker build -f dockerfile文件路径 -t 镜像名:[tag] .
+
+# 构建镜像
+[root@VM_0_9_centos dockerfile]# docker build -f dockerfile-centos -t mycentos:0.1 .
+Sending build context to Docker daemon  2.048kB
+Step 1/10 : FROM centos
+ ---> 300e315adb2f
+Step 2/10 : MAINTAINER Silence<taogu2010@yeah.net>
+ ---> Running in 91d808039ac3
+Removing intermediate container 91d808039ac3
+ ---> 1c977822e673
+Step 3/10 : ENV MYPATH /user/local
+ ---> Running in 500d370c3d37
+Removing intermediate container 500d370c3d37
+ ---> 93d81d7fea25
+Step 4/10 : WORKDIR $MYPATH
+ ---> Running in dc3d0adbe2ba
+Removing intermediate container dc3d0adbe2ba
+ ---> 17140632f67d
+Step 5/10 : RUN yum -y install vim
+ ---> Running in fe583929f07a
+
+...
+
+Installed:
+  gpm-libs-1.20.7-15.el8.x86_64         vim-common-2:8.0.1763-15.el8.x86_64    
+  vim-enhanced-2:8.0.1763-15.el8.x86_64 vim-filesystem-2:8.0.1763-15.el8.noarch
+  which-2.21-12.el8.x86_64             
+
+Complete!
+Removing intermediate container fe583929f07a
+ ---> c00af4e5c558
+Step 6/10 : RUN yum -y install net-tools
+ ---> Running in c90ce4efcdff
+
+...
+
+Installed:
+  net-tools-2.0-0.52.20160912git.el8.x86_64                                     
+
+Complete!
+Removing intermediate container c90ce4efcdff
+ ---> 75c757ad3fa2
+Step 7/10 : EXPOSE 80
+ ---> Running in 4ba3e0b63266
+Removing intermediate container 4ba3e0b63266
+ ---> 9ef4bad2c5be
+Step 8/10 : CMD echo $MYPATH
+ ---> Running in 988f44a8da7f
+Removing intermediate container 988f44a8da7f
+ ---> c6e4d6380759
+Step 9/10 : CMD echo "----end----"
+ ---> Running in 9e48a8a48338
+Removing intermediate container 9e48a8a48338
+ ---> fb4a30814deb
+Step 10/10 : CMD /bin/bash
+ ---> Running in d200a20c4553
+Removing intermediate container d200a20c4553
+ ---> d0254efd95c7
+Successfully built d0254efd95c7
+Successfully tagged mycentos:0.1
+
+# 3.测试运行
+```
+
+对比：之前原生的centos
+
+![image-20210507000549471](../img/image-20210507000549471.png)
+
+我们自己构建的centos：
+
+![image-20210507000648722](../img/image-20210507000648722.png)
+
+我们可以列出本地镜像的构建历史：
+
+命令：`docker history d0254efd95c7(镜像id)`
+
+![image-20210507000939542](../img/image-20210507000939542.png)
+
+### 5.4.2 `CMD` 和 `ENTRYPOINT` 的区别
+
+``` shell
+CMD 		# 指定一个容器启动时要运行的命令，dockerFile中可以有多个CMD指令，但只有最后一个生效！
+ENTRYPOINT 	# 指定一个容器启动时要运行的命令！和CMD一样，但是ENTRYPOINT可以追加命令
+```
+
+测试 `CMD`
+
+``` shell
+# 编写 dockerfile 文件
+[root@VM_0_9_centos dockerfile]# vim dockerfile-cmd-test
+[root@VM_0_9_centos dockerfile]# cat dockerfile-cmd-test 
+FROM centos
+CMD ["ls","-a"]
+
+# 构建镜像
+[root@VM_0_9_centos dockerfile]# docker build -f dockerfile-cmd-test -t cmd-test:0.1 .
+
+# 运行容器，发现 ls -a 命令生效了
+[root@VM_0_9_centos dockerfile]# docker run 537654a10f8f
+.
+..
+.dockerenv
+bin
+dev
+etc
+home
+lib
+lib64
+lost+found
+media
+mnt
+opt
+proc
+root
+run
+sbin
+srv
+sys
+tmp
+usr
+
+# 想追加一个命令 -l ls -al
+[root@VM_0_9_centos dockerfile]# docker run 537654a10f8f -l
+docker: Error response from daemon: OCI runtime create failed: container_linux.go:367: starting container process caused: exec: "-l": executable file not found in $PATH: unknown.
+
+# CMD 的情况下， -l 替换了 CMD ["ls","-a"] 命令， -l 不是命令所以报错了
+```
+
+测试 `ENTRYPOINT`
+
+``` shell
+[root@VM_0_9_centos dockerfile]# vim dockerfile-cmd-entrypoint
+[root@VM_0_9_centos dockerfile]# cat dockerfile-cmd-entrypoint 
+FROM centos
+ENTRYPOINT ["ls","-a"]
+[root@VM_0_9_centos dockerfile]# docker build -f dockerfile-cmd-entrypoint -t entrypoint-test:0.1 .
+Sending build context to Docker daemon  4.096kB
+Step 1/2 : FROM centos
+ ---> 300e315adb2f
+Step 2/2 : ENTRYPOINT ["ls","-a"]
+ ---> Running in 13bd745caa31
+Removing intermediate container 13bd745caa31
+ ---> 036025f64cd5
+Successfully built 036025f64cd5
+Successfully tagged entrypoint-test:0.1
+[root@VM_0_9_centos dockerfile]# docker run 036025f64cd5
+.
+..
+.dockerenv
+bin
+dev
+etc
+home
+lib
+lib64
+lost+found
+media
+mnt
+opt
+proc
+root
+run
+sbin
+srv
+sys
+tmp
+usr
+var
+
+# 追加命令是直接拼接在 ENTRYPOINT 命令后面的
+[root@VM_0_9_centos dockerfile]# docker run 036025f64cd5 -l
+total 56
+drwxr-xr-x   1 root root 4096 May  6 16:26 .
+drwxr-xr-x   1 root root 4096 May  6 16:26 ..
+-rwxr-xr-x   1 root root    0 May  6 16:26 .dockerenv
+lrwxrwxrwx   1 root root    7 Nov  3  2020 bin -> usr/bin
+drwxr-xr-x   5 root root  340 May  6 16:26 dev
+drwxr-xr-x   1 root root 4096 May  6 16:26 etc
+drwxr-xr-x   2 root root 4096 Nov  3  2020 home
+lrwxrwxrwx   1 root root    7 Nov  3  2020 lib -> usr/lib
+lrwxrwxrwx   1 root root    9 Nov  3  2020 lib64 -> usr/lib64
+drwx------   2 root root 4096 Dec  4 17:37 lost+found
+drwxr-xr-x   2 root root 4096 Nov  3  2020 media
+drwxr-xr-x   2 root root 4096 Nov  3  2020 mnt
+drwxr-xr-x   2 root root 4096 Nov  3  2020 opt
+dr-xr-xr-x 114 root root    0 May  6 16:26 proc
+dr-xr-x---   2 root root 4096 Dec  4 17:37 root
+drwxr-xr-x  11 root root 4096 Dec  4 17:37 run
+lrwxrwxrwx   1 root root    8 Nov  3  2020 sbin -> usr/sbin
+drwxr-xr-x   2 root root 4096 Nov  3  2020 srv
+dr-xr-xr-x  13 root root    0 May  5 07:10 sys
+drwxrwxrwt   7 root root 4096 Dec  4 17:37 tmp
+drwxr-xr-x  12 root root 4096 Dec  4 17:37 usr
+drwxr-xr-x  20 root root 4096 Dec  4 17:37 var
+```
+
+**DockerFile 中很多命令是相似，要了解它们的区别，必须通过实践去测试效果。**
+
+### 5.4.3 实战：tomcat 镜像
+
+步骤：
+
+1.准备镜像文件 tomcat 压缩包，jdk 压缩包
+
+![image-20210507003729642](../img/image-20210507003729642.png)
+
+2.编写 dockerfile 文件，官方命令 `Dockerfile`，build 会自动寻找这个文件，就不需要通过 `-f` 去指定了
+
+``` shell
+[root@VM_0_9_centos tomcatImage]# vim Dockerfile 
+[root@VM_0_9_centos tomcatImage]# cat Dockerfile 
+FROM centos
+MAINTAINER Silence<taogu2010@yeah.net>
+
+COPY README.md /usr/local/README.md
+
+ADD jdk-8u111-linux-x64.tar.gz /usr/local
+ADD apache-tomcat-8.5.8.tar.gz /usr/local
+
+RUN yum -y install vim
+
+ENV MYPATH /usr/local
+WORKDIR $MYPATH
+
+ENV JAVA_HOME /usr/local/jdk1.8.0_111
+ENV CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+ENV CATALINA_HOME /usr/local/apache-tomcat-8.5.8
+ENV CATALINA_BASH /usr/local/apache-tomcat-8.5.8
+ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin
+
+EXPOSE 8080
+
+CMD /usr/local/apache-tomcat-8.5.8/bin/startup.sh && tail -F /usr/local/apache-tomcat-8.5.8/bin/logs/catalina.out
+```
+
+3.构建镜像
+
+``` shell
+[root@VM_0_9_centos tomcatImage]# docker build -t silence-tomcat:1.0 .
+```
+
+4.启动镜像
+
+``` shell
+[root@VM_0_9_centos tomcatImage]# docker run -d -p 8002:8080 --name mytomcat -v /home/dockerVolume/tomcat/mytomcat:/usr/local/apache-tomcat-8.5.8/webapps/mytomcat -v /home/dockerVolume/tomcat/logs:/usr/local/apache-tomcat-8.5.8/logs silence-tomcat:1.0
+12b16079025b9894699a4f4f25eee181017c2323454471546b285b48c9a674af
+```
+
+5.访问 tomcat
+
+![image-20210507011357051](../img/image-20210507011357051.png)
+
+6.发布项目
+
+``` xml
+<!-- 编辑 web.xml -->
+[root@VM_0_9_centos mytomcat]# mkdir WEB-INF
+[root@VM_0_9_centos mytomcat]# ls
+WEB-INF
+[root@VM_0_9_centos mytomcat]# cd WEB-INF/
+[root@VM_0_9_centos WEB-INF]# ls
+[root@VM_0_9_centos WEB-INF]# vim web.xml
+[root@VM_0_9_centos WEB-INF]# cat web.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" 
+    xmlns="http://java.sun.com/xml/ns/j2ee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+        http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+</web-app>
+```
+
+``` jsp
+<!-- 编辑 jsp 测试文件 -->
+[root@VM_0_9_centos WEB-INF]# cd ..
+[root@VM_0_9_centos mytomcat]# vim index.jsp
+[root@VM_0_9_centos mytomcat]# cat index.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+    <html>
+        <head>
+            <meta charset="utf-8">
+            <title>Hello,Silence</title>
+        </head>
+    <body>
+        Hello World!<br/>
+        <%
+            System.out.println("----test web logs");
+        %>
+    </body>
+</html>
+```
+
+7.可以访问到项目，通过这样的方式发布，可以直接再宿主机上发布项目
+
+![image-20210507012849643](../img/image-20210507012849643.png)
+
+## 5.5 发布自己的镜像
+
 
 
 # 6.Docker 网络

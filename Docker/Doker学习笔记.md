@@ -1556,9 +1556,173 @@ WEB-INF
 
 ## 5.5 发布自己的镜像
 
+### 5.5.1 发布镜像到 DockerHub
 
+1.地址 https://hub.docker.com/ 注册自己的账号
+
+2.确定这个账号可以登录
+
+3.在我们服务器上提交自己的镜像
+
+``` shell
+[root@VM_0_9_centos ~]# docker login --help
+
+Usage:  docker login [OPTIONS] [SERVER]
+
+Log in to a Docker registry.
+If no server is specified, the default is defined by the daemon.
+
+Options:
+  -p, --password string   Password
+      --password-stdin    Take the password from stdin
+  -u, --username string   Username
+  
+# 登录
+[root@VM_0_9_centos ~]# docker login -u silence
+Password: 
+Error response from daemon: Get https://registry-1.docker.io/v2/: unauthorized: incorrect username or password
+```
+
+4.登录完毕后就可以提交镜像了，用 `docker push` 命令
+
+``` shell
+# 给镜像添加一个 tag
+docker tag 镜像id 镜像名称:tag
+
+# docker push 上去即可，要带上版本号
+docker push 镜像名称:tag
+```
+
+### 5.5.2 发布镜像到阿里云镜像仓库
+
+1.登录阿里云
+
+2.找到容器镜像服务
+
+3.创建命名空间
+
+4.创建容器镜像
+
+5.浏览阿里云
+
+**参考官方文档即可！**
+
+## 5.6 总结
+
+![docker 流程图](../img/image-20210507214948091.png)
 
 # 6.Docker 网络
+
+## 6.1 理解 Docker0
+
+清空所有环境
+
+通过 `ip addr` 命令查看服务器网络信息]
+
+![云服务器网络信息](../img/image-20210507224815085.png)
+
+三个网络
+
+问题：docker 是如何处理容器网络访问的？
+
+![image-20210507225111417](../img/image-20210507225111417.png)
+
+``` shell
+# 启动一个tomcat
+[root@VM_0_9_centos ~]# docker run -d -P --name tomcat_01 tomcat
+
+# 查看容器的内部网络地址 ip addr，发现容器启动的时候会得到一个 eth0@if126 ip 地址，docker 分配的
+[root@VM_0_9_centos ~]# docker exec -it tomcat_01 ip addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+125: eth0@if126: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether 02:42:ac:12:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 172.18.0.2/16 brd 172.18.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+       
+# 在宿主机上通过 ping 命令去 ping docker 分配的 ip 地址，能 ping 通 docker 容器内部
+[root@VM_0_9_centos ~]# ping 172.18.0.2
+PING 172.18.0.2 (172.18.0.2) 56(84) bytes of data.
+64 bytes from 172.18.0.2: icmp_seq=1 ttl=64 time=0.066 ms
+64 bytes from 172.18.0.2: icmp_seq=2 ttl=64 time=0.059 ms
+64 bytes from 172.18.0.2: icmp_seq=3 ttl=64 time=0.051 ms
+64 bytes from 172.18.0.2: icmp_seq=4 ttl=64 time=0.054 ms
+```
+
+原理
+
+1.我们每启动一个 docker 容器，docker 就会给 docker 容器分配一个 ip 地址，我们只要安装了 docker，就会有一个网卡 docker0，docker 使用的是桥接模式，使用的技术是 evth-pair 技术。
+
+再次测试 `ip addr`
+
+![image-20210507231930475](../img/image-20210507231930475.png)
+
+2.再启动一个容器测试，发现又多了一对网卡
+
+![image-20210507232041837](../img/image-20210507232041837.png)
+
+``` shell
+# 我们发现这个容器生成的网卡，都是一对一对的
+# evth-pair 就是一对虚拟设备接口，他们都是成对出现的，一端连着协议，一端彼此相连
+# 正因为有这个特性 evth-pair 充当一个桥梁，连接各种虚拟的网络设备的
+# OpenStac，Docker 容器之间的连接，ovs 的连接，都是使用 evth-pair 技术
+```
+
+3.测试 tomcat_01 和 tomcat_02 是否可以 ping 通
+
+``` shell
+# 容器和容器之间的网络是可以相互 ping 通的
+[root@VM_0_9_centos ~]# docker exec -it tomcat_02 ping 172.18.0.2
+PING 172.18.0.2 (172.18.0.2) 56(84) bytes of data.
+64 bytes from 172.18.0.2: icmp_seq=1 ttl=64 time=0.086 ms
+64 bytes from 172.18.0.2: icmp_seq=2 ttl=64 time=0.041 ms
+```
+
+绘制一个网络模型图
+
+![image-20210508001008181](../img/image-20210508001008181.png)
+
+结论：tomcat_01 和 tomcat_02 是公用的一个路由器：docker0
+
+所有的容器不指定网络的情况下，都是 docker0 路由的，docker 会给我们的容器分配一个默认的可用 ip 地址
+
+## 6.2 小结
+
+Docker 使用的是 Linux 的桥接，宿主机中是一个 Docker 容器的网桥 docker0
+
+![image-20210508001909428](../img/image-20210508001909428.png)
+
+**Docker 中的所有网络接口都是虚拟的，虚拟网络转发效率高**。
+
+只要删除容器，对应的网桥一对就没了。
+
+## 6.3 `--link`
+
+每次启动一个容器 ip 地址可能会变，是否可以通过名字来访问容器？
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

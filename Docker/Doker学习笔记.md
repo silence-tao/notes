@@ -2028,13 +2028,275 @@ docker 搭建 Redis 高可用集群完成
 
 ## 7.1 Docker Compose
 
+### 7.1.1 简介
+
+Docker
+
+Dockerfile build run 手动操作，当个容器
+
+微服务，100 个微服务，依赖关系
+
+Docker Compose 来轻松高效的管理容器，定义运行多个容器
+
+> 官方介绍
+
+定义、运行多个容器，通过 YAML 配置文件去定义，还有很多命令.
+
+Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application’s services. Then, with a single command, you create and start all the services from your configuration. To learn more about all the features of Compose, see [the list of features](https://docs.docker.com/compose/#features).
+
+所有的环境都可以使用 Compose
+
+Compose works in all environments: production, staging, development, testing, as well as CI workflows. You can learn more about each case in [Common Use Cases](https://docs.docker.com/compose/#common-use-cases).
+
+使用 Compose 的三个步骤
+
+Using Compose is basically a three-step process:
+
+1. Define your app’s environment with a `Dockerfile` so it can be reproduced anywhere.
+2. Define the services that make up your app in `docker-compose.yml` so they can be run together in an isolated environment.
+   - services 什么是服务
+   - docker-compose.yml 这个文件怎么写
+3. Run `docker compose up` and the [Docker compose command](https://docs.docker.com/compose/cli-command/) starts and runs your entire app. You can alternatively run `docker-compose up` using the docker-compose binary.
+   - 启动项目
+
+作用：批量容器编排
+
+Compose 是 Docker 官方的开源项目，需要安装。
+
+`Dockerfile` 让程序在任何地方运行，web 服务，redis、mysql、nginx……多个容器的启动
+
+Compose yml 官方配置文件示例
+
+``` yaml
+version: "3.9"  # optional since v1.27.0
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/code
+      - logvolume01:/var/log
+    links:
+      - redis
+  redis:
+    image: redis
+volumes:
+  logvolume01: {}
+```
+
+Compose：重要的概念
+
+- 服务 services：容器、应用（web、redis、mysql）
+- 项目 project：一组关联的容器
+
+### 7.1.2 安装
+
+1、下载
+
+``` shell
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+```
+
+![image-20210513003203698](../img/image-20210513003203698.png)
+
+2、授权
+
+``` shell
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+3、通过 `docker-compose --version` 或 `docker-compose version` 命令查看是否安装成功
+
+![image-20210513003420056](../img/image-20210513003420056.png)
+
+### 7.1.3 体验
+
+地址：https://docs.docker.com/compose/gettingstarted/
+
+**Python 应用**
+
+1、应用 app.py
+
+1.创建测试目录
+
+``` shell
+mkdir composetest
+cd composetest
+```
+
+2.编写代码
+
+``` python
+import time
+
+import redis
+from flask import Flask
+
+app = Flask(__name__)
+cache = redis.Redis(host='redis', port=6379)
+
+def get_hit_count():
+    retries = 5
+    while True:
+        try:
+            return cache.incr('hits')
+        except redis.exceptions.ConnectionError as exc:
+            if retries == 0:
+                raise exc
+            retries -= 1
+            time.sleep(0.5)
+
+@app.route('/')
+def hello():
+    count = get_hit_count()
+    return 'Hello World! I have been seen {} times.\n'.format(count)
+```
+
+3.创建 `requirements.txt` 文件，并输入以下内容
+
+``` shell
+flask
+redis
+```
+
+2、创建 Dockerfile 文件，并输入以下内容
+
+``` dockerfile
+# syntax=docker/dockerfile:1
+FROM python:3.7-alpine
+WORKDIR /code
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+RUN apk add --no-cache gcc musl-dev linux-headers
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+EXPOSE 5000
+COPY . .
+CMD ["flask", "run"]
+```
+
+3、创建 `docker-compose.yml`，并输入以下内容
+
+Docker-compose yaml 文件（定义整个服务，需要的环境，web、redis）完整的上线服务
+
+``` yaml
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+  redis:
+    image: "redis:alpine"
+```
+
+4、构建并运行 compose 项目
+
+``` shell
+# 命令
+docker-compose up
+```
+
+5、测试项目是否运行成功
+
+查看是否启动了两个服务（composetest_web_1、composetest_redis_1），并访问：http://localhost:5000
+
+![image-20210513010832409](../img/image-20210513010832409.png)
+
+
+
+
+
+流程：
+
+1、创建网络
+
+2、执行 Docker-compose yaml 文件
+
+3、启动服务
+
+Docker-compose yaml
+
+Creating composetest_redis_1 ... done                                                                                                                                                        
+
+Creating composetest_web_1   ... done
+
+![image-20210513005550569](../img/image-20210513005550569.png)
+
+1、文件名 composetest
+
+2、服务
+
+``` yaml
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+  redis:
+    image: "redis:alpine"
+```
+
+默认规则：
+
+![image-20210513005810345.png](../img/image-20210513005810345.png)
+
+`docker images` 发现需要的依赖都自动下载了
+
+![image-20210513011037370](../img/image-20210513011037370.png)
+
+``` shell
+[root@VM_0_9_centos ~]# docker service ls
+Error response from daemon: This node is not a swarm manager. Use "docker swarm init" or "docker swarm join" to connect this node to swarm and try again.
+```
+
+默认的服务名：文件名\_服务名\_num
+
+3、网络规则
+
+![image-20210513011733485](../img/image-20210513011733485.png)
+
+10 个服务 => 项目（项目中的内容都在同一个网络下面，可以通过域名访问）
+
+![image-20210513011904028](../img/image-20210513011904028.png)
+
+如果在同一个网络下，可以直接通过域名访问
+
+停止：`docker-compose down` 或者 `ctrl + c`
+
+![image-20210513012219231](../img/image-20210513012219231.png)
+
+docker-compose，可以通过 docker-compose 编写 yaml 配置文件，通过 `compose up` 命令一键启动所有的服务，或者停止。
+
+### 7.1.4 小结
+
+1、Docker 镜像，run => 容器
+
+2、Dockerfile 构建镜像（服务打包）
+
+3、docker-compose 启动项目（编排、多个微服务/环境）
+
+4、Docker 网络
+
+### 7.1.5 yaml 规则
+
 
 
 ## 7.2 Docker Swarm
 
+以集群的方式部署
+
+## 7.3 Docker Stack
 
 
-## 7.3 CI/CD jenkins
+
+## 7.4 Docker Secret
+
+
+
+## 7.5 Docker Config
 
 
 

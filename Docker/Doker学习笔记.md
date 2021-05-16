@@ -2282,11 +2282,101 @@ docker-compose，可以通过 docker-compose 编写 yaml 配置文件，通过 `
 
 ### 7.1.5 yaml 规则
 
+docker-compose.yml
+
+https://docs.docker.com/compose/compose-file/compose-file-v3/
+
+``` yaml
+# 3 层
+
+version: '',					# 版本
+services:						# 服务
+	服务1: web
+		# 服务的配置
+		images
+		build
+		network
+		......
+	服务2：redis
+	服务3: redis
+	......
+# 其它配置 网络/卷以及全局配置
+volumes:
+networks:
+configs:
+```
+
+`depends_on` 根据依赖关系，决定容器的启动顺序
+
+![image-20210516150448817](../img/image-20210516150448817.png)
+
+学习要掌握规律
+
+只要多写，多看：docker-compose.yml 配置
+
+1、官方文档：https://docs.docker.com/compose/compose-file/compose-file-v3/
+
+2、开源项目：redis、mysql、mq
+
+### 7.1.6 开源项目
+
+**博客**
+
+下载程序、安装数据库、配置
+
+compose 应用，可以一键启动
+
+1、下载项目（docker-compose.yml）
+
+2、如果需要文件：Dockerfile
+
+3、文件准备齐全（一键启动项目）
+
+
+
+前台启动：`docker-compose up`
+
+后台启动：`docker-compose up -d`
+
+![image-20210516152244385](../img/image-20210516152244385.png)
+
+### 7.1.7 实战
+
+1、编写项目微服务
+
+2、dockerfile 构建镜像
+
+3、docker-compose.yml 编排项目
+
+4、丢到服务器 `docker compose up`
+
+
+
+**小结：**
+
+未来项目只要 docker-compose 文件，按照这个规则，启动编排容器
+
+可以通过 `docker-compose up --bulid` 命令重新构建
+
+**工程、服务、容器**
+
+项目 compose 三层：
+
+- 工程 Project
+- 服务 服务
+- 容器运行实例
+
 
 
 ## 7.2 Docker Swarm
 
 以集群的方式部署
+
+Docker Engine 1.12 introduces swarm mode that enables you to create a cluster of one or more Docker Engines called a swarm. A swarm consists of one or more nodes: physical or virtual machines running Docker Engine 1.12 or later in swarm mode.
+
+There are two types of nodes: [**managers**](https://docs.docker.com/engine/swarm/how-swarm-mode-works/nodes/#manager-nodes) and [**workers**](https://docs.docker.com/engine/swarm/how-swarm-mode-works/nodes/#worker-nodes).
+
+![image-20210516163632043](../img/image-20210516163632043.png)
 
 ## 7.3 Docker Stack
 

@@ -72,3 +72,9 @@ System.out.println(str);
 
 句柄是指针的指针，句柄实际上是一个数据，是一个Long (整长型)的数据。句柄是一个标识符，是拿来标识对象或者项目的。
 
+# 2.Java 线程状态
+
+[Java线程的生命周期](https://juejin.cn/post/6844903558433734669)
+
+[Java线程的六种状态以及切换](https://segmentfault.com/a/1190000038392244)
+

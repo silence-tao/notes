@@ -50,3 +50,38 @@ git config --global credential.helper cache 设置记住密码（默认15分钟�
 git config credential.helper 'cache --timeout=3600' 设置保存一个小时时间
 git config --global credential.helper store 长期保存本地配置
 ```
+
+## 5.github生成token
+
+1.打开 `Settings` -> `Developer settings`，然后选择 `Personal access tokens`，再点击 `Generate new token` 按钮，具体如下图：
+
+![image-20220101172918949](../img/image-20220101172918949.png)
+
+2.选择要授予此令牌token的范围或权限：
+
+- 要使用token从命令行访问仓库，请选择repo
+- 要使用token从命令行删除仓库，请选择delete_repo
+- 其他根据需要进行勾选
+
+![image-20220101173115898](../img/image-20220101173115898.png)
+
+3.然后点击  `Generate token` 生成令牌。
+
+![image-20220101173336010](../img/image-20220101173336010.png)
+
+4.生成token后，记得把你的token保存下来，以便进行后面的操作。把token直接添加远程仓库链接中，这样就可以避免同一个仓库每次提交代码都要输入token了。
+
+```bash
+git remote set-url origin https://<your_token>@github.com/<USERNAME>/<REPO>.git
+```
+
+- `<your_token>`：换成你自己得到的token
+- `<USERNAME>`：是你自己github的用户名
+- `<REPO>`：是你的仓库名称
+
+例如：
+
+``` bash
+git remote set-url origin https://ghp_WNjxcsp0N5fsdwcyvLombVUiUUssnoN05V8yM@github.com/silence-tao/notes.git
+```
+

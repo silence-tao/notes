@@ -2,11 +2,11 @@
 
 # 简介
 
-Condition是在java 1.5中才出现的，它用来替代传统的Object的wait()、notify()实现线程间的协作，相比使用Object的wait()、notify()，使用Condition的await()、signal()这种方式实现线程间协作更加安全和高效。因此通常来说比较推荐使用Condition。
+`Condition` 是在 java 1.5 中才出现的，它用来替代传统的 `Object` 的 `wait()`、`notify()` 实现线程间的协作，相比使用 `Object` 的 `wait()`、`notify()`，使用 `Condition` 的 `await()`、`signal()` 这种方式实现线程间协作更加安全和高效。因此通常来说比较推荐使用 `Condition`。
 
-Condition能实现synchronized和wait、notify搭配的功能，另外比后者更灵活，Condition可以实现多路通知功能，也就是在一个Lock对象里可以创建多个Condition（即对象监视器）实例，线程对象可以注册在指定的Condition中，从而可以有选择的进行线程通知，在调度线程上更加灵活。而synchronized就相当于整个Lock对象中只有一个单一的Condition对象，所有的线程都注册在这个对象上。线程开始notifyAll时，需要通知所有的WAITING线程，没有选择权，会有相当大的效率问题。
+`Condition` 能实现 `synchronized` 和 `wait`、`notify` 搭配的功能，另外比后者更灵活，`Condition` 可以实现多路通知功能，也就是在一个 `Lock` 对象里可以创建多个 `Condition`（即对象监视器）实例，线程对象可以注册在指定的 `Condition` 中，从而可以有选择的进行线程通知，在调度线程上更加灵活。而 `synchronized` 就相当于整个 `Lock` 对象中只有一个单一的 `Condition` 对象，所有的线程都注册在这个对象上。线程开始 `notifyAll` 时，需要通知所有的 WAITING 线程，没有选择权，会有相当大的效率问题。
 
-这里要讲的是ReentrantLock（不了解ReentrantLock的同学可以看一下[JDK源码分析之——ReentrantLock](https://silentao.com/2020/05/29/10026/)）中的Condition，Condition是一个接口，而ReentrantLock里使用的Condition是由AQS（AbstractQueuedSynchronizer，这里又要回到AQS了哈哈，不了解AQS的同学可以看看之前发布的[JDK源码分析之——AQS](https://silentao.com/2019/04/08/10016/)）的内部类ConditionObject实现的。在ConditionObject内部维护了一个由Node（AQS里的另一个类）节点连接而成的等待队列，这个队列是一个单链表，同时ConditionObject还有指向单链表首尾节点的指针，方便对整个队列进行遍历。
+这里要讲的是 `ReentrantLock` 中的 `Condition`，`Condition` 是一个接口，而 `ReentrantLock` 里使用的 `Condition` 是由 AQS 的内部类 `ConditionObject` 实现的。在 `ConditionObject` 内部维护了一个由 `Node`（AQS 里的另一个类）节点连接而成的等待队列，这个队列是一个单链表，同时 `ConditionObject` 还有指向单链表首尾节点的指针，方便对整个队列进行遍历。
 
 流程图如下：
 ![10027_1](../../../silentao_blog/source/img/backend/10027/10027_1.png)
@@ -15,7 +15,7 @@ Condition能实现synchronized和wait、notify搭配的功能，另外比后者�
 
 ## 1.ConditionObject的成员变量
 
-ConditionObject的成员变量比较简单，包含两个分别指向队列头尾的指针和两种等待退出的模式，源码如下：
+`ConditionObject` 的成员变量比较简单，包含两个分别指向队列头尾的指针和两种等待退出的模式，源码如下：
 
 ``` java
 public class ConditionObject implements Condition, java.io.Serializable {
@@ -45,20 +45,20 @@ public class ConditionObject implements Condition, java.io.Serializable {
 
 ## 2.await
 
-await方法的作用就是释放当前线程持有的锁，然后将当前线程挂起，直到有其它线程将它唤醒或者被中断。在源码讲解前，先来做个名称解释：
+`await` 方法的作用就是释放当前线程持有的锁，然后将当前线程挂起，直到有其它线程将它唤醒或者被中断。在源码讲解前，先来做个名称解释：
 
-* 同步队列：指的是在AQS中等待获取资源的队列，由AQS控制；
-* 等待队列：指的是调用await方法之后等待被signal唤醒的队列，由AQS内部类ConditionObject控制。
+* 同步队列：指的是在 AQS 中等待获取资源的队列，由 AQS 控制；
+* 等待队列：指的是调用 `await` 方法之后等待被 `signal` 唤醒的队列，由 AQS 内部类 `ConditionObject` 控制。
 
-await方法具体流程如下：
+`await` 方法具体流程如下：
 
 1. 如果线程被中断，直接抛出中断异常；
-2. 创建一个状态为CONDITION的Node节点，并将节点放在等待队列的队尾；
+2. 创建一个状态为 `CONDITION` 的 `Node` 节点，并将节点放在等待队列的队尾；
 3. 完全释放线程占有的全部资源；
-4. 循环判断Node节点是否不在同步队列中，然后将当前线程挂起，否则退出循环，如果线程被中断也会退出循环；
+4. 循环判断 `Node` 节点是否不在同步队列中，然后将当前线程挂起，否则退出循环，如果线程被中断也会退出循环；
 5. 尝试去同步队列中获取所需要的资源，如果暂时拿不到就挂起当前线程，直到当前节点变成同步队列的第二个节点时被唤醒；
-6. 如果当前节点在等待队列中还有后继节点，说明当前线程是被中断唤醒的，这个时候要把等待队列中不是CONDITION状态的节点清理掉；
-7. 根据interruptMode的值来决定是否需要抛出中断异常或者重新标记中断。
+6. 如果当前节点在等待队列中还有后继节点，说明当前线程是被中断唤醒的，这个时候要把等待队列中不是 `CONDITION` 状态的节点清理掉；
+7. 根据 `interruptMode` 的值来决定是否需要抛出中断异常或者重新标记中断。
 
 源码如下：
 
@@ -107,7 +107,7 @@ public final void await() throws InterruptedException {
 
 ### 2.1 addConditionWaiter
 
-addConditionWaiter方法用来创建一个状态为CONDITION的新Node节点，并添加等待队列尾部，源码如下：
+`addConditionWaiter` 方法用来创建一个状态为 `CONDITION` 的新 `Node` 节点，并添加等待队列尾部，源码如下：
 
 ``` java
 private Node addConditionWaiter() {
@@ -135,7 +135,7 @@ private Node addConditionWaiter() {
 
 ### 2.2 fullyRelease
 
-fullyRelease方法的作用是释放线程持有的所有的资源，源码如下：
+`fullyRelease` 方法的作用是释放线程持有的所有的资源，源码如下：
 
 ``` java
 /**
@@ -168,7 +168,7 @@ final int fullyRelease(Node node) {
 
 ### 2.3 isOnSyncQueue
 
-isOnSyncQueue方法是用来判断node节点是否在同步队列，源码如下：
+`isOnSyncQueue` 方法是用来判断 `node` 节点是否在同步队列，源码如下：
 
 ``` java
 /**
@@ -219,7 +219,7 @@ private boolean findNodeFromTail(Node node) {
 
 ### 2.4 checkInterruptWhileWaiting
 
-checkInterruptWhileWaiting方法主要是校验node节点对应的线程是否被中断唤醒，如果是在被signal唤醒之前被中断就返回THROW_IE（表示在退出时要抛出中断异常），如果是在被signal唤醒之后被中断则返回REINTERRUPT（表示在退出时要重新标记中断），如果是被signal唤醒没有被中断则返回0（表示线程整个挂起的过程中都没有被中断），源码如下：
+`checkInterruptWhileWaiting` 方法主要是校验 `node` 节点对应的线程是否被中断唤醒，如果是在被 `signal` 唤醒之前被中断就返回 `THROW_IE`（表示在退出时要抛出中断异常），如果是在被 `signal` 唤醒之后被中断则返回 `REINTERRUPT`（表示在退出时要重新标记中断），如果是被 `signal` 唤醒没有被中断则返回 0（表示线程整个挂起的过程中都没有被中断），源码如下：
 
 ``` java
 private int checkInterruptWhileWaiting(Node node) {
@@ -257,7 +257,7 @@ final boolean transferAfterCancelledWait(Node node) {
 
 ### 2.5 unlinkCancelledWaiters
 
-unlinkCancelledWaiters方法的作用是删除等待队列中不是CONDITION状态的节点，从头开始挨个遍历每个节点，删除状态不是CONDITION状态的节点，也就是单链表的节点删除操作，源码如下：
+`unlinkCancelledWaiters` 方法的作用是删除等待队列中不是 `CONDITION` 状态的节点，从头开始挨个遍历每个节点，删除状态不是 `CONDITION` 状态的节点，也就是单链表的节点删除操作，源码如下：
 
 ``` java
 /**
@@ -291,7 +291,7 @@ private void unlinkCancelledWaiters() {
 
 ### 2.6 reportInterruptAfterWait
 
-reportInterruptAfterWait方法控制线程退出时是抛出中断异常还是重新标记中断，源码如下
+`reportInterruptAfterWait` 方法控制线程退出时是抛出中断异常还是重新标记中断，源码如下
 
 ``` java
 /**
@@ -311,15 +311,15 @@ private void reportInterruptAfterWait(int interruptMode)
 
 ### 2.7 小结
 
-await方法的源码分析在这里就告一段落啦，其中还有不响应中断的awaitUninterruptibly方法，带超时的awaitNanos和await方法以及指定超时截止时间的awaitUntil方法，逻辑大致和上面的await方法如出一辙，这里就不一一叙述啦，刚兴趣的同学可以自行研究。await方法会将线程占有的所有资源都释放掉，然后将线程挂起直到其它线程将它唤醒或者被中断。期间涉及到了node节点从等待队列到同步队列的转移，然后线程在同步队列中重新获取资源（即重新获得锁）后继续执行的整个过程。虽然过程不是很复杂，但是同时调用了内部类ConditionObject和AQS的方法，还需仔细品味等待队列和同步队列之间的关系，才能明白它们的巧妙之处。加油鸭！
+`await` 方法的源码分析在这里就告一段落啦，其中还有不响应中断的 `awaitUninterruptibly` 方法，带超时的 `awaitNanos` 和 `await` 方法以及指定超时截止时间的 `awaitUntil` 方法，逻辑大致和上面的 `await` 方法如出一辙，这里就不一一叙述啦，感兴趣的同学可以自行研究。`await` 方法会将线程占有的所有资源都释放掉，然后将线程挂起直到其它线程将它唤醒或者被中断。期间涉及到了 `node` 节点从等待队列到同步队列的转移，然后线程在同步队列中重新获取资源（即重新获得锁）后继续执行的整个过程。虽然过程不是很复杂，但是同时调用了内部类 `ConditionObject` 和 AQS 的方法，还需仔细品味等待队列和同步队列之间的关系，才能明白它们的巧妙之处。加油鸭！
 
 ## 3.signal
 
-signal方法主要是将等待队列中等待最久的那个没有取消的node节点转移到同步队列中的尾部，使该node节点有在同步队列中等待获取资源（获得锁）的资格，得以继续执行await方法后面的逻辑。具体过程如下：
+`signal` 方法主要是将等待队列中等待最久的那个没有取消的 `node` 节点转移到同步队列中的尾部，使该 `node` 节点有在同步队列中等待获取资源（获得锁）的资格，得以继续执行 `await` 方法后面的逻辑。具体过程如下：
 
-1. 判断当前线程是否为持有锁的线程，如果不是则抛出IllegalMonitorStateException异常；
-2. 获取等待队列中头结点，然后将头结点指针指向头结点的下一个节点，然后尝试将当前结点转移到同步队列的尾部；
-3. 如果当前节点在同步队列的前继节点已经取消或者修改其前继节点状态为SIGNAL失败时，换醒当前节点；
+1. 判断当前线程是否为持有锁的线程，如果不是则抛出 `IllegalMonitorStateException` 异常；
+2. 获取等待队列中头结点，然后将头结点指针指向头结点的下一个节点，再尝试将当前结点转移到同步队列的尾部；
+3. 如果当前节点在同步队列的前继节点已经取消或者修改其前继节点状态为 `SIGNAL` 失败时，换醒当前节点；
 4. 如果上述操作失败就重复2、3过程，直到成功将一个节点转移到同步队列，或者遍历完等待队列就结束整个过程。
 
 源码如下：
@@ -344,7 +344,7 @@ public final void signal() {
 
 ### 3.1 doSignal
 
-doSignal主要是从等待队列头部开始遍历，然后将节点从等待队列中移除，并尝试将节点转移到同步队列中，直到有一个成功或者遍历完整个等待队列为止，源码如下：
+`doSignal` 主要是从等待队列头部开始遍历，然后将节点从等待队列中移除，并尝试将节点转移到同步队列中，直到有一个成功或者遍历完整个等待队列为止，源码如下：
 
 ``` java
 /**
@@ -354,7 +354,7 @@ doSignal主要是从等待队列头部开始遍历，然后将节点从等待队
 private void doSignal(Node first) {
     do {
         // 将头部指针指向first.nextWaiter
-        // 这里是要讲first节点删除掉
+        // 这里是要将first节点删除掉
         if ( (firstWaiter = first.nextWaiter) == null)
             // first.nextWaiter为空表示整个等待队列已经空了
             // 将等待队列尾部指针也置为空
@@ -400,10 +400,10 @@ final boolean transferForSignal(Node node) {
 
 ### 3.2 小结
 
-signal方法主要是将在等待队列中等待了最久的且没有取消的一个节点转移到同步队列中，以便节点可以在同步队列中有再次获取资源的资格，可以继续完成后面的事情。而signalAll方法和signal方法唯一不同的是，signalAll方法是要将所有等待队列中未取消的节点转移到同步队列中，以便它们可以依次获取资源继续完成后面的事情，因为逻辑上差不多，这里也不再叙述，有兴趣的同学可以自己看看。
+`signal` 方法主要是将在等待队列中等待了最久的且没有取消的一个节点转移到同步队列中，以便节点可以在同步队列中有再次获取资源的资格，可以继续完成后面的事情。而 `signalAll` 方法和 `signal` 方法唯一不同的是，`signalAll` 方法是要将所有等待队列中未取消的节点转移到同步队列中，以便它们可以依次获取资源继续完成后面的事情，因为逻辑上差不多，这里也不再叙述，有兴趣的同学可以自己看看。
 
 ## 4.总结
 
-本篇讲述的是ReentrantLock中用到的条件变量Condition，是由AQS的内部类ConditionObject实现的，ConditionObject维护着一个以AQS内部类Node为节点的等待队列，这是一个单链表，等待队列里的都是调用了await方法后等待被唤醒的节点。ConditionObject主要用两个方法，await和signal方法。其中await方法主要是创建一个保存当前线程的Node节点并放在等待队列中，然后将线程持有的资源完全释放然后将线程挂起，直到线程被唤醒或被中断时，会将节点转移同步队列中，以便线程可以在同步队列中有再次获取资源的资格；而signal方法主要是将节点从等待队列转移到同步队列中，以便线程可以在同步队列中有再次获取资源的资格。await和signal需要配合使用，才能维护共享资源的同步。
+本篇讲述的是 `ReentrantLock` 中用到的条件变量 `Condition`，是由 AQS 的内部类 `ConditionObject` 实现的，`ConditionObject` 维护着一个以 AQS 内部类 `Node` 为节点的等待队列，这是一个单链表，等待队列里的都是调用了 `await` 方法后等待被唤醒的节点。`ConditionObject` 主要用两个方法，`await` 和 `signal` 方法。其中 `await` 方法主要是创建一个保存当前线程的 `Node` 节点并放在等待队列中，然后将线程持有的资源完全释放然后将线程挂起，直到线程被唤醒或被中断时，会将节点转移同步队列中，以便线程可以在同步队列中有再次获取资源的资格；而 `signal` 方法主要是将节点从等待队列转移到同步队列中，以便线程可以在同步队列中有再次获取资源的资格。`await` 和 `signal` 需要配合使用，才能维护共享资源的同步。
 
 源码虽然枯燥无味，但是它包含着精髓，同学们需要细细品味，加油鸭！

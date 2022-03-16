@@ -85,3 +85,57 @@ class Solution {
 }
 ```
 
+## 3. 无重复字符的最长子串
+
+难度：中等
+
+原题链接：[3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/)
+
+> 给定一个字符串 `s` ，请你找出其中不含有重复字符的 **最长子串** 的长度。
+>
+> **提示：**
+>
+> - `0 <= s.length <= 5 * 104`
+> - `s` 由英文字母、数字、符号和空格组成
+
+### 1.滑动窗口
+
+``` java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int length;
+        if (s == null || (length = s.length()) == 0) {
+            return 0;
+        }
+
+        // left、right作为滑动窗口的左右指针
+        int left = 0, right = 0, res = 0;
+        // windows保存left和right之间滑动窗口每个字符出现的次数
+        Map<Character, Integer> windows = new HashMap<>();
+        while (right < length) {
+            // 遍历字符串s
+            // 每次遍历结束都保证滑动窗口的字符是不重复的
+            char c = s.charAt(right++);
+            // 记录字符c出现一次
+            windows.put(c, windows.getOrDefault(c, 0) + 1);
+
+            // 如果字符出现次数大于1
+            // 说明字符c重复了
+            while (windows.get(c) > 1) {
+                // 这个时候缩小滑动窗口的范围
+                char t = s.charAt(left++);
+                // t已经不在滑动窗口里面了
+                // 所以要减去
+                windows.put(t, windows.get(t) - 1);
+            }
+
+            // 再重新计算滑动窗口内的长度
+            // 和res取最大值更新结果res
+            res = Math.max(res, right - left);
+        }
+
+        return res;
+    }
+}
+```
+

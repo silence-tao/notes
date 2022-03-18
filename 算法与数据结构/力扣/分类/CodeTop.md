@@ -270,3 +270,152 @@ class Solution {
 }
 ```
 
+## 25. K 个一组翻转链表
+
+原题链接：[25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
+
+> 给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。
+>
+> k 是一个正整数，它的值小于或等于链表的长度。
+>
+> 如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。
+>
+> 进阶：
+>
+> 你可以设计一个只使用常数额外空间的算法来解决此问题吗？
+> 你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。
+>
+> **提示：**
+>
+> - 列表中节点的数量在范围 `sz` 内
+> - `1 <= sz <= 5000`
+> - `0 <= Node.val <= 1000`
+> - `1 <= k <= sz`
+
+### 1.分割法
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if (head == null) {
+            return head;
+        }
+
+        ListNode node = head;
+        int i = 0;
+        // 先将链表按k个节点进行分割
+        while (node != null && ++i < k) {
+            node = node.next;
+        }
+
+        // 如果剩余链表长度小于k
+        if (i < k) {
+            // 就直接返回头节点head
+            return head;
+        }
+
+        // 分割链表
+        ListNode next = node.next;
+        node.next = null;
+
+        // 反转当前段的链表
+        ListNode newHead = reverseListNode(head);
+        // 然后继续递归反转剩余的链表
+        head.next = reverseKGroup(next, k);
+
+        return newHead;
+    }
+
+    /**
+     * 反转链表
+     */
+    private ListNode reverseListNode(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode next = head.next;
+        ListNode node = reverseListNode(next);
+
+        head.next = null;
+        next.next = head;
+
+        return node;
+    }
+}
+```
+
+## 912. 排序数组
+
+原题链接：[912. 排序数组](https://leetcode-cn.com/problems/sort-an-array/)
+
+> 给你一个整数数组 `nums`，请你将该数组升序排列。
+>
+> **提示：**
+>
+> - `1 <= nums.length <= 5 * 104`
+> - `-5 * 104 <= nums[i] <= 5 * 104`
+
+### 1.双路快排
+
+``` java
+class Solution {
+    public int[] sortArray(int[] nums) {
+        int length = nums.length;
+
+        helper(nums, 0, length - 1);
+
+        return nums;
+    }
+
+    /**
+     * 双路快排
+     */
+    private void helper(int[] nums, int l, int r) {
+        if (l >= r) {
+            return ;
+        }
+
+        int e = nums[l];
+        int lt = l, gt = r + 1, i = l + 1;
+        while (i < gt) {
+            if (nums[i] < e) {
+                swap(nums, ++lt, i++);
+            } else if (nums[i] > e) {
+                swap(nums, --gt, i);
+            } else {
+                i++;
+            }
+        }
+
+        swap(nums, l, lt);
+
+        helper(nums, l, lt - 1);
+        helper(nums, gt, r);
+    }
+
+    /**
+     * 交换数组中两个位置的值
+     */
+    private void swap(int[] nums, int i, int j) {
+        if (i == j) {
+            return ;
+        }
+
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+```
+

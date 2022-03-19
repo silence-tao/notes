@@ -432,7 +432,7 @@ class Solution {
 > - `0 <= nums.length <= 3000`
 > - `-105 <= nums[i] <= 105`
 
-1.排序+左右指针
+### 1.排序+左右指针
 
 ``` java
 class Solution {

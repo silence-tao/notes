@@ -575,3 +575,735 @@ class Solution {
 }
 ```
 
+## 21. 合并两个有序链表
+
+原题链接：[21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
+
+> 将两个升序链表合并为一个新的 **升序** 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 
+>
+> **提示：**
+>
+> - 两个链表的节点数目范围是 `[0, 50]`
+> - `-100 <= Node.val <= 100`
+> - `l1` 和 `l2` 均按 **非递减顺序** 排列
+
+### 1.迭代法
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        if (list1 == null && list2 == null) {
+            return null;
+        }
+
+        // 定义一个head节点作为合并后链表到头节点
+        ListNode head = new ListNode();
+        // node作为活动节点，用来合并节点
+        ListNode node = head;
+        while (list1 != null || list2 != null) {
+            if (list1 == null) {
+                // 如果list1为空，那么直接将list2合入node.next
+                node.next = list2;
+                // 然后直接break
+                break ;
+            } else if (list2 == null) {
+                // 如果list2为空，那么直接将list1合入node.next
+                node.next = list1;
+                // 然后直接break
+                break ;
+            } else if (list1.val < list2.val) {
+                // list1.val更小，就将list1合入node.next
+                node.next = list1;
+                // list1跳到下一个节点
+                list1 = list1.next;
+            } else {
+                // list2.val更小，就将list2合入node.next
+                node.next = list2;
+                // list2跳到下一个节点
+                list2 = list2.next;
+            }
+
+            // node跳到下一个节点
+            node = node.next;
+        }
+
+        // 返回头节点到next即新链表到头节点
+        return head.next;
+    }
+}
+```
+
+## 141. 环形链表
+
+原题链接：[141. 环形链表](https://leetcode-cn.com/problems/linked-list-cycle/)
+
+> 给你一个链表的头节点 head ，判断链表中是否有环。
+>
+> 如果链表中有某个节点，可以通过连续跟踪 next 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。注意：pos 不作为参数进行传递 。仅仅是为了标识链表的实际情况。
+>
+> 如果链表中存在环 ，则返回 true 。 否则，返回 false 。
+>
+> **提示：**
+>
+> - 链表中节点的数目范围是 `[0, 104]`
+> - `-105 <= Node.val <= 105`
+> - `pos` 为 `-1` 或者链表中的一个 **有效索引** 。
+
+### 1.快慢指针
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return false;
+        }
+
+        // 利用快慢指针来判断链表中是否有环
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            // 慢指针跳一个节点
+            slow = slow.next;
+            // 快指针跳两个节点
+            fast = fast.next.next;
+
+            // 如果有环，快慢指针最终会相遇
+            if (slow == fast) {
+                // 直接返回true
+                return true;
+            }
+        }
+        
+        // 否则返回false
+        return false;
+    }
+}
+```
+
+## 102. 二叉树的层序遍历
+
+原题链接：[102. 二叉树的层序遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/)
+
+> 给你二叉树的根节点 `root` ，返回其节点值的 **层序遍历** 。 （即逐层地，从左到右访问所有节点）。
+>
+> **提示：**
+>
+> - 树中节点数目在范围 `[0, 2000]` 内
+> - `-1000 <= Node.val <= 1000`
+
+### 1.队列
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+
+        // 利用队列实现层序遍历
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        queue.addFirst(root);
+
+        while (!queue.isEmpty()) {
+            // 因为每一层都需要放在一个集合中
+            // 所以这里先把同一层的节点放到list中
+            List<TreeNode> list = new ArrayList<>();
+            // 遍历队列
+            while (!queue.isEmpty()) {
+                // 将队列中的元素放入list中
+                // 这里就是将同一层到节点放入到list中
+                list.add(queue.removeLast());
+            }
+
+            List<Integer> nums = new ArrayList<>();
+            // 然后再遍历这一层的节点
+            for (TreeNode node : list) {
+                // 当前节点值放入nums集合中
+                nums.add(node.val);
+
+                // 如果当前节点左节点不为空
+                if (node.left != null) {
+                    // 就将左节点放入队列中
+                    queue.addFirst(node.left);
+                }
+
+                // 如果当前节点右节点不为空
+                if (node.right != null) {
+                    // 就将右节点放入队列中
+                    queue.addFirst(node.right);
+                }
+            }
+
+            // 将当前层的结果放入res中
+            res.add(nums);
+        }
+
+        // 返回结果
+        return res;
+    }
+}
+```
+
+## 121. 买卖股票的最佳时机
+
+原题链接：[121. 买卖股票的最佳时机](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
+
+> 给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
+>
+> 你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+>
+> 返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
+>
+> **提示：**
+>
+> - `1 <= prices.length <= 105`
+> - `0 <= prices[i] <= 104`
+
+### 1.贪心算法
+
+``` java
+class Solution {
+    public int maxProfit(int[] prices) {
+        // 贪心算法，min为数组中最小的元素
+        int length = prices.length, res = 0, min = prices[0];
+
+        // 通过遍历数组找到最小的元素
+        // 然后和后面的元素相减得出的差中取最大值
+        for (int i = 1; i < length; i++) {
+            // 更新最小值
+            if (min > prices[i]) {
+                min = prices[i];
+            }
+
+            // 和后面的元素相减并与res取最大值
+            res = Math.max(res, prices[i] - min);
+        }
+
+        return res;
+    }
+}
+```
+
+## 103. 二叉树的锯齿形层序遍历
+
+原题链接：[103. 二叉树的锯齿形层序遍历](https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/)
+
+> 给你二叉树的根节点 `root` ，返回其节点值的 **锯齿形层序遍历** 。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
+>
+> **提示：**
+>
+> - 树中节点数目在范围 `[0, 2000]` 内
+> - `-100 <= Node.val <= 100`
+
+### 1.栈
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+
+        // 利用栈实现层序遍历
+        LinkedList<TreeNode> stack = new LinkedList<>();
+        stack.push(root);
+
+        // true：表示从左往右
+        // false：表示从右往左
+        boolean flag = true;
+        while (!stack.isEmpty()) {
+            // 因为每一层都需要放在一个集合中
+            // 所以这里先把同一层的节点放到list中
+            List<TreeNode> list = new ArrayList<>();
+            // 遍历队列
+            while (!stack.isEmpty()) {
+                // 将栈中的元素放入list中
+                // 这里就是将同一层到节点放入到list中
+                list.add(stack.pop());
+            }
+
+            List<Integer> nums = new ArrayList<>();
+            // 然后再遍历这一层的节点
+            for (TreeNode node : list) {
+                // 当前节点值放入nums集合中
+                nums.add(node.val);
+
+                if (flag) { // 如果当前是从左往右
+                    // 则先将left入栈
+                    if (node.left != null) {
+                        stack.push(node.left);
+                    }
+                    // 再将right入栈
+                    if (node.right != null) {
+                        stack.push(node.right);
+                    }
+                } else { // 如果当前是从右往左
+                    // 则先将right入栈
+                    if (node.right != null) {
+                        stack.push(node.right);
+                    }
+                    // 再将left入栈
+                    if (node.left != null) {
+                        stack.push(node.left);
+                    }
+                }
+            }
+
+            // 变换方向
+            flag = !flag;
+            // 将当前层的结果放入res中
+            res.add(nums);
+        }
+
+        return res;
+    }
+}
+```
+
+## 160. 相交链表
+
+原题链接：[160. 相交链表](https://leetcode-cn.com/problems/intersection-of-two-linked-lists/)
+
+> 给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表不存在相交节点，返回 null 。
+>
+> 图示两个链表在节点 c1 开始相交：
+>
+> ![img](../../../img/160_statement.png)
+>
+> 题目数据 保证 整个链式结构中不存在环。
+>
+> 注意，函数返回结果后，链表必须 保持其原始结构 。
+>
+> 自定义评测：
+>
+> 评测系统 的输入如下（你设计的程序 不适用 此输入）：
+>
+> intersectVal - 相交的起始节点的值。如果不存在相交节点，这一值为 0
+> listA - 第一个链表
+> listB - 第二个链表
+> skipA - 在 listA 中（从头节点开始）跳到交叉节点的节点数
+> skipB - 在 listB 中（从头节点开始）跳到交叉节点的节点数
+> 评测系统将根据这些输入创建链式数据结构，并将两个头节点 headA 和 headB 传递给你的程序。如果程序能够正确返回相交节点，那么你的解决方案将被 视作正确答案 。
+>
+> 提示：
+>
+> listA 中节点数目为 m
+> listB 中节点数目为 n
+> 1 <= m, n <= 3 * 104
+> 1 <= Node.val <= 105
+> 0 <= skipA <= m
+> 0 <= skipB <= n
+> 如果 listA 和 listB 没有交点，intersectVal 为 0
+> 如果 listA 和 listB 有交点，intersectVal == listA[skipA] == listB[skipB]
+>
+
+### 1.集合
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        // 如果headA或者headB其中一个为null
+        // 那么它们必然不会相交，所以直接返回null
+        if (headA == null || headB == null) {
+            return null;
+        }
+
+        // 利用Set集合保存headA链表的所有节点
+        Set<ListNode> set = new HashSet<>();
+        ListNode node = headA;
+        // 遍历headA将节点放入set集合中
+        while (node != null) {
+            set.add(node);
+
+            node = node.next;
+        }
+
+        node = headB;
+        // 再遍历headB
+        // 并判断headB中是否有和set中相同的节点
+        while (node != null) {
+            // 如果有相同的节点
+            if (set.contains(node)) {
+                // 那么第一个相同的节点就是相交节点
+                // 直接返回
+                return node;
+            }
+
+            // 跳到下一个节点
+            node = node.next;
+        }
+
+        return null;
+    }
+}
+```
+
+## 20. 有效的括号
+
+原题链接：[20. 有效的括号](https://leetcode-cn.com/problems/valid-parentheses/)
+
+> 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
+>
+> 有效字符串需满足：
+>
+> 左括号必须用相同类型的右括号闭合。
+> 左括号必须以正确的顺序闭合。
+>
+> **提示：**
+>
+> - `1 <= s.length <= 104`
+> - `s` 仅由括号 `'()[]{}'` 组成
+
+### 1.栈
+
+``` java
+class Solution {
+    public boolean isValid(String s) {
+        int length = s.length();
+        if (length % 2 == 1) {
+            return false;
+        }
+
+        // 利用栈来完成括号匹配
+        LinkedList<Character> stack = new LinkedList<>();
+        // 遍历字符串的每一个字符
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            if (c == '(' || c == '{' || c == '[') {
+                // 如果当前字符是左括号
+                // 则则直接入栈
+                stack.push(c);
+
+                continue ;
+            }
+
+            // 如果遇到右括号，但是栈是空
+            // 说明当前字符前面没有与之匹配的左括号
+            if (stack.isEmpty()) {
+                // 直接返回false
+                return false;
+            }
+
+            // 否则弹出栈顶元素
+            char l = stack.pop();
+            if (l == '(' && c != ')' || l == '{' && c != '}' || l == '[' && c != ']') {
+                // 如果栈顶元素不能和当前字符匹配成功
+                // 则直接返回false
+                return false;
+            }
+        }
+
+        // 栈不为空表示还有括号没有匹配成功
+        if (!stack.isEmpty()) {
+            // 这里直接返回false
+            return false;
+        }
+
+        // 到了这里表示所有括号都匹配成功，返回true
+        return true;
+    }
+}
+```
+
+## 236. 二叉树的最近公共祖先
+
+原题链接：[236. 二叉树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/)
+
+> 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+>
+> 百度百科中最近公共祖先的定义为：“对于有根树 T 的两个节点 p、q，最近公共祖先表示为一个节点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
+>
+> 提示：
+>
+> 树中节点数目在范围 [2, 105] 内。
+> -109 <= Node.val <= 109
+> 所有 Node.val 互不相同 。
+> p != q
+> p 和 q 均存在于给定的二叉树中。
+>
+
+### 1.先序遍历
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        // 先序遍历
+        if (root == null) {
+            return null;
+        }
+
+        // 只要遇到了p或者q
+        if (root == p || root == q) {
+            // 则直接返回一个不为空的节点
+            // 这里返回root节点
+            return root;
+        }
+
+        // 然后先遍历左节点
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        // 再遍历右节点
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+        // 如果遍历左右节点返回的结果都不为空
+        // 则表示当前root节点就是p和q的最近公共祖先
+        if (left != null && right != null) {
+            // 直接返回root
+            return root;
+        }
+
+        // 否则返回遍历左右节点不为空的结果
+        return left != null ? left : right;
+    }
+}
+```
+
+## 88. 合并两个有序数组
+
+原题链接：[88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
+
+> 给你两个按 非递减顺序 排列的整数数组 nums1 和 nums2，另有两个整数 m 和 n ，分别表示 nums1 和 nums2 中的元素数目。
+>
+> 请你 合并 nums2 到 nums1 中，使合并后的数组同样按 非递减顺序 排列。
+>
+> 注意：最终，合并后数组不应由函数返回，而是存储在数组 nums1 中。为了应对这种情况，nums1 的初始长度为 m + n，其中前 m 个元素表示应合并的元素，后 n 个元素为 0 ，应忽略。nums2 的长度为 n 。
+>
+> 提示：
+>
+> nums1.length == m + n
+> nums2.length == n
+> 0 <= m, n <= 200
+> 1 <= m + n <= 200
+> -109 <= nums1[i], nums2[j] <= 109
+>
+
+### 1.迭代法
+
+``` java
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        // 先用临时数组temp将nums1数组中的元素保存起来
+        int[] temp = new int[m];
+        for (int i = 0; i < m; i++) {
+            temp[i] = nums1[i];
+        }
+
+        int i = 0, j = 0, k = 0;
+        // 合并数组temp和nums2
+        while (i < m || j < n) {
+            if (i == m) {
+                // 如果temp遍历完了，那么直接将nums2[j]合入nums1
+                nums1[k] = nums2[j++];
+            } else if (j == n) {
+                // 如果nums2遍历完了，那么直接将temp[i]合入nums1
+                nums1[k] = temp[i++];
+            } else if (temp[i] < nums2[j]) {
+                // 如果temp[i]更小就将temp[i]合入nums1
+                nums1[k] = temp[i++];
+            } else {
+                // 否则nums2[j]更小就将nums2[j]合入nums1
+                nums1[k] = nums2[j++];
+            }
+
+            k++;
+        }
+    }
+}
+```
+
+## 33. 搜索旋转排序数组
+
+原题链接：[33. 搜索旋转排序数组](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/)
+
+> 整数数组 nums 按升序排列，数组中的值 互不相同 。
+>
+> 在传递给函数之前，nums 在预先未知的某个下标 k（0 <= k < nums.length）上进行了 旋转，使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。例如， [0,1,2,4,5,6,7] 在下标 3 处经旋转后可能变为 [4,5,6,7,0,1,2] 。
+>
+> 给你 旋转后 的数组 nums 和一个整数 target ，如果 nums 中存在这个目标值 target ，则返回它的下标，否则返回 -1 。
+>
+> 提示：
+>
+> 1 <= nums.length <= 5000
+> -10^4 <= nums[i] <= 10^4
+> nums 中的每个值都 独一无二
+> 题目数据保证 nums 在预先未知的某个下标上进行了旋转
+> -10^4 <= target <= 10^4
+>
+
+### 1.二分法变种
+
+``` java
+class Solution {
+    public int search(int[] nums, int target) {
+        int length = nums.length, left = 0, right = length - 1;
+
+        // 二分法变种
+        while (left <= right) {
+            int mid = (left + right) >> 1;
+            // 如果nums[mid] == target
+            // 找到到了target
+            if (nums[mid] == target) {
+                // 直接返回mid
+                return mid;
+            }
+
+            // 如果nums[left] <= nums[mid]
+            if (nums[left] <= nums[mid]) {
+                // 表示区间[left, mid]是递增的
+                if (nums[left] <= target && target < nums[mid]) {
+                    // 表示targer在区间[left, mid]内
+                    // 所以收缩right，mid - 1
+                    right = mid - 1;
+                } else {
+                    // 否则表示targer不在区间[left, mid]内
+                    // 收缩left，mid + 1
+                    left = mid + 1;
+                }
+            } else {// 否则表示区间[mid, right]是递增的
+                if (nums[mid] < target && target <= nums[right]) {
+                    // 表示target在区间[mid, right]内
+                    // 所以收缩left，mid + 1
+                    left = mid + 1;
+                } else {
+                    // 否则表示targer不在区间[mid, right]内
+                    // 收缩right，mid - 1
+                    right = mid - 1;
+                }
+            }
+        }
+
+        // 到了这里表示没有找到target
+        // 返回-1
+        return -1;
+    }
+}
+```
+
+## 5. 最长回文子串
+
+原题链接：[5. 最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
+
+> 给你一个字符串 `s`，找到 `s` 中最长的回文子串。
+>
+> **提示：**
+>
+> - `1 <= s.length <= 1000`
+> - `s` 仅由数字和英文字母组成
+
+### 1.左右指针
+
+``` java
+class Solution {
+    public String longestPalindrome(String s) {
+        int length = s.length(), st = 0, end = 0;
+
+        // 遍历字符串找出最长的回文子串
+        for (int i = 0; i < length; i++) {
+            // 先以位置i为中心向两边统计回文子串的长度
+            int s1 = helper(s, i, i);
+            // 再以位置i和下一个位置i + 1为中心向两边统计回文子串的长度
+            int s2 = helper(s, i, i + 1);
+            
+            // 取两者中的最大值
+            int max = Math.max(s1, s2);
+            // 如果最大值大于现有的回文子串长度
+            if (max > end - st + 1) {
+                // 则更新st和end
+                // 如果max为奇数，则i为中心位置
+                // 如果max为偶数，则i为中心位置中左边的位置
+                // 所以计算st时要减去(max - 1) / 2
+                st = i - (max - 1) / 2;
+                // 计算end时直接加上max的一半即max / 2
+                end = i + max / 2;
+            }
+        }
+
+        return s.substring(st, end + 1);
+    }
+
+    /**
+     * 统计字符串在left和right位置两边回文子串的长度
+     */
+    private int helper(String s, int left, int right) {
+        int length = s.length();
+        while (left >= 0 && right < length && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+
+        return right - left - 1;
+    }
+}
+```
+

@@ -1307,3 +1307,71 @@ class Solution {
 }
 ```
 
+## 200. 岛屿数量
+
+原题链接：[200. 岛屿数量](https://leetcode-cn.com/problems/number-of-islands/)
+
+> 给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+>
+> 岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
+>
+> 此外，你可以假设该网格的四条边均被水包围。
+>
+> 提示：
+>
+> m == grid.length
+> n == grid[i].length
+> 1 <= m, n <= 300
+> grid\[i][j] 的值为 '0' 或 '1'
+
+### 1.深度优先搜索
+
+``` java
+class Solution {
+    public int numIslands(char[][] grid) {
+        int m = grid.length, n = grid[0].length, sum = 0;
+        
+        // visited用来标记访问过的陆地
+        boolean[][] visited = new boolean[m][n];
+        // 遍历二维数组
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (visited[i][j]) {
+                    continue ;
+                }
+
+                // 当遇到陆地时
+                if (grid[i][j] == '1') {
+                    // 陆地加1
+                    sum++;
+                    // 再进行深度优先搜索标记相连的陆地
+                    helper(grid, visited, i, j);
+                }
+            }
+        }
+
+        return sum;
+    }
+
+    /**
+     * 深度优先搜索标记相连的陆地
+     */
+    private void helper(char[][] grid, boolean[][] visited, int i, int j) {
+        int m = grid.length, n = grid[0].length;
+        // 遇到边界或者访问过的陆地或者非陆地时
+        // 直接返回
+        if (i < 0 || i >= m || j < 0 || j >= n || visited[i][j] || grid[i][j] == '0') {
+            return ;
+        }
+
+        visited[i][j] = true;
+
+        // 上右下左访问旁边的陆地
+        helper(grid, visited, i - 1, j);
+        helper(grid, visited, i, j + 1);
+        helper(grid, visited, i + 1, j);
+        helper(grid, visited, i, j - 1);
+    }
+}
+```
+

@@ -1438,3 +1438,146 @@ class Solution {
 }
 ```
 
+## 415. 字符串相加
+
+原题链接：[415. 字符串相加](https://leetcode-cn.com/problems/add-strings/)
+
+> 给定两个字符串形式的非负整数 num1 和num2 ，计算它们的和并同样以字符串形式返回。
+>
+> 你不能使用任何內建的用于处理大整数的库（比如 BigInteger）， 也不能直接将输入的字符串转换为整数形式。
+>
+> 提示：
+>
+> 1 <= num1.length, num2.length <= 104
+> num1 和num2 都只包含数字 0-9
+> num1 和num2 都不包含任何前导零
+>
+
+### 1.倒序迭代
+
+``` java
+class Solution {
+    public String addStrings(String num1, String num2) {
+        int len1 = num1.length(), len2 = num2.length();
+
+        // sum保存临时的和以及上次相加结果的进位
+        int sum = 0, i = len1 - 1, j = len2 - 1;
+        StringBuilder res = new StringBuilder();
+        // 倒叙遍历两个字符串
+        while (i >= 0 || j >= 0) {
+            int a = 0;
+            if (i >= 0) {
+                // 将字符转为数字
+                a = num1.charAt(i--) - '0';
+            }
+
+            int b = 0;
+            if (j >= 0) {
+                // 将字符转为数字
+                b = num2.charAt(j--) - '0';
+            }
+
+            // 相加
+            sum += a + b;
+            // 对10取余放到结果中
+            res.append(sum % 10);
+            // 除以10获取进位
+            sum /= 10;
+        }
+
+        // 如果进位不为0
+        if (sum > 0) {
+            // 则将进位放入结果中
+            res.append(sum);
+        }
+
+        // 反转结果返回
+        return res.reverse().toString();
+    }
+}
+```
+
+## 92. 反转链表 II
+
+原题链接：[92. 反转链表 II](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
+
+> 给你单链表的头指针 head 和两个整数 left 和 right ，其中 left <= right 。请你反转从位置 left 到位置 right 的链表节点，返回 反转后的链表 。
+>
+> **提示：**
+>
+> - 链表中节点数目为 `n`
+> - `1 <= n <= 500`
+> - `-500 <= Node.val <= 500`
+> - `1 <= left <= right <= n`
+
+### 1.迭代法
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        // 创建h节点作为反转链表的头节点
+        ListNode h = new ListNode();
+        // pre作为反转链表的前继节点
+        // last作为反转后链表的最后一个节点
+        ListNode node = head, pre = null, last = null;
+        // pos记录遍历到了第几个节点
+        int pos = 0;
+
+        // 遍历到链表的第right个节点
+        while (node != null && pos++ < right) {
+            // 如果遍历到了第left个节点及以后的节点
+            if (left <= pos) {
+                // left == pos时表示便利到了反转链表的第一个节点
+                // 即反转后链表的最后一个节点
+                if (left == pos) {
+                    // 用last记录反转后链表的最后一个节点
+                    last = node;
+                }
+
+                // 临时存放当前节点
+                ListNode cur = node;
+                // node跳到下一个节点
+                node = node.next;
+
+                // 实现反转
+                // 当前节点的next指向头节点的下一个节点
+                cur.next = h.next;
+                // 头节点的next指向当前节点
+                h.next = cur;
+            } else {
+                // 在遍历到第left个节点前
+                // 一直更新pre
+                pre = node;
+                // node跳到下一个节点
+                node = node.next;
+            }
+        }
+
+        // 如果pre不为空表示left > 1
+        if (pre != null) {
+            // 这里需要把反转链表前面的节点连接上反转后的链表
+            pre.next = h.next;
+        }
+
+        if (last != null) {
+            // 将反转后的链表连接上反转链表后面的节点
+            last.next = node;
+        }
+
+        // 如果left == 1直接返回h.next
+        // 否则返回head
+        return left == 1 ? h.next : head;
+    }
+}
+```
+

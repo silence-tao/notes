@@ -1581,3 +1581,176 @@ class Solution {
 }
 ```
 
+## 23. 合并K个升序链表
+
+原题链接：[23. 合并K个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/)
+
+> 给你一个链表数组，每个链表都已经按升序排列。
+>
+> 请你将所有链表合并到一个升序链表中，返回合并后的链表。
+>
+> 提示：
+>
+> k == lists.length
+> 0 <= k <= 10^4
+> 0 <= lists[i].length <= 500
+> -10^4 <= lists[i][j] <= 10^4
+> lists[i] 按 升序 排列
+> lists[i].length 的总和不超过 10^4
+>
+
+### 1.归并
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists.length == 0) {
+            return null;
+        }
+
+        // 利用栈实现归并合并链表
+        LinkedList<ListNode> stack = new LinkedList<>();
+        // 先遍历lists将所有链表放入stack中
+        for (ListNode list : lists) {
+            stack.push(list);
+        }
+
+        // 然后将栈中的每两个链表弹出进行合并
+        // 合并结果再放入栈中
+        // 当栈中只剩下一个链表时停止合并
+        while (stack.size() > 1) {
+            stack.push(merge(stack.pop(), stack.pop()));
+        }
+
+        // 栈中剩余的最后一个链表就是合并后的结果
+        return stack.pop();
+    }
+
+    /**
+     * 合并两个升序链表
+     */
+    private ListNode merge(ListNode node1, ListNode node2) {
+        if (node1 == null) {
+            return node2;
+        }
+
+        if (node2 == null) {
+            return node1;
+        }
+
+        ListNode head = new ListNode();
+        ListNode node = head;
+
+        while (node1 != null || node2 != null) {
+            if (node1 == null) {
+                node.next = node2;
+
+                break ;
+            } else if (node2 == null) {
+                node.next = node1;
+
+                break ;
+            } else if (node1.val < node2.val) {
+                node.next = node1;
+
+                node1 = node1.next;
+            } else {
+                node.next = node2;
+
+                node2 = node2.next;
+            }
+
+            node = node.next;
+        }
+
+        return head.next;
+    }
+}
+```
+
+## 142. 环形链表 II
+
+原题链接：[142. 环形链表 II](https://leetcode-cn.com/problems/linked-list-cycle-ii/)
+
+> 给定一个链表的头节点  head ，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
+>
+> 如果链表中有某个节点，可以通过连续跟踪 next 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。如果 pos 是 -1，则在该链表中没有环。注意：pos 不作为参数进行传递，仅仅是为了标识链表的实际情况。
+>
+> 不允许修改 链表。
+>
+> **提示：**
+>
+> - 链表中节点的数目范围在范围 `[0, 104]` 内
+> - `-105 <= Node.val <= 105`
+> - `pos` 的值为 `-1` 或者链表中的一个有效索引
+
+### 1.快慢指针
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return null;
+        }
+
+        // 快慢指针
+        // 快指针每次跳一个节点
+        // 慢指针每次跳两个节点
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+
+            // 如果链表有环，则快慢指针相遇，即slow == fast
+            if (slow == fast) {
+                // 这时直接跳出循环
+                break ;
+            }
+        }
+
+        // 如果快慢指针不相等，则链表无环
+        if (slow != fast) {
+            // 直接返回null
+            return null;
+        }
+
+        // 既然判定链表有环
+        // 那让慢指针从头节点开始
+        // 和快指针以相同的速度前进
+        // 当两个快慢指针再次相遇时的节点
+        // 就是环的起点
+        slow = head;
+        while (slow != fast) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+
+        // 返回快慢指针都是环的起点
+        return slow;
+    }
+}
+```
+
+
+

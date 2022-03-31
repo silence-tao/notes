@@ -1752,5 +1752,86 @@ public class Solution {
 }
 ```
 
+## 54. 螺旋矩阵
 
+原题链接：[54. 螺旋矩阵](https://leetcode-cn.com/problems/spiral-matrix/)
+
+> 给你一个 `m` 行 `n` 列的矩阵 `matrix` ，请按照 **顺时针螺旋顺序** ，返回矩阵中的所有元素。
+>
+> 提示：
+>
+> m == matrix.length
+> n == matrix[i].length
+> 1 <= m, n <= 10
+> -100 <= matrix[i][j] <= 100
+>
+
+### 1.迭代
+
+``` java
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        int m = matrix.length, n = matrix[0].length;
+
+        // 上下左右边界
+        int u = 0, d = m - 1, l = 0, r = n - 1;
+        // move代表左下右上移动 0->1->2->3
+        int move = 0;
+        // step代表移动了多少步
+        int step = m * n, i = 0, j = 0;
+
+        List<Integer> res = new ArrayList<>();
+        while (step-- > 0) {
+            res.add(matrix[i][j]);
+            if (move == 0) { // 相右移动
+                if (j == r) {
+                    // 转到下一层
+                    i++;
+                    // 移动方向转为向下
+                    move = 1;
+                    // 上边界缩小1
+                    u++;
+
+                    continue ;
+                }
+
+                // 向右移动一格
+                j++;
+            } else if (move == 1) {
+                if (i == d) {
+                    j--;
+                    move = 2;
+                    r--;
+
+                    continue ;
+                }
+
+                i++;
+            } else if (move == 2) {
+                if (j == l) {
+                    i--;
+                    move = 3;
+                    d--;
+
+                    continue ;
+                }
+
+                j--;
+            } else {
+                if (i == u) {
+                    j++;
+                    move = 0;
+                    l++;
+
+                    continue ;
+                }
+
+                i--;
+            }
+        }
+
+        return res;
+    }
+}
+```
 

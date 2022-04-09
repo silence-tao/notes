@@ -5,7 +5,7 @@
 ## 1.JDK对线程池的支持
 
 为了能够更好地控制多线程，JDK 提供了一套 `Executor` 框架，帮助开发人员有效地进行线程控制，其本质就是一个线程池。
-![thread_pool](../../../silentao_blog/source/img/backend/thread_pool.png)
+![thread_pool](../img/thread_pool.png)
 
 其中 `ThreadPoolExecutor` 表示一个线程池，`Executors` 提供了各种类型的线程池，主要有以下工厂方法：
 

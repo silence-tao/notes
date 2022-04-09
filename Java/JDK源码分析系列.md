@@ -23,7 +23,7 @@ AQS 定义两种资源共享方式：Exclusive（独占，只有一个线程能�
 4. `tryAcquireShared(int)`：共享方式。尝试获取资源。负数表示失败；0 表示成功，但没有剩余可用资源；正数表示成功，且有剩余资源；
 5. `tryReleaseShared(int)`：共享方式。尝试释放资源，如果释放后允许唤醒后续等待结点返回 true，否则返回 false。
 
-以 `ReentrantLock` 为例，`state` 初始化为 0，表示未锁定状态。A 线程 `lock()` 时，会调用 `tryAcquire()` 独占该锁并将 `state + 1`。此后，其他线程再 `tryAcquire()` 时就会失败，直到 A 线程 `unlock()` 到 `state = 0`（即释放锁）为止，其它线程才有机会获取该锁。当然，释放锁之前，A 线程自己是可以重复获取此锁的（`state` 会累加），这就是可重入的概念。但要注意，获取多少次就要释放多么次，这样才能保证 `state` 是能回到零态的。
+以 `ReentrantLock` 为例，`state` 初始化为 0，表示未锁定状态。A 线程 `lock()` 时，会调用 `tryAcquire()` 独占该锁并将 `state + 1`。此后，其他线程再 `tryAcquire()` 时就会失败，直到 A 线程 `unlock()` 到 `state = 0`（即释放锁）为止，其它线程才有机会获取该锁。当然，释放锁之前，A 线程自己是可以重复获取此锁的（`state` 会累加），这就是可重入的概念。但要注意，获取多少次就要释放多少次，这样才能保证 `state` 是能回到零态的。
 
 再以 `CountDownLatch` 以例，任务分为 N 个子线程去执行，`state` 也初始化为 N（注意 N 要与线程个数一致）。这 N 个子线程是并行执行的，每个子线程执行完后 `countDown()` 一次，`state` 会 CAS 减 1。等到所有子线程都执行完后(即 `state = 0`)，会 `unpark()` 主调用线程，然后主调用线程就会从 `await()` 函数返回，继续后余动作。
 
@@ -84,7 +84,8 @@ private Node addWaiter(Node mode) {
             return node;
         }
     }
-    // 当队列为空则通过此方法入队
+    // 快速的方式放入队尾失败
+  	// 或者队列为空则通过此方法入队
     enq(node);
     return node;
 }
@@ -94,7 +95,7 @@ private Node addWaiter(Node mode) {
 
 1. `CANCELLED`：值为 1，在同步队列中等待的线程等待超时或被中断，需要从同步队列中取消该 `Node` 的结点，其结点的 `waitStatus` 为 `CANCELLED`，即结束状态，进入该状态后的结点将不会再变化；
 2. `SIGNAL`：值为 -1，被标识为该等待唤醒状态的后继结点，当其前继结点的线程释放了同步锁或被取消，将会通知该后继结点的线程执行。说白了，就是处于唤醒状态，只要前继结点释放锁，就会通知标识为 `SIGNAL` 状态的后继结点的线程执行；
-3. `CONDITION`：值为 -2，与 `Condition` 相关，该标识的结点处于同步队列中，结点的线程等待在 `Condition` 上，当其他线程调用了 `Condition` 的 `signal()` 方法后，`CONDITION` 状态的结点将从同步队列转移到同步队列中，等待获取同步锁；
+3. `CONDITION`：值为 -2，与 `Condition` 相关，该标识的结点处于等待队列中，结点的线程等待在 `Condition` 上，当其他线程调用了 `Condition` 的 `signal()` 方法后，`CONDITION` 状态的结点将从等待队列转移到同步队列中，等待获取同步锁；
 4. `PROPAGATE`：值为 -3，与共享模式相关，在共享模式中，该状态标识结点的线程处于可运行状态；
 5. 0 状态：值为 0，代表初始化状态。
 
@@ -102,7 +103,7 @@ AQS 在判断状态时，通过用 `waitStatus > 0` 表示取消状态，而 `wa
 
 ##### 2.1.2.1 enq(Node)
 
-此方法用于当同步队列为空时，创建头结点，并将node加入队尾。源码如下：
+此方法用于当同步队列为空或者有多个结点并发加入队尾时，通过 CAS 自旋的方式将 node 加入队尾。源码如下：
 
 ``` java
 private Node enq(final Node node) {
@@ -125,7 +126,7 @@ private Node enq(final Node node) {
 
 #### 2.1.3 acquireQueued(Node, int)
 
-通过 `tryAcquire()` 和 `addWaiter()`，该线程获取资源失败，已经被放入同步队列尾部了。接下来应该进入等待状态休息，直到其他线程彻底释放资源后唤醒自己，自己再拿到资源，然后就可以去干自己想干的事了。源码如下：
+通过 `tryAcquire()` 和 `addWaiter()`，该线程获取资源失败，已经被放入同步队列尾部了。接下来应该进入等待状态休息，直到其他线程彻底释放资源后唤醒自己，自己再拿到资源，然后就可以执行临界区的代码了。源码如下：
 
 ``` java
 // 在同步队列中排队拿号（中间没其它事干可以休息），直到拿到号后再返回
@@ -202,8 +203,8 @@ private final boolean parkAndCheckInterrupt() {
 
 `park()` 会让当前线程进入 waiting 状态。在此状态下，有两种途径可以唤醒该线程：
 
-1. 被unpark()；
-2. 被interrupt()。
+1. 被 `unpark()`；
+2. 被 `interrupt()`。
 
 需要注意的是，`Thread.interrupted()` 会清除当前线程的中断标记位。 
 
@@ -686,7 +687,7 @@ public final boolean hasQueuedPredecessors() {
 
 ### 5.1 加锁
 
-加锁方式有好几种，大致可分为直接加锁、支持中断响应的加锁、支持快速失败的加锁、支持超时的加锁，因为具体加锁的实现都已经由 AQS 和 `ReentrantLock` 的内部类 `Sync`、`NonfairSync` 和 `FairSync` 实现好饿了，所以 `ReentrantLock` 加锁就变得很简单，具体如下：
+加锁方式有好几种，大致可分为直接加锁、支持中断响应的加锁、支持快速失败的加锁、支持超时的加锁，因为具体加锁的实现都已经由 AQS 和 `ReentrantLock` 的内部类 `Sync`、`NonfairSync` 和 `FairSync` 实现好了，所以 `ReentrantLock` 加锁就变得很简单，具体如下：
 
 ``` java
 /**
@@ -744,12 +745,10 @@ public void unlock() {
 
 `Condition` 能实现 `synchronized` 和 `wait`、`notify` 搭配的功能，另外比后者更灵活，`Condition` 可以实现多路通知功能，也就是在一个 `Lock` 对象里可以创建多个 `Condition`（即对象监视器）实例，线程对象可以注册在指定的 `Condition` 中，从而可以有选择的进行线程通知，在调度线程上更加灵活。而 `synchronized` 就相当于整个 `Lock` 对象中只有一个单一的 `Condition` 对象，所有的线程都注册在这个对象上。线程开始 `notifyAll` 时，需要通知所有的 WAITING 线程，没有选择权，会有相当大的效率问题。
 
-这里要讲的是 `ReentrantLock` 中的 `Condition`，`Condition` 是一个接口，而 `ReentrantLock` 里使用的 `Condition` 是由 AQS 的内部类 `ConditionObject` 实现的。在 `ConditionObject` 内部维护了一个由 `Node`（AQS 里的另一个类）节点连接而成的等待队列，这个队列是一个单链表，同时 `ConditionObject` 还有指向单链表首尾节点的指针，方便对整个队列进行遍历。
+这里要讲的是 `ReentrantLock` 中的 `Condition`，`Condition` 是一个接口，而 `ReentrantLock` 里使用的 `Condition` 是由 AQS 的内部类 `ConditionObject` 实现的。在 `ConditionObject` 内部维护了一个由 `Node`（AQS 里的另一个内部类）节点连接而成的等待队列，这个队列是一个单链表，同时 `ConditionObject` 还有指向单链表首尾节点的指针，方便对整个队列进行遍历。
 
 流程图如下：
 ![10027_1](../img/10027_1-16422559649083.png)
-
-由于鄙人不善于作图，所以接下来会有大量的源码注释还有文字说明，如果有说得不清楚的地方，还望评论区指出哈
 
 ## 1.ConditionObject的成员变量
 
@@ -1152,7 +1151,7 @@ final boolean transferForSignal(Node node) {
 
 ## 1.CountDownLatch
 
-`CountDownLatch` 中 count down 是倒数的意思，latch 则是门闩的含义，它通常用来控制线程等待，它可以让某一个线程等待直到倒计时结束，再开始执行。
+`CountDownLatch` 中 count down 是倒数的意思，latch 则是门闩的含义，它通常用来控制线程等待，它可以让某一个线程等待直到倒计时结束，再继续执行。
 
 ### 1.1 简介
 
@@ -1306,7 +1305,7 @@ private final Runnable barrierCommand;
 private Generation generation = new Generation();
 // 还需要阻塞的线程数（即parties-当前阻塞的线程数）
 // 当新建generation或generation被破坏时，count会被重置
-// 因为对Count的操作都是在获取锁之后，所以不需要其他同步措施。
+// 因为对count的操作都是在获取锁之后，所以不需要其他同步措施。
 private int count;
 ```
 
@@ -1504,9 +1503,9 @@ public void reset() {
 
 ## 简介
 
-ThreadLocal，很多地方叫做线程本地变量，也有些地方叫做线程本地存储，其实意思差不多。可能很多朋友都知道ThreadLocal为变量在每个线程中都创建了一个副本，那么每个线程可以访问自己内部的副本变量。  
+ThreadLocal，很多地方叫做线程本地变量，也有些地方叫做线程本地存储，其实意思差不多。可能很多朋友都知道 ThreadLocal 为变量在每个线程中都创建了一个副本，那么每个线程可以访问自己内部的副本变量。  
 
-ThreadLocal的存储结构如下：
+ThreadLocal 的存储结构如下：
 
 ![10019_1](../img/10019_1.png)
 
@@ -1514,13 +1513,13 @@ ThreadLocal的存储结构如下：
 
 ### ThreadLocalMap
 
-ThreadLocalMap类是ThreadLocal的静态内部类。每个Thread维护一个ThreadLocalMap映射表，这个映射表的key是ThreadLocal实例本身，value是真正需要存储的Object。这样的设计主要有以下几点优势：
+ThreadLocalMap 类是 ThreadLocal 的静态内部类。每个 Thread 维护一个 ThreadLocalMap 映射表，这个映射表的 key 是 ThreadLocal 实例本身，value 是真正需要存储的 Object。这样的设计主要有以下几点优势：
 
-1. 这样设计之后每个ThreadLocalMap的Entry数量变小了：之前是Thread的数量，现在是ThreadLocal的数量，能提高性能；
+1. 这样设计之后每个 ThreadLocalMap 的 Entry 数量变小了：之前是 Thread 的数量，现在是 ThreadLocal 的数量，能提高性能；
 
-2. 当Thread销毁之后对应的ThreadLocalMap也就随之销毁了，能减少内存使用量。
+2. 当 Thread 销毁之后对应的 ThreadLocalMap 也就随之销毁了，能减少内存使用量。
 
-ThreadLocalMap就是以ThreadLocal对象为key的简易版的HashMap，通过静态内部类Entry来存储key和value，使用线性探测的方式来解决哈希冲突的问题，并且提供了基本的元素增删改查和扩容的方法。这里要讲的是ThreadLocalMap的静态内部类Entry，Entry继承了WeakReference并使用ThreadLocal的弱引用作为key，先来看一下Entry的定义：
+ThreadLocalMap 就是以 ThreadLocal 对象为 key 的简易版的 HashMap，通过静态内部类 Entry 来存储 key 和 value，使用线性探测的方式来解决哈希冲突的问题，并且提供了基本的元素增删改查和扩容的方法。这里要讲的是 ThreadLocalMap 的静态内部类 Entry，Entry 继承了 WeakReference 并使用 ThreadLocal 的弱引用作为 key，先来看一下 Entry 的定义：
 
 ``` java
 static class Entry extends WeakReference<ThreadLocal<?>> {
@@ -1534,15 +1533,15 @@ static class Entry extends WeakReference<ThreadLocal<?>> {
 }
 ```
 
-弱引用的对象在jvm下一次进行gc的时候就会被回收，对象内存空间就会被释放，于是就会产生这样一个问题：
+弱引用的对象在 jvm 下一次进行 gc 的时候就会被回收，对象内存空间就会被释放，于是就会产生这样一个问题：
 
-ThreadLocalMap使用ThreadLocal的弱引用作为key，如果外部没有ThreadLocal对象的强引用，只是作为局部变量来使用的话，那么在下一次gc时ThreadLocal对象就会被回收，ThreadLocalMap中对应的Entry就会出现key为null的情况，这些key对应的value也将无法再访问，但是value却有一个来自当前线程的强引用，因此只有等这个线程销毁时，value才能真正的被回收。但是当我们在使用线程池的情况时，核心线程是一直在运行的，线程对象不会被回收，于是就可能出现内存泄漏的问题。
+ThreadLocalMap 使用 ThreadLocal 的弱引用作为 key，如果外部没有 ThreadLocal 对象的强引用，只是作为局部变量来使用的话，那么在下一次 gc 时 ThreadLocal 对象就会被回收，ThreadLocalMap 中对应的 Entry 就会出现 key 为 null 的情况，这些 key 对应的 value 也将无法再访问，但是 value 却有一个来自当前线程的强引用，因此只有等这个线程销毁时，value 才能真正的被回收。但是当我们在使用线程池的情况时，核心线程是一直在运行的，线程对象不会被回收，于是就可能出现内存泄漏的问题。
 
 对象之间的引用结构图如下：
 
 ![10019_2](../img/10019_2-16422564011134.png)
 
-ThreadLocalMap使用了线性探测来处理哈希冲突的问题，并在这个过程中将那些key为null的Entry和对应的value清理掉了，具体实现在expungeStaleEntry方法中，可以看源码：
+ThreadLocalMap 使用了线性探测来处理哈希冲突的问题，并在这个过程中将那些 key 为 null 的 Entry 和对应的 value 清理掉了，具体实现在 expungeStaleEntry 方法中，可以看源码：
 
 ``` java
 private int expungeStaleEntry(int staleSlot) {
@@ -1588,13 +1587,13 @@ private int expungeStaleEntry(int staleSlot) {
 }
 ```
 
-expungeStaleEntry方法执行完后，key为null的Entry到value对象就不会存在强引用了，在gc时Entry和value对象就会被回收，自然就不存在内存泄漏的问题。查看expungeStaleEntry方法的调用位置可以知道，在ThreadLocalMap的getEntry、set和remove方法中，都会调用expungeStaleEntry方法。当我不需要获取value也不需要set value时，还是可能会出现内存泄漏问题，这是可能就需要手动的调用ThreadLocal的remove方法来防止内存泄漏。
+expungeStaleEntry 方法执行完后，key 为 null 的 Entry 到 value 对象就不会存在强引用了，在 gc 时 Entry 和 value 对象就会被回收，自然就不存在内存泄漏的问题。查看 expungeStaleEntry 方法的调用位置可以知道，在 ThreadLocalMap 的 getEntry、set 和 remove 方法中，都会调用 expungeStaleEntry 方法。当我们不需要获取 value 也不需要 set value 时，还是可能会出现内存泄漏问题，这是可能就需要手动的调用 ThreadLocal 的 remove 方法来防止内存泄漏。
 
-其实，最好的方式就是将ThreadLocal变量定义成private static的，这样的话ThreadLocal的生命周期就更长，由于一直存在ThreadLocal的强引用，所以ThreadLocal也就不会被回收，也就能保证任何时候都能根据ThreadLocal的弱引用访问到Entry的value值，然后remove它，可以防止内存泄露。
+其实，最好的方式就是将 ThreadLocal 变量定义成 `private static` 的，这样的话 ThreadLocal 的生命周期就更长，由于一直存在 ThreadLocal 的强引用，所以 ThreadLocal 也就不会被回收，也就能保证任何时候都能根据 ThreadLocal 的弱引用访问到 Entry 的 value 值，然后 remove 它，可以防止内存泄露。
 
 ### initialValue
 
-initialValue()方法是protected类型的，很显然是建议在子类重载该函数的，所以通常该方法都会以匿名内部类的形式被重载，以指定初始值。当调用get()方法的时候，若是与当前线程关联的ThreadLocal值已经被设置过，则不会调用initialValue()方法；否则，会调用initialValue()方法来进行初始值的设置。通常initialValue()方法每个线程只会调用一次，除非调用了remove()方法之后又调用get()方法，此时，与当前线程关联的ThreadLocal值处于没有设置过的状态（其状态体现在源码中，就是线程的ThreadLocalMap对象是否为null），initialValue()方法仍会被调用。源码如下：
+`initialValue()` 方法是 protected 类型的，很显然是建议在子类重载该函数的，所以通常该方法都会以匿名内部类的形式被重载，以指定初始值。当调用 get() 方法的时候，若是与当前线程关联的 ThreadLocal 值已经被设置过，则不会调用 initialValue() 方法；否则，会调用 initialValue() 方法来进行初始值的设置。通常 initialValue() 方法每个线程只会调用一次，除非调用了 remove() 方法之后又调用 get() 方法，此时，与当前线程关联的 ThreadLocal 值处于没有设置过的状态（其状态体现在源码中，就是线程的 ThreadLocalMap 对象是否为 null），initialValue() 方法仍会被调用。源码如下：
 
 ``` java
 protected T initialValue() {
@@ -1604,14 +1603,14 @@ protected T initialValue() {
 
 ### get
 
-获取与当前线程关联的ThreadLocal值，废话不多说，直接看源码：
+获取与当前线程关联的 ThreadLocal 值，废话不多说，直接看源码：
 
 
 ``` java
 public T get() {
     // 获取当前线程对象
     Thread t = Thread.currentThread();
-    // 根据当前线程对象，获取线程对于的ThreadLocalMap对象
+    // 根据当前线程对象，获取线程对应的ThreadLocalMap对象
     ThreadLocalMap map = getMap(t);
     if (map != null) {// map不为空
         // 以当前ThreadLocal对象的引用获取map中对于的value
@@ -1656,17 +1655,17 @@ void createMap(Thread t, T firstValue) {
 }
 ```
 
-ThreadLocal的实现离不开ThreadLocalMap类，get其实就是去当前线程的ThreadLocalMap里获取以ThreadLocal对象为key对应Entry的值，大致过程如下：
+ThreadLocal 的实现离不开 ThreadLocalMap 类，get 其实就是去当前线程的 ThreadLocalMap 里获取以 ThreadLocal 对象为 key 对应 Entry 的值，大致过程如下：
 
 1. 对应的值已经存在就直接返回；
-2. 否则调用initialValue方法获取初始值；
-3. 如果ThreadLocalMap不为空就将初始值以ThreadLocal为key存入ThreadLocalMap对象中；
-4. 否则就创建当前对象的ThreadLocalMap对象并存入初始值；
+2. 否则调用 initialValue 方法获取初始值；
+3. 如果 ThreadLocalMap 不为空就将初始值以 ThreadLocal 为 key 存入 ThreadLocalMap 对象中；
+4. 否则就创建当前对象的 ThreadLocalMap 对象并存入初始值；
 5. 最后返回初始值。
 
 ### set
 
-设置与当前线程关联的ThreadLocal值，依然不多废话，直接看源码：
+设置与当前线程关联的 ThreadLocal 值，依然不多废话，直接看源码：
 
 ``` java
 public void set(T value) {
@@ -1699,10 +1698,10 @@ public void remove() {
 
 ## 总结
 
-①ThreadLocal并不解决线程间共享数据的问题；
-②ThreadLocal通过隐式的在不同线程内创建独立实例副本避免了实例线程安全的问题；
-③每个线程持有一个Map并维护了ThreadLocal对象与具体实例的映射，该Map由于只被持有它的线程访问，故不存在线程安全以及锁的问题；
-④ThreadLocal 适用于变量在线程间隔离且在方法间共享的场景。
+1. ThreadLocal 并不解决线程间共享数据的问题；
+2. ThreadLocal 通过隐式的在不同线程内创建独立实例副本避免了实例线程安全的问题；
+3. 每个线程持有一个 Map 并维护了 ThreadLocal 对象与具体实例的映射，该 Map 由于只被持有它的线程访问，故不存在线程安全以及锁的问题；
+4. ThreadLocal 适用于变量在线程间隔离且在方法间共享的场景。
 
 # 7.JDK源码分析之——FutureTask
 

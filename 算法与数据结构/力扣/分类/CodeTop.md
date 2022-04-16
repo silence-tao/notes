@@ -1922,3 +1922,353 @@ class Solution {
 }
 ```
 
+## 42. 接雨水
+
+原题链接：[42. 接雨水](https://leetcode-cn.com/problems/trapping-rain-water/)
+
+> 给定 `n` 个非负整数表示每个宽度为 `1` 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+>
+> **提示：**
+>
+> - `n == height.length`
+> - `1 <= n <= 2 * 104`
+> - `0 <= height[i] <= 105`
+
+### 1.双指针
+
+``` java
+class Solution {
+    public int trap(int[] height) {
+        int length;
+        if ((length = height.length) == 0) {
+            return 0;
+        }
+
+        // 每个柱子能接多少雨水等于当前柱子两边最大高度的较小值减去当前高度的值
+        int sum = 0, left, right;
+        for (int i = 1; i < length; i++) {
+            left = right = height[i];
+
+            // 找到左边最大最大高度的柱子
+            for (int j = i - 1; j >= 0; j--) {
+                left = Math.max(left, height[j]);
+            }
+
+            // 找到右边最大最大高度的柱子
+            for (int j = i + 1; j < length; j++) {
+                right = Math.max(right, height[j]);
+            }
+
+            // 当前柱子两边最大高度的较小值减去当前高度的值
+            // 就是当前柱子能接的雨水
+            sum += Math.min(left, right) - height[i];
+        }
+
+        return sum;
+    }
+}
+```
+
+## 143. 重排链表
+
+原题链接：[143. 重排链表](https://leetcode-cn.com/problems/reorder-list/)
+
+> 给定一个单链表 L 的头节点 head ，单链表 L 表示为：
+>
+> ```
+> L0 → L1 → … → Ln - 1 → Ln
+> ```
+>
+>
+> 请将其重新排列后变为：
+>
+> ```
+> L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
+> ```
+>
+> 不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+>
+> **提示：**
+>
+> - 链表的长度范围为 `[1, 5 * 104]`
+> - `1 <= node.val <= 1000`
+
+### 1.快慢指针+栈
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public void reorderList(ListNode head) {
+        if (head == null || head.next == null) {
+            return ;
+        }
+
+        // 利用快慢指针将链表一分为二
+        ListNode slow = head, fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // slow就是链表点中点或者中点左边的节点
+        // right就是右半部分链表
+        ListNode right = slow.next;
+        // 将左右两部分链表断开
+        slow.next = null;
+
+        // 利用栈保存右半部分链表的所有节点
+        LinkedList<ListNode> stack = new LinkedList<>();
+        // 遍历右半部分链表并将每个节点压入栈中
+        while (right != null) {
+            ListNode cur = right;
+            right = right.next;
+
+            // 断开后面的链接
+            cur.next = null;
+            // 压入栈中
+            stack.push(cur);
+        }
+
+        ListNode node = head;
+        while (!stack.isEmpty()) {
+            // 当前节点原next节点
+            ListNode next = node.next;
+            // 将栈顶节点弹出接入node的next中
+            node.next = stack.pop();
+
+            // 跳到栈弹出的栈顶节点
+            node = node.next;
+            // 将前节点原next节点接入到栈顶节点next节点
+            node.next = next;
+            // 然后再跳到下一个节点
+            node = node.next;
+        }
+    }
+}
+```
+
+## 94. 二叉树的中序遍历
+
+原题链接：[94. 二叉树的中序遍历](https://leetcode-cn.com/problems/binary-tree-inorder-traversal/)
+
+> 给定一个二叉树的根节点 `root` ，返回 *它的 **中序** 遍历* 。
+>
+> **提示：**
+>
+> - 树中节点数目在范围 `[0, 100]` 内
+> - `-100 <= Node.val <= 100`
+
+### 1.中序遍历
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+
+        // 中序遍历
+        inorderTraversal(root, list);
+
+        return list;
+    }
+
+    /**
+     * 中序遍历
+     */
+    private void inorderTraversal(TreeNode root, List<Integer> list) {
+        if (root == null) {
+            return ;
+        }
+
+        // 先遍历左节点
+        inorderTraversal(root.left, list);
+
+        // 再遍历当前节点
+        list.add(root.val);
+
+        // 最后遍历右节点
+        inorderTraversal(root.right, list);
+    }
+}
+```
+
+## 124. 二叉树中的最大路径和
+
+原题链接：[124. 二叉树中的最大路径和](https://leetcode-cn.com/problems/binary-tree-maximum-path-sum/)
+
+> 路径 被定义为一条从树中任意节点出发，沿父节点-子节点连接，达到任意节点的序列。同一个节点在一条路径序列中 至多出现一次 。该路径 至少包含一个 节点，且不一定经过根节点。
+>
+> 路径和 是路径中各节点值的总和。
+>
+> 给你一个二叉树的根节点 root ，返回其 最大路径和 。
+>
+> **提示：**
+>
+> - 树中节点数目范围是 `[1, 3 * 104]`
+> - `-1000 <= Node.val <= 1000`
+
+### 1.后序遍历
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    int res = Integer.MIN_VALUE;
+    public int maxPathSum(TreeNode root) {
+        maxPathSumHelper(root);
+
+        return res;
+    }
+
+    /**
+     * 后序遍历
+     */
+    private int maxPathSumHelper(TreeNode root) {
+        if (root == null) {
+            // 空节点的贡献值为0
+            return 0;
+        }
+
+        // 递归计算左右子节点的最大贡献值
+        // 只有在最大贡献值大于 0 时，才会选取对应子节点
+        int left = Math.max(maxPathSumHelper(root.left), 0);
+        int right = Math.max(maxPathSumHelper(root.right), 0);
+
+        // 节点的最大路径和取决于该节点的值与该节点的左右子节点的最大贡献值
+        int nodeMax = left + right + root.val;
+
+        // 更新答案
+        res = Math.max(nodeMax, res);
+
+        // 返回节点的最大贡献值
+        return Math.max(left, right) + root.val;
+    }
+}
+```
+
+## 232. 用栈实现队列
+
+原题链接：[232. 用栈实现队列](https://leetcode-cn.com/problems/implement-queue-using-stacks/)
+
+> 请你仅使用两个栈实现先入先出队列。队列应当支持一般队列支持的所有操作（push、pop、peek、empty）：
+>
+> 实现 MyQueue 类：
+>
+> void push(int x) 将元素 x 推到队列的末尾
+> int pop() 从队列的开头移除并返回元素
+> int peek() 返回队列开头的元素
+> boolean empty() 如果队列为空，返回 true ；否则，返回 false
+> 说明：
+>
+> 你 只能 使用标准的栈操作 —— 也就是只有 push to top, peek/pop from top, size, 和 is empty 操作是合法的。
+> 你所使用的语言也许不支持栈。你可以使用 list 或者 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。
+>
+> 提示：
+>
+> 1 <= x <= 9
+> 最多调用 100 次 push、pop、peek 和 empty
+> 假设所有操作都是有效的 （例如，一个空的队列不会调用 pop 或者 peek 操作）
+>
+
+### 1.栈
+
+``` java
+class MyQueue {
+    // 用两个栈实现队列
+    // 一个栈用于入队
+    private LinkedList<Integer> stack1;
+    // 一个栈用于出队
+    private LinkedList<Integer> stack2;
+
+    public MyQueue() {
+        // 初始化队列
+        stack1 = new LinkedList<>();    
+        stack2 = new LinkedList<>();
+    }
+    
+    public void push(int x) {
+        // 入队放入stack1
+        stack1.push(x);
+    }
+    
+    public int pop() {
+        // 出队用stack2
+        // 如果stack2为空
+        if (stack2.isEmpty()) {
+            // 则将stack1中的所有元素弹出放入stack2中
+            while (!stack1.isEmpty()) {
+                stack2.push(stack1.pop());
+            }
+        }
+
+        // 然后从stack2弹出
+        return stack2.pop();
+    }
+    
+    public int peek() {
+        // 出队用stack2
+        // 如果stack2为空
+        if (stack2.isEmpty()) {
+            // 则将stack1中的所有元素弹出放入stack2中
+            while (!stack1.isEmpty()) {
+                stack2.push(stack1.pop());
+            }
+        }
+
+        // 然后从stack2弹出
+        return stack2.peek();
+    }
+    
+    public boolean empty() {
+        // 只有两个栈都为空时，队列才为空
+        return stack1.isEmpty() && stack2.isEmpty();
+    }
+}
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue obj = new MyQueue();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.peek();
+ * boolean param_4 = obj.empty();
+ */
+```
+

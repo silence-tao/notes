@@ -2272,3 +2272,184 @@ class MyQueue {
  */
 ```
 
+## 199. 二叉树的右视图
+
+原题链接：[199. 二叉树的右视图](https://leetcode-cn.com/problems/binary-tree-right-side-view/)
+
+> 给定一个二叉树的 **根节点** `root`，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+>
+> **提示:**
+>
+> - 二叉树的节点个数的范围是 `[0,100]`
+> - `-100 <= Node.val <= 100` 
+
+### 1.层序遍历
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+
+        // 利用队列实现层序遍历
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            // 将同一层的节点都放入list集合中
+            List<TreeNode> list = new ArrayList<>();
+            while (!queue.isEmpty()) {
+                list.add(queue.poll());
+            }
+
+            // 然后再遍历这一层的节点
+            for (int i = 0; i < list.size(); i++) {
+                TreeNode node = list.get(i);
+                if (i == list.size() - 1) {
+                    // 如果是这一层的最后一个节点
+                    // 则将节点值加入res结果集合中
+                    res.add(node.val);
+                }
+
+                // 将当前节点不为空的左子节点加入队列
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+
+                // 将当前节点不为空的右子节点加入队列
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+        }
+
+        return res;
+    }
+}
+```
+
+## 70. 爬楼梯
+
+原题链接：[70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
+
+> 假设你正在爬楼梯。需要 `n` 阶你才能到达楼顶。
+>
+> 每次你可以爬 `1` 或 `2` 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+>
+> **提示：**
+>
+> - `1 <= n <= 45`
+
+### 1.动态规划
+
+``` java
+class Solution {
+    public int climbStairs(int n) {
+        if (n <= 2) {
+            return n;
+        }
+
+        // f[n] = f[n - 2] + f[n - 1]
+        // first = f[n - 2]
+        // second = f[n - 1]
+        int first = 1, second = 2, res = 0;
+        for (int i = 3; i <= n; i++) {
+            // 更新res
+            res = first + second;
+            // 下一轮的fisrt等于现在的second
+            first = second;
+            // 下一轮的second等于现在的res
+            second = res;
+        }
+
+        return res;
+    }
+}
+```
+
+## 19. 删除链表的倒数第 N 个结点
+
+原题链接：[19. 删除链表的倒数第 N 个结点](https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/)
+
+> 给你一个链表，删除链表的倒数第 `n` 个结点，并且返回链表的头结点。
+>
+> **提示：**
+>
+> - 链表中结点的数目为 `sz`
+> - `1 <= sz <= 30`
+> - `0 <= Node.val <= 100`
+> - `1 <= n <= sz`
+
+### 1.倒数指针
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+  
+    /**
+     * 如果想得到倒数第n个节点
+     * 可以先让node1遍历到第n个节点
+     * 然后定义node2从头和node1一起向后遍历
+     * 直到node1遍历到最后一个节点时
+     * node2就到了倒数第n个节点
+     */
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode node = head;
+        // 先遍历到第n + 1个节点
+        while (n-- > 0 && node != null) {
+            node = node.next;
+        }
+
+        // 如果第n + 1个节点是null
+        // 说明要删除的是倒数第n个节点
+        if (node == null) {
+            // 直接返回头节点的next节点
+            return head.next;
+        }
+        
+        // pre为待删除节点的前一个节点
+        // pre从头开始遍历
+        ListNode pre = head;
+        // node继续向后遍历，直到倒数第1个节点为止
+        // 此时pre就是待删除节点的前一个节点
+        while (node != null && node.next != null) {
+            node = node.next;
+            pre = pre.next;
+        }
+
+        // 将pre.next指向pre.next.next
+        // 删除待删除的节点
+        pre.next = pre.next.next;
+
+        // 返回头节点即可
+        return head;
+    }
+}
+```
+

@@ -2453,3 +2453,152 @@ class Solution {
 }
 ```
 
+## 69. x 的平方根
+
+原题链接：[69. x 的平方根 ](https://leetcode-cn.com/problems/sqrtx/)
+
+> 给你一个非负整数 x ，计算并返回 x 的 算术平方根 。
+>
+> 由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。
+>
+> 注意：不允许使用任何内置指数函数和算符，例如 pow(x, 0.5) 或者 x ** 0.5 。
+>
+> **提示：**
+>
+> - `0 <= x <= 231 - 1`
+
+### 1.二分法
+
+``` java
+class Solution {
+    public int mySqrt(int x) {
+        if (x <= 1) {
+            return x;
+        }
+
+        // 二分法，因为x的算术平方根肯定小于等于x / 2
+        // 所以二分的区间为[1, x / 2]
+        // 将[1, x / 2]分为[1, mid - 1]、[mid, x / 2]两个区间
+        int left = 1, right = x / 2;
+        while (left < right) {
+            // mid取右边界
+            int mid = (left + right + 1) >>> 1;
+            // 需要找到第一个mid * mid > x的整数
+            // 那么mid - 1就是x的算术平方根
+            if (mid > x / mid) {
+                right = mid - 1;
+            } else {
+                left = mid;
+            }
+        }
+
+        // 退出循环时，left == right
+        // 返回任一都是x的算术平方根
+        return left;
+    }
+}
+```
+
+## 56. 合并区间
+
+原题链接：[56. 合并区间](https://leetcode-cn.com/problems/merge-intervals/)
+
+> 以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。请你合并所有重叠的区间，并返回 一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间 。
+>
+> 提示：
+>
+> 1 <= intervals.length <= 104
+> intervals[i].length == 2
+> 0 <= starti <= endi <= 104
+>
+
+### 1.排序
+
+``` java
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        int length = intervals.length;
+        
+        // 先对集合intervals按区间左边的值排序
+        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+
+        int pos = -1;
+        // res保存结果
+        int[][] res = new int[length][2];
+        // 遍历intervals合并区间
+        for (int i = 0; i < length; i++) {
+            // pos == -1是初始情况
+            // res[pos][1] < intervals[i][0]表示区间不重叠
+            if (pos == -1 || res[pos][1] < intervals[i][0]) {
+                // 直接将intervals[i]赋给res
+                res[++pos] = intervals[i];
+            } else {
+                // 否则有重叠
+                // 那么合并这两个区间
+                // 且区间右边的值为res[pos][1],intervals[i][1]中的最大值
+                res[pos][1] = Math.max(res[pos][1], intervals[i][1]);
+            }
+        }
+        
+        // 将结果复制返回
+        return Arrays.copyOf(res, pos + 1);
+    }
+}
+```
+
+## 4. 寻找两个正序数组的中位数
+
+原题链接：[4. 寻找两个正序数组的中位数](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/)
+
+> 给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
+>
+> 算法的时间复杂度应该为 O(log (m+n)) 。
+>
+> 提示：
+>
+> nums1.length == m
+> nums2.length == n
+> 0 <= m <= 1000
+> 0 <= n <= 1000
+> 1 <= m + n <= 2000
+> -106 <= nums1[i], nums2[i] <= 106
+>
+
+### 1.合并有序数组
+
+``` java
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int len1 = nums1.length, len2 = nums2.length, len = len1 + len2;
+        int[] num = new int[len];
+
+        // 合并两个有序数组
+        int i = 0, j = 0, k = 0;
+        while (i < len1 || j < len2) {
+            if (i >= len1) {
+                num[k] = nums2[j++];
+            } else if (j >= len2) {
+                num[k] = nums1[i++];
+            } else if (nums1[i] < nums2[j]) {
+                num[k] = nums1[i++];
+            } else {
+                num[k] = nums2[j++];
+            }
+
+            k++;
+        }
+
+        // 然后取合并后数组的中位数
+        int mid = len / 2;
+        if (len % 2 == 0) {
+            // 如果合并后数组的长度是偶数
+            // 则取中间的两个元素相加再除以2
+            return (num[mid - 1] + num[mid]) / 2.0D;
+        } else {
+            // 否则取中间的元素
+            return num[mid];
+        }
+    }
+}
+```
+

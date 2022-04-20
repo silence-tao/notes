@@ -2602,3 +2602,61 @@ class Solution {
 }
 ```
 
+## 82. 删除排序链表中的重复元素 II
+
+原题链接：[82. 删除排序链表中的重复元素 II](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/)
+
+> 给定一个已排序的链表的头 `head` ， *删除原始链表中所有重复数字的节点，只留下不同的数字* 。返回 *已排序的链表* 。
+>
+> **提示：**
+>
+> - 链表中节点数目在范围 `[0, 300]` 内
+> - `-100 <= Node.val <= 100`
+> - 题目数据保证链表已经按升序 **排列**
+
+### 1.迭代
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null) {
+            return head;
+        }
+
+        // 给head创建一个新的头节点
+        ListNode newHead = new ListNode(0, head);
+        ListNode cur = newHead;
+        
+        // 然后遍历链表，遍历到倒数第二个节点
+        while (cur.next != null && cur.next.next != null) {
+            // 如果当前节点后面两个节点值相等
+            if (cur.next.val == cur.next.next.val) {
+                int val = cur.next.val;
+                // 然后将相等的节点删除
+                while (cur.next != null && cur.next.val == val) {
+                    // 将当前节点的next指向next的next
+                    // 就把和val相等的节点删除了
+                    cur.next = cur.next.next;
+                }
+            } else {
+                // 没有相等的节点，直接跳到下一个节点
+                cur = cur.next;
+            }
+        }
+
+        // 返回newHead的next就是删除重复值后的链表
+        return newHead.next;
+    }
+}
+```
+

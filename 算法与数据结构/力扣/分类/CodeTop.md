@@ -2660,3 +2660,68 @@ class Solution {
 }
 ```
 
+## 72. 编辑距离
+
+原题链接：[72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)
+
+> 给你两个单词 word1 和 word2， 请返回将 word1 转换成 word2 所使用的最少操作数  。
+>
+> 你可以对一个单词进行如下三种操作：
+>
+> - 插入一个字符
+> - 删除一个字符
+> - 替换一个字符
+>
+> **提示：**
+>
+> - `0 <= word1.length, word2.length <= 500`
+> - `word1` 和 `word2` 由小写英文字母组成
+
+### 1.动态规划
+
+``` java
+class Solution {
+    public int minDistance(String word1, String word2) {
+        int m = word1.length(), n = word2.length();
+
+        if (m * n == 0) {
+            return m + n;
+        }
+
+        // dp[i][j]表示word1的前i个字母到word2的前j个字母之间的编辑距离
+        int[][] dp = new int[m + 1][n + 1];
+
+        // word1的前i个字母到空的word2的编辑距离为i
+        for (int i = 0; i <= m; i++) {
+            dp[i][0] = i;
+        }
+
+        // 空的word1到word2的前j个字母的编辑距离为j
+        for (int j = 0; j <= n; j++) {
+            dp[0][j] = j;
+        }
+
+        // 如果word1和word2最后一个字母相同
+        // dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - ][j - 1])
+        // 如果word1和word2最后一个字母不同
+        // dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - ][j - 1] + 1)
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                int left = dp[i - 1][j] + 1;
+                int down = dp[i][j - 1] + 1;
+                int leftDown = dp[i - 1][j - 1];
+
+                if (word1.charAt(i - 1) != word2.charAt(j - 1)) {
+                    leftDown += 1;
+                }
+
+                dp[i][j] = Math.min(left, Math.min(down, leftDown));
+            }
+        }
+
+        // dp[m][n]就是word1转换成word2所使用的最少操作数
+        return dp[m][n];
+    }
+}
+```
+

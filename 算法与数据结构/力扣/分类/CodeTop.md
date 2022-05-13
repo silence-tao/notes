@@ -2725,3 +2725,327 @@ class Solution {
 }
 ```
 
+## 2. 两数相加
+
+原题链接：[2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
+
+> 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
+>
+> 请你将两个数相加，并以相同形式返回一个表示和的链表。
+>
+> 你可以假设除了数字 0 之外，这两个数都不会以 0 开头。
+>
+> **提示：**
+>
+> - 每个链表中的节点数在范围 `[1, 100]` 内
+> - `0 <= Node.val <= 9`
+> - 题目数据保证列表表示的数字不含前导零
+
+### 1.迭代法
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        // 创建一个head节点作为和的链表的头节点
+        ListNode head = new ListNode();
+        ListNode node = head;
+
+        // 用t来保存进位
+        int t = 0;
+        // 遍历链表l1 l2，将相同位数的节点相加
+        while (l1 != null || l2 != null) {
+            // sum保存当前位数的节点的和
+            int sum = t;
+
+            // l1节点不为空才做加法
+            if (l1 != null) {
+                sum += l1.val;
+
+                l1 = l1.next;
+            }
+
+            // l2节点不为空才做加法
+            if (l2 != null) {
+                sum += l2.val;
+
+                l2 = l2.next;
+            }
+
+            // sum对10取余作为新节点的值
+            // 并放到node的next节点上
+            node.next = new ListNode(sum % 10);
+            // node跳到下一个节点
+            node = node.next;
+
+            // sum / 10计算进位
+            t = sum / 10;
+        }
+
+        // 如果进位大于0
+        if (t > 0) {
+            // 则还需要再新建一个节点
+            node.next = new ListNode(t);
+            node = node.next;
+        }
+
+        // head.next就是结果链表
+        return head.next;
+    }
+}
+```
+
+## 148. 排序链表
+
+原题链接：[148. 排序链表](https://leetcode-cn.com/problems/sort-list/)
+
+> 给你链表的头结点 `head` ，请将其按 **升序** 排列并返回 **排序后的链表** 。
+>
+> **提示：**
+>
+> - 链表中节点的数目在范围 `[0, 5 * 104]` 内
+> - `-105 <= Node.val <= 105`
+
+### 1.归并排序
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+
+    /**
+     * 归并排序
+     * 用递归的方式不断的将链表一分为二
+     * 直到分到每段只剩下一个节点时
+     * 再做递归
+     */
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        // 利用快慢指针将链表一分为二
+        ListNode slow = head, fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // 将链表分为first、second
+        ListNode first = head;
+        ListNode second = slow.next;
+        // 断开first、second的连接
+        slow.next = null;
+
+        // 继续对链表进行递归切分
+        // 此时返回的left、right就是有序的链表
+        ListNode left = sortList(first);
+        ListNode right = sortList(second);
+
+        // 合并这两个有序的链表
+        return merge(left, right);
+    }
+
+    /**
+     * 合并两个有序链表
+     */
+    private ListNode merge(ListNode first, ListNode second) {
+        if (first == null && second == null) {
+            return null;
+        }
+
+        if (first == null) {
+            return second;
+        }
+
+        if (second == null) {
+            return first;
+        }
+
+        ListNode newHead = new ListNode();
+        ListNode node = newHead;
+        while (first != null || second != null) {
+            if (first == null) {
+                node.next = second;
+                
+                break ;
+            } else if (second == null) {
+                node.next = first;
+
+                break ;
+            } else if (first.val < second.val) {
+                node.next = first;
+
+                first = first.next;
+            } else {
+                node.next = second;
+
+                second = second.next;
+            }
+
+            node = node.next;
+        }
+
+        return newHead.next;
+    }
+}
+```
+
+## 8. 字符串转换整数 (atoi)
+
+原题链接：[8. 字符串转换整数 (atoi)](https://leetcode-cn.com/problems/string-to-integer-atoi/)
+
+> 请你来实现一个 myAtoi(string s) 函数，使其能将字符串转换成一个 32 位有符号整数（类似 C/C++ 中的 atoi 函数）。
+>
+> 函数 myAtoi(string s) 的算法如下：
+>
+> 读入字符串并丢弃无用的前导空格
+> 检查下一个字符（假设还未到字符末尾）为正还是负号，读取该字符（如果有）。 确定最终结果是负数还是正数。 如果两者都不存在，则假定结果为正。
+> 读入下一个字符，直到到达下一个非数字字符或到达输入的结尾。字符串的其余部分将被忽略。
+> 将前面步骤读入的这些数字转换为整数（即，"123" -> 123， "0032" -> 32）。如果没有读入数字，则整数为 0 。必要时更改符号（从步骤 2 开始）。
+> 如果整数数超过 32 位有符号整数范围 [−231,  231 − 1] ，需要截断这个整数，使其保持在这个范围内。具体来说，小于 −231 的整数应该被固定为 −231 ，大于 231 − 1 的整数应该被固定为 231 − 1 。
+> 返回整数作为最终结果。
+> 注意：
+>
+> 本题中的空白字符只包括空格字符 ' ' 。
+> 除前导空格或数字后的其余字符串外，请勿忽略 任何其他字符。
+>
+> **提示：**
+>
+> - `0 <= s.length <= 200`
+> - `s` 由英文字母（大写和小写）、数字（`0-9`）、`' '`、`'+'`、`'-'` 和 `'.'` 组成
+
+### 1.迭代法
+
+``` java
+class Solution {
+    public int myAtoi(String s) {
+        int length = s.length();
+
+        // true：表示正数；false：表示负数
+        boolean flag = true;
+        // 记录数字出现的数量包括+、-符号
+        int t = 0;
+
+        // 将所有数字放入str中
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            if (c == ' ') {
+                // 如果在数字后面还出现空格
+                if (t > 0) {
+                    // 就直接跳出循环
+                    break ;
+                }
+            } else if (c == '+') {
+                // 如果在数字后面还出现+号
+                if (t > 0) {
+                    // 就直接跳出循环
+                    break ;
+                }
+
+                // 记数
+                t++;
+            } else if (c == '-') {
+                // 如果在数字后面还出现-号
+                if (t > 0) {
+                    // 就直接跳出循环
+                    break ;
+                }
+
+                // 标记为负数
+                flag = false;
+
+                // 记数
+                t++;
+            } else if (c >= '0' && c <= '9') {
+                // 将数字放入str中
+                str.append(c);
+
+                // 记数
+                t++;
+            } else {
+                // 如果出现其它字符，就直接跳出循环
+                break ;
+            }
+        }
+
+        if (str.length() == 0) {
+            return 0;
+        }
+
+        try {
+            // 将字符串转为整型
+            int result = Integer.parseInt(str.toString());
+
+            // 根据flag返回正负结果
+            return flag ? result : -result;
+        } catch (Exception ignore) {
+            // 如果抛了异常表示字符串转为整型溢出了
+        }
+
+        // 到了这里就返回int整型的极值
+        return flag ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+    }
+}
+```
+
+## 剑指 Offer 22. 链表中倒数第k个节点
+
+原题链接：[剑指 Offer 22. 链表中倒数第k个节点](https://leetcode.cn/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/)
+
+> 输入一个链表，输出该链表中倒数第k个节点。为了符合大多数人的习惯，本题从1开始计数，即链表的尾节点是倒数第1个节点。
+>
+> 例如，一个链表有 6 个节点，从头节点开始，它们的值依次是 1、2、3、4、5、6。这个链表的倒数第 3 个节点是值为 4 的节点。
+
+### 1.双指针
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode getKthFromEnd(ListNode head, int k) {
+      	// 先定义firstNode向右遍历k个节点
+        ListNode firstNode = head;
+        while (k-- > 0 && firstNode != null) {
+            firstNode = firstNode.next;
+        }
+
+        // 然后定义secondNode从头开始遍历
+      	// firstNode继续向右遍历，直到firstNode遍历到空节点为止
+        ListNode secondNode = head;
+        while (firstNode != null) {
+          	// firstNode和secondNode一起向右遍历
+            firstNode = firstNode.next;
+            secondNode = secondNode.next;
+        }
+
+      	// secondNode节点就是倒数第k个节点
+        return secondNode;
+    }
+}
+```
+

@@ -3049,3 +3049,47 @@ class Solution {
 }
 ```
 
+## 41. 缺失的第一个正数
+
+原题链接：[41. 缺失的第一个正数](https://leetcode.cn/problems/first-missing-positive/)
+
+> 给你一个未排序的整数数组 `nums` ，请你找出其中没有出现的最小的正整数。
+>
+> 请你实现时间复杂度为 `O(n)` 并且只使用常数级别额外空间的解决方案。
+>
+> **提示：**
+>
+> - `1 <= nums.length <= 5 * 105`
+> - `-231 <= nums[i] <= 231 - 1`
+
+### 1.HashSet
+
+``` java
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        int length = nums.length;
+
+        // 将所有整数放入set集合中
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            set.add(num);
+        }
+
+        // 整数数组长度为length
+        // 那么先看看nums中的整数在区间[1, length]内有没有缺失的正整数
+        // 从1开始只要缺失那就是最小的正整数
+        for (int i = 1; i <= length; i++) {
+            // set中不存在i
+            if (!set.contains(i)) {
+                // 那么i就是没有出现的最小的正整数
+                return i;
+            }
+        }
+
+        // 区间[1, length]的正整数在nums都存在
+        // 那么length + 1就是没有出现的最小的正整数
+        return length + 1;
+    }
+}
+```
+

@@ -37,7 +37,7 @@ git fetch origin <远程分支名>:<本地分支名> 在<远程分支名>的基�
 git checkout -b <name> 创建+切换分支
 git merge <name> 合并某分支到当前分支
 git branch -d <name> 删除分支
-git branch -r -d origin/<name> 删除远程分支
+git push origin --delete [branch_name] 删除远程分支
 git branch | [grep "<关键字>"] | xargs git branch -D 批量删除[有<关键字>的]本地分支
 ```
 

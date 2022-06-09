@@ -3093,3 +3093,142 @@ class Solution {
 }
 ```
 
+## 31. 下一个排列
+
+原题链接：[31. 下一个排列](https://leetcode.cn/problems/next-permutation/)
+
+> 整数数组的一个 排列  就是将其所有成员以序列或线性顺序排列。
+>
+> 例如，arr = [1,2,3] ，以下这些都可以视作 arr 的排列：[1,2,3]、[1,3,2]、[3,1,2]、[2,3,1] 。
+> 整数数组的 下一个排列 是指其整数的下一个字典序更大的排列。更正式地，如果数组的所有排列根据其字典顺序从小到大排列在一个容器中，那么数组的 下一个排列 就是在这个有序容器中排在它后面的那个排列。如果不存在下一个更大的排列，那么这个数组必须重排为字典序最小的排列（即，其元素按升序排列）。
+>
+> 例如，arr = [1,2,3] 的下一个排列是 [1,3,2] 。
+> 类似地，arr = [2,3,1] 的下一个排列是 [3,1,2] 。
+> 而 arr = [3,2,1] 的下一个排列是 [1,2,3] ，因为 [3,2,1] 不存在一个字典序更大的排列。
+> 给你一个整数数组 nums ，找出 nums 的下一个排列。
+>
+> 必须 原地 修改，只允许使用额外常数空间。
+>
+>  **提示：**
+>
+> - `1 <= nums.length <= 100`
+> - `0 <= nums[i] <= 100`
+
+### 1.两遍扫描
+
+``` java
+class Solution {
+    public void nextPermutation(int[] nums) {
+        int length = nums.length, i = length - 2;
+        // 先从后往前找逆序对
+        while (i >= 0 && nums[i] >= nums[i + 1]) {
+            i--;
+        }
+
+        if (i >= 0) { // i >= 0 表示区间[i + 1, length)都是逆序的
+            // 首先需要找到区间[i + 1, length)第一个大于num[i]的数
+            int j = length - 1;
+            while (j > i && nums[i] >= nums[j]) {
+                j--;
+            }
+
+            // 然后再交换i、j两个位置的值
+            swap(nums, i, j);
+        }
+
+        // 最后将区间[i + 1, length)之间的元素位置反转
+        // 就可以得到整数数组的下一个排列 
+        reverse(nums, i + 1, length - 1);
+    }
+
+    /**
+     * 交换数组nums中的i、j两个位置的元素
+     */
+    private void swap(int[] nums, int i, int j) {
+        if (i == j) {
+            return ;
+        }
+
+        int t = nums[i];
+        nums[i] = nums[j];
+        nums[j] = t;
+    }
+
+    /**
+     * 将数组nums中区间[i, j]之间的元素位置反转
+     */
+    private void reverse(int[] nums, int left, int right) {
+        if (left == right) {
+            return ;
+        }
+
+        while (left < right) {
+            swap(nums, left++, right--);
+        }
+    }
+}
+```
+
+## 22. 括号生成
+
+原题链接：[22. 括号生成](https://leetcode.cn/problems/generate-parentheses/)
+
+> 数字 `n` 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 **有效的** 括号组合。
+>
+>  **提示：**
+>
+> - `1 <= n <= 8`
+
+### 1.递归
+
+``` java
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> res = new ArrayList<>();
+        StringBuilder builder = new StringBuilder();
+
+        // 递归
+        helper(n, 0, 0, res, builder);
+
+        return res;
+    }
+
+    /**
+     * 递归：每次都可能放入“(”或者在 right < left 时放入“)”
+     * left：左括号使用的次数
+     * right：有括号使用的次数
+     * res：保存结果的集合
+     * builder：保存当前轮次结果
+     */
+    private void helper(int n, int left, int right, List<String> res, StringBuilder builder) {
+        if (left == n && right == n) {
+            // 当左右括号使用次数等于n时
+            // 将结果加入集合中
+            res.add(builder.toString());
+
+            return ;
+        }
+
+        if (left < n) {
+            // left < n 还有左括号没用
+            // 可以将左括号加入builder
+            builder.append("(");
+            // 左括号使用次数加1，继续递归
+            helper(n, left + 1, right, res, builder);
+            // 然后将刚刚加入的左括号删除
+            builder.delete(builder.length() - 1, builder.length());
+        }
+
+        if (right < left) {
+            // right < left 还有右括号没用
+            // 可以将右括号加入builder
+            builder.append(")");
+            // 右括号使用次数加1，继续递归
+            helper(n, left, right + 1, res, builder);
+            // 然后将刚刚加入的右括号删除
+            builder.delete(builder.length() - 1, builder.length());
+        }
+    }
+}
+```
+

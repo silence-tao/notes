@@ -3232,3 +3232,142 @@ class Solution {
 }
 ```
 
+## 1143. 最长公共子序列
+
+原题链接：[1143. 最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/)
+
+> 给定两个字符串 text1 和 text2，返回这两个字符串的最长 公共子序列 的长度。如果不存在 公共子序列 ，返回 0 。
+>
+> 一个字符串的 子序列 是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。
+>
+> 例如，"ace" 是 "abcde" 的子序列，但 "aec" 不是 "abcde" 的子序列。
+> 两个字符串的 公共子序列 是这两个字符串所共同拥有的子序列。
+>
+> **提示：**
+>
+> - `1 <= text1.length, text2.length <= 1000`
+> - `text1` 和 `text2` 仅由小写英文字符组成。
+
+### 1.动态规划
+
+``` java
+class Solution {
+    public int longestCommonSubsequence(String text1, String text2) {
+        int m = text1.length(), n = text2.length();
+        // 利用二维数组dp保存两个字符串公共子序列的长度
+        // 其中dp[i][j]表示text1[0:i]和text2[0:j]的最长公共子序列的长度
+        int[][] dp = new int[m + 1][n + 1];
+
+        for (int i = 1; i <= m; i++) {
+            char c1 = text1.charAt(i - 1);
+            for (int j = 1; j <= n; j++) {
+                char c2 = text2.charAt(j - 1);
+                if (c1 == c2) {
+                    // 当前c1 == c2时
+                    // 要考虑text1[0:i-1]和text2[0:j-1]的公共子序列
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    // 否则，需要考虑text1[0:i-1]和text2[0:j]的公共子序列
+                    // 以及text1[0:i]和text2[0:j-1]的公共子序列
+                    // 并取两者的最大值
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+
+        return dp[m][n];
+    }
+}
+```
+
+## 93. 复原 IP 地址
+
+原题链接：[93. 复原 IP 地址](https://leetcode.cn/problems/restore-ip-addresses/)
+
+> 有效 IP 地址 正好由四个整数（每个整数位于 0 到 255 之间组成，且不能含有前导 0），整数之间用 '.' 分隔。
+>
+> 例如："0.1.2.201" 和 "192.168.1.1" 是 有效 IP 地址，但是 "0.011.255.245"、"192.168.1.312" 和 "192.168@1.1" 是 无效 IP 地址。
+> 给定一个只包含数字的字符串 s ，用以表示一个 IP 地址，返回所有可能的有效 IP 地址，这些地址可以通过在 s 中插入 '.' 来形成。你 不能 重新排序或删除 s 中的任何数字。你可以按 任何 顺序返回答案。
+>
+> **提示：**
+>
+> - `1 <= s.length <= 20`
+> - `s` 仅由数字组成
+
+### 1.递归
+
+``` java
+class Solution {
+    // 整型数组来保存当前生成的ip地址
+    int[] ip;
+    // res集合保存结果
+    List<String> res;
+    public List<String> restoreIpAddresses(String s) {
+        ip = new int[4];
+        res = new ArrayList<>();
+
+        helper(s, 0, 0);
+
+        return res;
+    }
+
+    /**
+     * 递归将字符串s转成ip地址
+     * start：表示字符串遍历的位置
+     * pos：表示ip地址生成到第几位了
+     */
+    private void helper(String s, int start, int pos) {
+        int length = s.length();
+        if (pos == 4) {
+            // pos == 4表示当前ip地址已经生成了4位
+            if (start == length) {
+                // start == length表示当前生成的ip地址使用了所有的字符串
+                // 是有效的ip地址，将结果加入结果集合当中
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < 4; i++) {
+                    builder.append(ip[i]);
+
+                    if (i < 3) {
+                        builder.append(".");
+                    }
+                }
+
+                res.add(builder.toString());
+            }
+
+            return ;
+        }
+
+        if (start == length) {
+            return ;
+        }
+
+        // 遇到0则直接将0作为ip地址中的一位
+        if (s.charAt(start) == '0') {
+            ip[pos] = 0;
+
+            helper(s, start + 1, pos + 1);
+
+            return ;
+        }
+
+        // num用来控制当前位的ip地址有效
+        int num = 0;
+        // 从start开始往后遍历字符串
+        // 生成当前有效的ip地址位
+        for (int i  = start; i < length; i++) {
+            num = num * 10 + (s.charAt(i) - '0');
+            // 控制num在区间(0, 255]内，保证有效
+            if (num > 0 && num <= 255) {
+                ip[pos] = num;
+
+                helper(s, i + 1, pos + 1);
+            } else {
+                // 否则不需要忘后取了
+                break ;
+            }
+        }
+    }
+}
+```
+

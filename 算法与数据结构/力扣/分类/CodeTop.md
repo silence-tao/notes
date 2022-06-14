@@ -3491,3 +3491,63 @@ class Solution {
 }
 ```
 
+## 144. 二叉树的前序遍历
+
+原题链接：[144. 二叉树的前序遍历](https://leetcode.cn/problems/binary-tree-preorder-traversal/)
+
+> 给你二叉树的根节点 `root` ，返回它节点值的 **前序** 遍历。
+>
+> **提示：**
+>
+> - 树中节点数目在范围 `[0, 100]` 内
+> - `-100 <= Node.val <= 100`
+
+### 1.前序遍历
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+
+        // 前序遍历
+        preorderTraversal(root, res);
+
+        return res;
+    }
+
+    /**
+     * 前序遍历
+     */
+    private void preorderTraversal(TreeNode root, List<Integer> res) {
+        if (root == null) {
+            return ;
+        }
+
+        // 前遍历当前节点
+        res.add(root.val);
+
+        // 再遍历左右子节点
+        preorderTraversal(root.left, res);
+        preorderTraversal(root.right, res);
+    }
+}
+```
+

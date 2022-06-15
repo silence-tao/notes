@@ -3551,3 +3551,229 @@ class Solution {
 }
 ```
 
+## 105. 从前序与中序遍历序列构造二叉树
+
+原题链接：[105. 从前序与中序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+
+> 给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。
+>
+> 提示:
+>
+> - 1 <= preorder.length <= 3000
+> - inorder.length == preorder.length
+> - -3000 <= preorder[i], inorder[i] <= 3000
+> - preorder 和 inorder 均 无重复 元素
+> - inorder 均出现在 preorder
+> - preorder 保证 为二叉树的前序遍历序列
+> - inorder 保证 为二叉树的中序遍历序列
+
+### 1.根据先序遍历和中序遍历递归构造二叉树
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        // 递归构造二叉树
+        return buildTree(preorder, inorder, 0, 0, inorder.length - 1);
+    }
+
+    /**
+     * 根据先序遍历和中序遍历递归构造二叉树
+     * 在先序遍历preorder中找到根节点，也就是preorder[pos]
+     * 然后将中序遍历inorder以根节点分为左右两部分
+     * 左边为根节点的左子树，右边为根节点的右子树
+     * 以此类推
+     * @param preorder 先序遍历结果
+     * @param inorder 中序遍历结果
+     * @param pos 先序遍历结果访问到的位置
+     * @param st 中序遍历结果的左边界
+     * @param end 中序遍历结果的右边界
+     * @return
+     */
+    private TreeNode buildTree(int[] preorder, int[] inorder, int pos, int st, int end) {
+        if (pos >= preorder.length || st > end) {
+            return null;
+        }
+
+        // 起始的preorder[pos]就是当前根节点的值
+        int cur = preorder[pos];
+        // 创建根节点
+        TreeNode node = new TreeNode(cur);
+        // 如果中序遍历结果的左右边界相等
+        // 说明当前节点没有子节点
+        if (st == end) {
+            // 直接返回即可
+            return node;
+        }
+
+        // 然后在中序遍历结果inorder的区间[st, end]范围内
+        // 找到节点cur在inorder中的位置
+        int mid = st;
+        for (int i = st; i <= end; i++) {
+            if (inorder[i] == cur) {
+                mid = i;
+
+                break ;
+            }
+        }
+
+        // 再将inorder以item的位置一分为二
+        // 其中左边区间为[st, mid - 1]
+        // preorder的起始位置为pos + 1
+        node.left = buildTree(preorder, inorder, pos + 1, st, mid - 1);
+        // 右边区间为[mid + 1, end]
+        // preorder的起始位置为pos + mid - st + 1
+        node.right = buildTree(preorder, inorder, pos + mid - st + 1, mid + 1, end);
+
+        return node;
+    }
+
+    public TreeNode buildTreeByPostorder(int[] inorder, int[] postorder) {
+        return buildTreeByPostorder(inorder, postorder, postorder.length - 1, 0, inorder.length - 1);
+    }
+
+    /**
+     * 根据中序遍历和后序遍历递归构造二叉树
+     * 在后序遍历postorder中找到当前根节点，也就是postorder[pos]
+     * 然后将中序遍历inorder以根节点分为左右两部分
+     * 左边为根节点的左子树，右边为根节点的右子树
+     * 以此类推
+     * @param inorder 中序遍历结果
+     * @param postorder 后序遍历结果
+     * @param pos 后序遍历结果访问到的位置
+     * @param st 中序遍历结果的左边界
+     * @param end 中序遍历结果的右边界
+     * @return
+     */
+    private TreeNode buildTreeByPostorder(int[] inorder, int[] postorder, int pos, int st, int end) {
+        if (pos < 0 || st > end) {
+            return null;
+        }
+
+        // postorder[pos]就是当前根节点的值
+        int cur = postorder[pos];
+        // 创建根节点
+        TreeNode node = new TreeNode(cur);
+        // 如果中序遍历结果的左右边界相等
+        // 说明当前节点没有子节点
+        if (st == end) {
+            // 直接返回即可
+            return node;
+        }
+
+        // 然后在中序遍历结果inorder的区间[st, end]范围内
+        // 找到节点cur在inorder中的位置
+        int mid = st;
+        for (int i = st; i <= end; i++) {
+            if (inorder[i] == cur) {
+                mid = i;
+
+                break ;
+            }
+        }
+
+        // 再将inorder以item的位置一分为二
+        // 其中左边区间为[st, mid - 1]
+        // postorder的起始位置为pos - (end - mid + 1)
+        node.left = buildTreeByPostorder(inorder, postorder, pos - (end - mid + 1), st, mid - 1);
+        // 右边区间为[mid + 1, end]
+        // postorder的起始位置为pos - 1
+        node.right = buildTreeByPostorder(inorder, postorder, pos - 1, mid + 1, end);
+
+        return node;
+    }
+}
+```
+
+### 2.根据中序遍历和后序遍历递归构造二叉树
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    public TreeNode buildTreeByPostorder(int[] inorder, int[] postorder) {
+        return buildTreeByPostorder(inorder, postorder, postorder.length - 1, 0, inorder.length - 1);
+    }
+
+    /**
+     * 根据中序遍历和后序遍历递归构造二叉树
+     * 在后序遍历postorder中找到当前根节点，也就是postorder[pos]
+     * 然后将中序遍历inorder以根节点分为左右两部分
+     * 左边为根节点的左子树，右边为根节点的右子树
+     * 以此类推
+     * @param inorder 中序遍历结果
+     * @param postorder 后序遍历结果
+     * @param pos 后序遍历结果访问到的位置
+     * @param st 中序遍历结果的左边界
+     * @param end 中序遍历结果的右边界
+     * @return
+     */
+    private TreeNode buildTreeByPostorder(int[] inorder, int[] postorder, int pos, int st, int end) {
+        if (pos < 0 || st > end) {
+            return null;
+        }
+
+        // postorder[pos]就是当前根节点的值
+        int cur = postorder[pos];
+        // 创建根节点
+        TreeNode node = new TreeNode(cur);
+        // 如果中序遍历结果的左右边界相等
+        // 说明当前节点没有子节点
+        if (st == end) {
+            // 直接返回即可
+            return node;
+        }
+
+        // 然后在中序遍历结果inorder的区间[st, end]范围内
+        // 找到节点cur在inorder中的位置
+        int mid = st;
+        for (int i = st; i <= end; i++) {
+            if (inorder[i] == cur) {
+                mid = i;
+
+                break ;
+            }
+        }
+
+        // 再将inorder以item的位置一分为二
+        // 其中左边区间为[st, mid - 1]
+        // postorder的起始位置为pos - (end - mid + 1)
+        node.left = buildTreeByPostorder(inorder, postorder, pos - (end - mid + 1), st, mid - 1);
+        // 右边区间为[mid + 1, end]
+        // postorder的起始位置为pos - 1
+        node.right = buildTreeByPostorder(inorder, postorder, pos - 1, mid + 1, end);
+
+        return node;
+    }
+}
+```
+

@@ -3777,3 +3777,305 @@ class Solution {
 }
 ```
 
+## 129. 求根节点到叶节点数字之和
+
+原题链接：[129. 求根节点到叶节点数字之和](https://leetcode.cn/problems/sum-root-to-leaf-numbers/)
+
+> 给你一个二叉树的根节点 root ，树中每个节点都存放有一个 0 到 9 之间的数字。
+> 每条从根节点到叶节点的路径都代表一个数字：
+>
+> 例如，从根节点到叶节点的路径 1 -> 2 -> 3 表示数字 123 。
+> 计算从根节点到叶节点生成的 所有数字之和 。
+>
+> 叶节点 是指没有子节点的节点。
+>
+> **提示：**
+>
+> - 树中节点的数目在范围 `[1, 1000]` 内
+> - `0 <= Node.val <= 9`
+> - 树的深度不超过 `10`
+
+### 1.先序遍历
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    int sum;
+    public int sumNumbers(TreeNode root) {
+        sum = 0;
+
+        sumNumbers(root, 0);
+
+        return sum;
+    }
+
+    /**
+     * 先序遍历
+     * root：当前遍历到的节点
+     * num：当前遍历到的节点的路径和
+     */
+    private void sumNumbers(TreeNode root, int num) {
+        // 空节点直接返回
+        if (root == null) {
+            return ;
+        }
+
+        // 将当前节点值加入到路径和中
+        num = num * 10 + root.val;
+        // 左右子节点为空
+        if (root.left == null && root.right == null) {
+            // 表示当前是叶子节点
+            // 将路径和加入到总和中
+            sum += num;
+
+            // 并直接返回
+            return ;
+        }
+
+        // 否则再继续遍历左右子节点
+        sumNumbers(root.left, num);
+        sumNumbers(root.right, num);
+    }
+}
+```
+
+## 104. 二叉树的最大深度
+
+原题链接：[104. 二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree/)
+
+> 给定一个二叉树，找出其最大深度。
+>
+> 二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
+>
+> **说明:** 叶子节点是指没有子节点的节点。
+
+### 1.原地递归
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        // 先遍历左右节点
+        // 然后返回最大值，再深度加1
+        return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+    }
+}
+```
+
+### 3.递归
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int maxDepth(TreeNode root) {
+        return maxDepth(root, 0);
+    }
+
+    /**
+     * 递归
+     */
+    private int maxDepth(TreeNode root, int depth) {
+        if (root == null) {
+            return depth;
+        }
+
+        // 深度加1，再遍历左右节点
+        // 然后返回最大值
+        return Math.max(maxDepth(root.left, depth + 1), maxDepth(root.right, depth + 1));
+    }
+}
+```
+
+## 110. 平衡二叉树
+
+原题链接：[110. 平衡二叉树](https://leetcode.cn/problems/balanced-binary-tree/)
+
+> 给定一个二叉树，判断它是否是高度平衡的二叉树。
+>
+> 本题中，一棵高度平衡二叉树定义为：
+>
+> 一个二叉树*每个节点* 的左右两个子树的高度差的绝对值不超过 1 。
+>
+> **提示：**
+>
+> - 树中的节点数在范围 `[0, 5000]` 内
+> - `-104 <= Node.val <= 104`
+
+### 1.递归
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+
+        // 比较左右子树的最大深度是否小于等于1
+        int heightLeft = maxDepth(root.left);
+        int heightRight = maxDepth(root.right);
+        if (Math.abs(heightLeft - heightRight) > 1) {
+            return false;
+        }
+
+        // 然后再递归判断左右子树是否为平衡二叉树
+        return isBalanced(root.left) && isBalanced(root.right);
+    }
+
+    /**
+     * 递归求二叉树的最大深度
+     */
+    private int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+    }
+}
+```
+
+## 155. 最小栈
+
+原题链接：[155. 最小栈](https://leetcode.cn/problems/min-stack/)
+
+> 设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。
+>
+> 实现 MinStack 类:
+>
+> - MinStack() 初始化堆栈对象。
+> - void push(int val) 将元素val推入堆栈。
+> - void pop() 删除堆栈顶部的元素。
+> - int top() 获取堆栈顶部的元素。
+> - int getMin() 获取堆栈中的最小元素。
+>
+> 提示：
+>
+> - -231 <= val <= 231 - 1
+> - pop、top 和 getMin 操作总是在 非空栈 上调用
+> - push, pop, top, and getMin最多被调用 3 * 104 次
+
+### 1.最小栈
+
+``` java
+class MinStack {
+    
+    /**
+     * 原生栈
+     * 按元素入栈顺序保存元素
+     */
+    private LinkedList<Integer> stack;
+
+    /**
+     * 递增栈
+     * 按元素从小到大的顺序入栈
+     */
+    private LinkedList<Integer> incrementStack;
+
+    public MinStack() {
+        stack = new LinkedList<>();
+        incrementStack = new LinkedList<>();
+    }
+    
+    public void push(int val) {
+        stack.push(val);
+        
+        // 如果incrementStack为空或者栈顶元素小于val
+        if (incrementStack.isEmpty() || incrementStack.peek() > val) {
+            // 那么将val压入incrementStack
+            incrementStack.push(val);
+        } else {
+            // 否则将栈顶元素压入incrementStack
+            // 保持stack和incrementStack有相同个数的元素
+            incrementStack.push(incrementStack.peek());
+        }
+    }
+    
+    public void pop() {
+        // 将两个栈的栈顶元素都删除
+        incrementStack.pop();
+        stack.pop();
+    }
+    
+    public int top() {
+        // 返回stack的栈顶元素
+        return stack.peek();
+    }
+    
+    public int getMin() {
+        // 返回incrementStack的栈顶元素
+        return incrementStack.peek();
+    }
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(val);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */
+```
+

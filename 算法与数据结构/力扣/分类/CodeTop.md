@@ -3777,6 +3777,174 @@ class Solution {
 }
 ```
 
+## 239. 滑动窗口最大值
+
+原题链接：[239. 滑动窗口最大值](https://leetcode.cn/problems/sliding-window-maximum/)
+
+> 给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。
+>
+> 返回 滑动窗口中的最大值 。
+>
+> **提示：**
+>
+> - `1 <= nums.length <= 105`
+> - `-104 <= nums[i] <= 104`
+> - `1 <= k <= nums.length`
+
+### 1.单调递减队列
+
+``` java
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int length = nums.length;
+
+        // 结果数组的长度为length - k + 1
+        int[] res = new int[length - k + 1];
+        // 用LinkedList实现一个单调递减队列
+        LinkedList<Integer> queue = new LinkedList<>();
+        int j = 0;
+        // 遍历数组中的元素
+        for (int i = 0; i < length; i++) {
+            if (i < k - 1) {
+                // i < k - 1时将元素放入队列中
+                // 保证滑动窗口内的前k - 1个元素形成一个单调递减队列
+                putItem(queue, nums[i]);
+            } else {
+                // 然后继续往队列添加添加滑动窗口的第k个元素
+                // 这样滑动窗口的k个元素就形成了一个单调递减队列
+                putItem(queue, nums[i]);
+                // 队列中的头部元素就是滑动窗口的最大值
+                res[j++] = queue.getFirst();
+                // 因为滑动窗口要向右移动
+                // 所以判断一下队列的头部元素是否等于滑动窗口的第一个元素
+                if (queue.getFirst() == nums[i - k + 1]) {
+                    // 相等则删除掉第一个元素
+                    queue.removeFirst();
+                }
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * 把元素放入单调递减队列
+     * 把队列前面小于item的元素删除
+     * 然后再将item放入队列中
+     * 这样就保证了队列单调递减的性质
+     * 队列头部的元素就一定是滑动窗口的最大值
+     */
+    private void putItem(LinkedList<Integer> queue, int item) {
+        while (!queue.isEmpty() && queue.getLast() < item) {
+            // 把队列前面小于item的元素删除
+            queue.removeLast();
+        }
+
+        // 然后再将item放入队列中
+        queue.addLast(item);
+    }
+}
+```
+
+## 76. 最小覆盖子串
+
+原题链接：[76. 最小覆盖子串](https://leetcode.cn/problems/minimum-window-substring/)
+
+> 给你一个字符串 s 、一个字符串 t 。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 "" 。
+>
+>  
+>
+> 注意：
+>
+> 对于 t 中重复字符，我们寻找的子字符串中该字符数量必须不少于 t 中该字符数量。
+> 如果 s 中存在这样的子串，我们保证它是唯一的答案。
+>
+> **提示：**
+>
+> - `1 <= s.length, t.length <= 105`
+> - `s` 和 `t` 由英文字母组成
+
+### 1.滑动窗口
+
+``` java
+class Solution {
+    public String minWindow(String s, String t) {
+        int len1 = s.length(), len2 = t.length();
+
+        // 用needMap记录字符串t中出现的字符及对应的次数
+        Map<Character, Integer> needMap = new HashMap<>();
+        // 用windowMap记录字符串s中特定区间内出现的字符及对应的次数
+        Map<Character, Integer> windowMap = new HashMap<>();
+
+        // 遍历字符串t中的每一个字符
+        for (int i = 0; i < len2; i++) {
+            char c = t.charAt(i);
+            // 然后在needMap中记录次数
+            needMap.put(c, needMap.getOrDefault(c, 0) + 1);
+        }
+
+        // 用left和right表示字符串s中的特定区间[left, right)
+        // need表示区间[left, right)中涵盖字符串t中字符的个数
+        // st和end表示字符串s内满足涵盖t中所有字符的子串的最小区间
+        // 先让right向右移动
+        // 找到区间[left, right)内满足涵盖t中所有字符的子串
+        // 然后再让left向右移动，缩小区间范围
+        // 找到符合条件的最小子串，然后更新st和end
+        int left = 0, right = 0, need = 0, st = 0, end = 0;
+        while (right < len1) {
+            char c = s.charAt(right++);
+            // 如果当前字符在字符串t中
+            if (needMap.containsKey(c)) {
+                // 先将字符c在windowMap的次数加1
+                windowMap.put(c, windowMap.getOrDefault(c, 0) + 1);
+                
+                // 如果Objects.equals(needMap.get(c), windowMap.get(c))
+                // 这里用equals是因为Ingeter类型的整型
+                // 大于127就不能直接用==判断相等
+                if (Objects.equals(needMap.get(c), windowMap.get(c))) {
+                    // 表示区间[left, right)字符c出现的次数
+                    // 已经涵盖字符串t中的字符c
+                    // need加1
+                    need++;
+                }
+            }
+
+            // needMap.size() == need
+            // 表示字符串区间[left, right)满足涵盖t中所有字符
+            // while是要不断的让left向右移动
+            // 缩小区间，以便找到字符串s涵盖t的最小子串
+            while (needMap.size() == need) {
+                // 先更新st和end
+                if (end == 0 || end - st > right - left) {
+                    // 没有更新过或者end - st > right - left时才更新
+                    st = left;
+                    end = right;
+                }
+
+                // 然后left向右移动，缩小区间范围
+                c = s.charAt(left++);
+                // 如果当前字符在字符串t中
+                if (needMap.containsKey(c)) {
+                    // 字符c在windowMap的次数减1
+                    windowMap.put(c, windowMap.get(c) - 1);
+                    // 如果needMap.get(c) > windowMap.get(c)
+                    if (needMap.get(c) > windowMap.get(c)) {
+                        // 表示区间[left, right)字符c出现的次数
+                        // 无法涵盖字符串t中的字符c
+                        // need减1
+                        need--;
+                    }
+                }
+            }
+        }
+
+        // 返回字符串在区间[st, end)内的字符
+        // 即为s中涵盖t所有字符的最小子串
+        return s.substring(st, end);
+    }
+}
+```
+
 ## 129. 求根节点到叶节点数字之和
 
 原题链接：[129. 求根节点到叶节点数字之和](https://leetcode.cn/problems/sum-root-to-leaf-numbers/)

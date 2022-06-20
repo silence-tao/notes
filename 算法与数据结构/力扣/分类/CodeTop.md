@@ -4247,3 +4247,110 @@ class MinStack {
  */
 ```
 
+## 322. 零钱兑换
+
+原题链接：[322. 零钱兑换](https://leetcode.cn/problems/coin-change/)
+
+> 给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。
+>
+> 计算并返回可以凑成总金额所需的 最少的硬币个数 。如果没有任何一种硬币组合能组成总金额，返回 -1 。
+>
+> 你可以认为每种硬币的数量是无限的。
+>
+> **提示：**
+>
+> - `1 <= coins.length <= 12`
+> - `1 <= coins[i] <= 231 - 1`
+> - `0 <= amount <= 104`
+
+### 1.递归
+
+**力扣上会超时，无法通过**
+
+``` java
+class Solution {
+    int min;
+    public int coinChange(int[] coins, int amount) {
+        if (amount == 0) {
+            return 0;
+        }
+
+        min = amount + 1;
+
+        // 递归
+        coinChange(coins, amount, 0);
+
+        // min == amount + 1表示没有任何一种硬币组合能组成总金额
+        return min == amount + 1 ? -1 : min;
+    }
+
+    /**
+     * 递归
+     * leftAmount：剩余需要凑的总金额
+     * count：目前使用了多少个硬币
+     */
+    private void coinChange(int[] coins, int leftAmount, int count) {
+        // 遍历coins数组
+        for (int i = 0; i < coins.length; i++) {
+            // 使用硬币数+1
+            int temp = count + 1;
+            // 减去当前硬币的金额
+            int tempAmount = leftAmount - coins[i];
+            // 如果剩余需要凑的总金额 <= 0
+            if (tempAmount <= 0) {
+                if (tempAmount == 0) {
+                    // == 0表示刚好凑成了
+                    // 更新一下结果值min
+                    min = Math.min(temp, min);
+                }
+
+                // < 0表示当前硬币面额太大
+                // 直接continue
+                continue ;
+            }
+
+            // tempAmount > 0表示还需要硬币来凑成总金额
+            coinChange(coins, tempAmount, temp);
+        }
+    }
+}
+```
+
+### 2.动态规划
+
+``` java
+class Solution {
+    
+    public int coinChange(int[] coins, int amount) {
+        int length = coins.length;
+
+        // 用dp数组保存凑成总金额为[1, amount]需要最少的硬币数
+        int[] dp = new int[amount + 1];
+        // 因为要凑齐总金额amount所需要的硬币数肯定不会超过amount + 1
+        // 所以给dp赋上初始值amount + 1
+        Arrays.fill(dp, amount + 1);
+        // 要凑齐总金额为0所需要的硬币数为0
+        dp[0] = 0;
+
+        // 从计算凑齐总金额为1需要最少硬币数开始遍历
+        for (int i = 1; i <= amount; i++) {
+            // 每一个硬币都判断一下
+            // 看看能不能以最少的硬币数凑成总金额i
+            for (int coin : coins) {
+                // 当前硬币面额大于i
+                if (coin > i) {
+                    // 则跳过
+                    continue ;
+                }
+
+                // 而凑成总金额i所需要最少的硬币数为
+                // dp[i] 和 dp[i - coin] + 1 中取最小值
+                dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+            }
+        }
+
+        return dp[amount] == amount + 1 ? -1 : dp[amount];
+    }
+}
+```
+

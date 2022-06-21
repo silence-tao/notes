@@ -4354,3 +4354,147 @@ class Solution {
 }
 ```
 
+## 113. 路径总和 II
+
+原题链接：[113. 路径总和 II](https://leetcode.cn/problems/path-sum-ii/)
+
+> 给你二叉树的根节点 root 和一个整数目标和 targetSum ，找出所有 从根节点到叶子节点 路径总和等于给定目标和的路径。
+>
+> 叶子节点 是指没有子节点的节点。
+>
+> **提示：**
+>
+> - 树中节点总数在范围 `[0, 5000]` 内
+> - `-1000 <= Node.val <= 1000`
+> - `-1000 <= targetSum <= 1000`
+
+### 1.先序遍历
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+
+        // 保存从根节点到叶子节点的路径
+        List<Integer> list = new ArrayList<>();
+
+        // 先序遍历
+        pathSum(root, targetSum, 0, res, list);
+
+        return res;
+    }
+
+    /**
+     * 先序遍历
+     * sum：当前路径总和
+     * res：路径总和等于targetSum的路径
+     * list：当前从根节点到叶子节点的路径
+     */
+    private void pathSum(TreeNode root, int targetSum, int sum, List<List<Integer>> res, List<Integer> list) {
+        // 先将当前节点值加入路径总和
+        sum += root.val;
+        // 并将节点值加入路径
+        list.add(root.val);
+
+        if (root.left == null && root.right == null) {
+            // 如果当前是叶子节点
+            if (targetSum == sum) {
+                // 且当前路径总和等于targetSum
+                // 那么将结果加入res集合
+                res.add(new ArrayList<>(list));
+            }
+
+            // 叶子节点终止递归
+            return ;
+        }
+
+        // 递归左节点
+        if (root.left != null) {
+            pathSum(root.left, targetSum, sum, res, list);
+
+            // 回溯时要删除加入到list路径中的左节点
+            list.remove(list.size() - 1);
+        }
+
+        // 递归右节点
+        if (root.right != null) {
+            pathSum(root.right, targetSum, sum, res, list);
+
+            // 回溯时要删除加入到list路径中的右节点
+            list.remove(list.size() - 1);
+        }
+    }
+}
+```
+
+## 32. 最长有效括号
+
+原题链接：[32. 最长有效括号](https://leetcode.cn/problems/longest-valid-parentheses/)
+
+> 给你一个只包含 `'('` 和 `')'` 的字符串，找出最长有效（格式正确且连续）括号子串的长度。
+>
+> **提示：**
+>
+> - `0 <= s.length <= 3 * 104`
+> - `s[i]` 为 `'('` 或 `')'`
+
+### 1.栈
+
+``` java
+class Solution {
+    public int longestValidParentheses(String s) {
+        int length = s.length();
+
+        // 始终保持栈底元素为当前已经遍历过的元素中
+        // 最后一个没有被匹配的右括号的下标
+        LinkedList<Integer> stack = new LinkedList<>();
+        // 空栈时假设最后一个没有被匹配的右括号的下标是-1
+        stack.addFirst(-1);
+        int res = 0;
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            if (c == '(') {
+                // 对于遇到的每个(
+                // 将它的下标放入栈中
+                stack.addFirst(i);
+            } else {
+                // 对于遇到的每个)
+                // 先弹出栈顶元素表示匹配了当前右括号
+                stack.removeFirst();
+                
+                if (stack.isEmpty()) {
+                    // 如果栈为空，说明当前的右括号为没有被匹配的右括号
+                    // 将其下标放入栈中来更新最后一个没有被匹配的右括号的下标
+                    stack.addFirst(i);
+                } else {
+                    // 如果栈不为空
+                    // 当前右括号的下标减去栈顶元素
+                    // 即为以该右括号为结尾的最长有效括号的长度
+                    res = Math.max(res, i - stack.getFirst());
+                }
+            }
+        }
+
+        return res;
+    }
+}
+```
+

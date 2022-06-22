@@ -4498,3 +4498,62 @@ class Solution {
 }
 ```
 
+## 43. 字符串相乘
+
+原题链接：[43. 字符串相乘](https://leetcode.cn/problems/multiply-strings/)
+
+> 给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
+>
+> 注意：不能使用任何内置的 BigInteger 库或直接将输入转换为整数。
+>
+> 提示：
+>
+> - 1 <= num1.length, num2.length <= 200
+> - num1 和 num2 只能由数字组成。
+> - num1 和 num2 都不包含任何前导零，除了数字0本身。
+
+### 1.迭代法
+
+``` java
+class Solution {
+    public String multiply(String num1, String num2) {
+        if ("0".equals(num1) || "0".equals(num2)) {
+            return "0";
+        }
+
+        int len1 = num1.length(), len2 = num2.length();
+        // 因为两数相乘的积位数不会超过这两个数位数的和
+        // 所以可以用长度为len1 + len2的整型数组暂存两数相乘的积
+        // 其中num[len1 + len2 - 1]为积的个位数
+        // 其它高位数向左以此类推
+        // num1[i] * num2[j]的结果正好是放在num[i + j + 1]上
+        int[] num = new int[len1 + len2];
+        for (int i = len1 - 1; i >= 0; i--) {
+            int a = num1.charAt(i) - '0';
+            for (int j = len2 - 1; j >= 0; j--) {
+                int b = num2.charAt(j) - '0';
+
+                int sum = num[i + j + 1] + a * b;
+                // 取余留在原位
+                num[i + j + 1] = sum % 10;
+                // 进位放在左边一位
+                num[i + j] += sum / 10;
+            }
+        }
+
+        // 数组num中从左边开始不为0的元素就是结果
+        StringBuilder res = new StringBuilder();
+        // 从左遍历数组num并将结果放入res中
+        for (int i = 0; i < len1 + len2; i++) {
+            if (res.length() == 0 && num[i] == 0) {
+                continue ;
+            }
+
+            res.append(num[i]);
+        }
+        
+        return res.toString();
+    }
+}
+```
+

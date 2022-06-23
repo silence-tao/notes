@@ -419,6 +419,77 @@ class Solution {
 }
 ```
 
+### 2.堆排序
+
+``` java
+class Solution {
+    public int[] sortArray(int[] nums) {
+        int length = nums.length;
+        // heapify：构建一个最大堆
+        for (int i = (length - 1) / 2; i >= 0; i--) {
+            shiftDown(nums, length, i);
+        }
+
+        // 原地堆排序
+        // 将最大堆堆顶元素nums[0]与堆中最后一个叶子节点元素nums[i]交换位置
+        // 然后通过shiftDown维护区间[0, i)范围内最大堆的性质
+        // 直到只剩下根节点
+        for (int i = length - 1; i > 0; i--) {
+            // 交换堆顶与最后一个叶子的位置
+            swap(nums, 0, i);
+            // 维护区间[0, i)范围内最大堆的性质
+            shiftDown(nums, i, 0);
+        }
+
+        return nums;
+    }
+
+    /**
+     * 将以nums[k]为根节点
+     * 且在区间[0, length)范围内的子树构建成最大堆
+     */
+    private void shiftDown(int[] nums, int length, int k) {
+        // nums[2 * k + 1]表示根节点num[k]的左节点
+        // nums[2 * k + 2]表示根节点num[k]的右节点
+        while (2 * k + 1 < length) {
+            int j = 2 * k + 1;
+            // 取根节点nums[i]左右节点中较大的节点
+            if (j + 1 < length && nums[j] < nums[j + 1]) {
+                j = j + 1;
+            }
+
+            // 如果根节点比左右节点中较大的节点还大
+            // 说明当前以nums[k]为根节点的树已经是最大堆
+            if (nums[k] > nums[j]) {
+                // 直接break退出循环
+                break ;
+            }
+
+            // 交换nums[k]与nums[j]
+            // 以维护最大堆的性质
+            swap(nums, k, j);
+
+            // 然后切换根节点为nums[j]
+            // 继续维护nums[k]的子树为最大堆
+            k = j;
+        }
+    }
+
+    /**
+     * 交换数组中i和j两个元素的位置
+     */
+    private void swap(int[] nums, int i, int j) {
+        if (i == j) {
+            return ;
+        }
+
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+```
+
 ## 15. 三数之和
 
 原题链接：[15. 三数之和](https://leetcode-cn.com/problems/3sum/)
@@ -4553,6 +4624,82 @@ class Solution {
         }
         
         return res.toString();
+    }
+}
+```
+
+## 98. 验证二叉搜索树
+
+原题链接：[98. 验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/)
+
+> 给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树。
+>
+> 有效 二叉搜索树定义如下：
+>
+> 节点的左子树只包含 小于 当前节点的数。
+> 节点的右子树只包含 大于 当前节点的数。
+> 所有左子树和右子树自身必须也是二叉搜索树。
+>
+> **提示：**
+>
+> - 树中节点数目范围在`[1, 104]` 内
+> - `-231 <= Node.val <= 231 - 1`
+
+### 1.中序遍历
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+
+        // 通过中序遍历将节点值放入集合中
+        helper(root, list);
+
+        // 再遍历集合list
+        // 如果二叉树root是二叉搜索树
+        // 那么list集合中的元素必定是递增的
+        for (int i = 1; i < list.size(); i++) {
+            if (list.get(i - 1) >= list.get(i)) {
+                // 不满足递增，直接返回false
+                return false;
+            }
+        }
+
+        // 到了这里说明list集合是递增的
+        // root是二叉搜索树，返回true
+        return true;
+    }
+
+    /**
+     * 中序遍历
+     * 通过中序遍历将节点值放入集合中
+     */
+    private void helper(TreeNode root, List<Integer> list) {
+        if (root == null) {
+            return ;
+        }
+
+        // 先访问左节点
+        helper(root.left, list);
+        // 将当前节点值放入集合中
+        list.add(root.val);
+        // 再访问右节点
+        helper(root.right, list);
     }
 }
 ```

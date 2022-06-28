@@ -4318,6 +4318,71 @@ class MinStack {
  */
 ```
 
+## 543. 二叉树的直径
+
+原题链接：[543. 二叉树的直径](https://leetcode.cn/problems/diameter-of-binary-tree/)
+
+> 给定一棵二叉树，你需要计算它的直径长度。一棵二叉树的直径长度是任意两个结点路径长度中的最大值。这条路径可能穿过也可能不穿过根结点。
+>
+> **注意：**两结点之间的路径长度是以它们之间边的数目表示。
+
+### 1.后序遍历
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    // 二叉树的直径长度
+    int max = 0;
+    public int diameterOfBinaryTree(TreeNode root) {
+        max = 0;
+
+        // 后序遍历
+        postOrder(root);
+
+        return max;
+    }
+
+    /**
+     * 后序遍历
+     * 返回从root节点出发到左右子树叶子节点的最大路径长度
+     * 并更新整棵二叉树的直径长度
+     */
+    private int postOrder(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        // root节点到左子树叶子节点的最大路径长度
+        int left = postOrder(root.left);
+        // root节点到右子树叶子节点的最大路径长度
+        int right = postOrder(root.right);
+
+        // 用root节点左子树的两个叶子节点的路径长度
+        // 更新二叉树的直径长度
+        max = Math.max(left + right, max);
+
+        // root节点出发到左右子树叶子节点的最大路径长度
+        // 为left和right中的最大值+1
+        return Math.max(left, right) + 1;
+    }
+}
+```
+
 ## 322. 零钱兑换
 
 原题链接：[322. 零钱兑换](https://leetcode.cn/problems/coin-change/)

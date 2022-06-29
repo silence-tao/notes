@@ -4581,6 +4581,68 @@ class Solution {
 }
 ```
 
+## 78. 子集
+
+原题链接：[78. 子集](https://leetcode.cn/problems/subsets/)
+
+> 给你一个整数数组 `nums` ，数组中的元素 **互不相同** 。返回该数组所有可能的子集（幂集）。
+>
+> 解集 **不能** 包含重复的子集。你可以按 **任意顺序** 返回解集。
+>
+> **提示：**
+>
+> - `1 <= nums.length <= 10`
+> - `-10 <= nums[i] <= 10`
+> - `nums` 中的所有元素 **互不相同**
+
+### 1.递归
+
+``` java
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+
+        // 递归
+        subsets(nums, 0, res, list);
+
+        return res;
+    }
+
+    /**
+     * 递归
+     * st：当前递归的起始位置
+     * res：结果集合
+     * list：当前递归组成的子集
+     */
+    private void subsets(int[] nums, int st, List<List<Integer>> res, List<Integer> list) {
+        int length = nums.length;
+
+        // 将当前子集放入结果集合res中
+        res.add(new ArrayList<>(list));
+        
+        // 起始位置大于等于nums数组的长度
+        if (st >= length) {
+            // 直接return，结束递归
+            return ;
+        }
+
+        // 从起始位置st开始遍历数组nums
+        for (int i = st; i < length; i++) {
+            // 将当前元素nums[i]加入子集list中
+            list.add(nums[i]);
+            // 因为子集不能重复
+            // 所以下一次递归的起始位置为i + 1
+            subsets(nums, i + 1, res, list);
+
+            // 每个元素当前循环中只能使用一次
+            // 所以这里将当前元素nums[i]从子集list中删除
+            list.remove(list.size() - 1);
+        }
+    }
+}
+```
+
 ## 32. 最长有效括号
 
 原题链接：[32. 最长有效括号](https://leetcode.cn/problems/longest-valid-parentheses/)
@@ -4765,6 +4827,71 @@ class Solution {
         list.add(root.val);
         // 再访问右节点
         helper(root.right, list);
+    }
+}
+```
+
+## 101. 对称二叉树
+
+原题链接：[101. 对称二叉树](https://leetcode.cn/problems/symmetric-tree/)
+
+> 给你一个二叉树的根节点 `root` ， 检查它是否轴对称。
+>
+> **提示：**
+>
+> - 树中节点数目在范围 `[1, 1000]` 内
+> - `-100 <= Node.val <= 100`
+
+### 1.层序遍历
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        return isSymmetric(root.left, root.right);
+    }
+
+    /**
+     * 层序遍历
+     * 遍历每一层对称的两个节点left和right是否相等
+     */
+    private boolean isSymmetric(TreeNode left, TreeNode right) {
+        if (left == null && right == null) {
+            // left和right都为空
+            // 肯定是对称的，直接返回true
+            return true;
+        }
+
+        if (left == null || right == null) {
+            // left和right只要一个不为空
+            // 那么肯定不对称，直接返回false
+            return false;
+        }
+
+        if (left.val != right.val) {
+            // left和right值不相等
+            // 那么肯定不对称，直接返回false
+            return false;
+        }
+
+        // 遍历下一层节点
+        // 下一层节点中left.right和right.left对称
+        // left.left和right.right对称
+        return isSymmetric(left.right, right.left) && isSymmetric(left.left, right.right);
     }
 }
 ```

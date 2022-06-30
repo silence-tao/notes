@@ -4896,3 +4896,106 @@ class Solution {
 }
 ```
 
+## 165. 比较版本号
+
+原题链接：[165. 比较版本号](https://leetcode.cn/problems/compare-version-numbers/)
+
+> 给你两个版本号 version1 和 version2 ，请你比较它们。
+>
+> 版本号由一个或多个修订号组成，各修订号由一个 '.' 连接。每个修订号由 多位数字 组成，可能包含 前导零 。每个版本号至少包含一个字符。修订号从左到右编号，下标从 0 开始，最左边的修订号下标为 0 ，下一个修订号下标为 1 ，以此类推。例如，2.5.33 和 0.1 都是有效的版本号。
+>
+> 比较版本号时，请按从左到右的顺序依次比较它们的修订号。比较修订号时，只需比较 忽略任何前导零后的整数值 。也就是说，修订号 1 和修订号 001 相等 。如果版本号没有指定某个下标处的修订号，则该修订号视为 0 。例如，版本 1.0 小于版本 1.1 ，因为它们下标为 0 的修订号相同，而下标为 1 的修订号分别为 0 和 1 ，0 < 1 。
+>
+> 返回规则如下：
+>
+> - 如果 version1 > version2 返回 1，
+> - 如果 version1 < version2 返回 -1，
+> - 除此之外返回 0。
+>
+> 提示：
+>
+> - 1 <= version1.length, version2.length <= 500
+> - version1 和 version2 仅包含数字和 '.'
+> - version1 和 version2 都是 有效版本号
+> - version1 和 version2 的所有修订号都可以存储在 32 位整数 中
+
+### 1.单指针
+
+``` java
+class Solution {
+    public int compareVersion(String version1, String version2) {
+        // 先将字符串version1、version2转为字符串数组
+        String[] strs1 = version1.split("\\.");
+        String[] strs2 = version2.split("\\.");
+
+        // 遍历两个字符串数组
+        // 按位比较每一位版本的大小
+        // 如果位数不够就以0填充
+        int len1 = strs1.length, len2 = strs2.length, pos = 0, ver1, ver2;
+        while (pos < len1 || pos < len2) {
+            if (pos >= len1) {
+                // 字符串strs1位数不够用0填充
+                ver1 = 0;
+                ver2 = Integer.valueOf(strs2[pos]);
+            } else if (pos >= len2) {
+                ver1 = Integer.valueOf(strs1[pos]);
+                // 字符串strs2位数不够用0填充
+                ver2 = 0;
+            } else {
+                ver1 = Integer.valueOf(strs1[pos]);
+                ver2 = Integer.valueOf(strs2[pos]);
+            }
+
+            // ver1 < ver2 表示version1 < version2
+            if (ver1 < ver2) {
+                // 直接返回-1
+                return -1;
+            } else if (ver1 > ver2) {
+                // ver1 > ver2 表示version1 > version2
+                // 直接返回 1
+                return 1;
+            }
+
+            pos++;
+        }
+        
+        // 如果以上都没有命中
+        // 表示version1 == version2
+        // 直接返回0
+        return 0;
+    }
+}
+```
+
+### 2.迭代法
+
+``` java
+class Solution {
+    public int compareVersion(String version1, String version2) {
+        // 先将两个版本号分割成字符串数组
+        String[] arr1 = version1.split("\\.");
+        String[] arr2 = version2.split("\\.");
+
+        int len1 = arr1.length, len2 = arr2.length;
+        // 然后按位比较每一位的大小
+        for (int i = 0; i < Math.max(len1, len2); i++) {
+            // 将每一位修订号转成整型
+            // 如果超出数组范围则转成0
+            int ver1 = i < len1 ? Integer.parseInt(arr1[i]) : 0;
+            int ver2 = i < len2 ? Integer.parseInt(arr2[i]) : 0;
+
+            // 比较两个修订号是否相等
+            if (ver1 != ver2) {
+                // 不相等ver1 > ver2返回1
+                // 否则返回-1
+                return ver1 > ver2 ? 1 : -1;
+            }
+        }
+
+        // 到了这里说明所有的修订号都相等
+        // 即两个版本号相等，返回0
+        return 0;
+    }
+}
+```
+

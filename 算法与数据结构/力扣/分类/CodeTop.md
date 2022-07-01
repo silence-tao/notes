@@ -4999,3 +4999,126 @@ class Solution {
 }
 ```
 
+## 64. 最小路径和
+
+原题链接：[64. 最小路径和](https://leetcode.cn/problems/minimum-path-sum/)
+
+> 给定一个包含非负整数的 `*m* x *n*` 网格 `grid` ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+>
+> **说明：**每次只能向下或者向右移动一步。
+>
+> 提示：
+>
+> - m == grid.length
+> - n == grid[i].length
+> - 1 <= m, n <= 200
+> - 0 <= grid[i][j] <= 100
+
+### 1.动态规划
+
+``` java
+class Solution {
+    public int minPathSum(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+
+        // 利用二维的dp数组保存左上角到grid任意位置的最小路径
+        // 其中到grid[i][j]位置的最小路径为dp[i + 1][j + 1]
+        int[][] dp = new int[m + 1][n + 1];
+        // 初始化dp数组
+        for (int i = 0; i <= m; i++) {
+            // 因为取的是最小值，所以将dp初始化为Integer.MAX_VALUE
+            Arrays.fill(dp[i], Integer.MAX_VALUE);
+        }
+
+        // 将dp[1][1]上面和左边初始化为0
+        dp[0][1] = 0;
+        dp[1][0] = 0;
+
+        // 动态转移方程
+        // dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + grid[i - 1][j - 1]
+        // 即grid[0][0]到grid[i][j]的最小路径
+        // 为grid[0][0]到grid[i - 1][j]和grid[i][j - 1]中的最小值
+        // 再加上grid[i][j]
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + grid[i - 1][j - 1];
+            }
+        }
+
+        // 所以dp[m][n]就是左上角到右下角的最小路径
+        return dp[m][n];
+    }
+}
+```
+
+## 234. 回文链表
+
+原题链接：[234. 回文链表](https://leetcode.cn/problems/palindrome-linked-list/)
+
+> 给你一个单链表的头节点 `head` ，请你判断该链表是否为回文链表。如果是，返回 `true` ；否则，返回 `false` 。
+>
+> **提示：**
+>
+> - 链表中节点数目在范围`[1, 105]` 内
+> - `0 <= Node.val <= 9`
+
+### 1.双指针
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        if (head.next == null) {
+            return true;
+        }
+
+        // 使用栈保存链表前半部分节点的值
+        LinkedList<Integer> stack = new LinkedList<>();
+        // 然后利用快慢指针使slow跳到链表后半部分的第一个节点上
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast != null && fast.next != null) {
+            // 节点值入栈
+            stack.push(slow.val);
+
+            // 慢指针跳一个节点
+            slow = slow.next;
+            // 快指针跳两个节点
+            fast = fast.next.next;
+        }
+
+        // fast != null表示链表节点个数为单数
+        if (fast != null) {
+            // 所以slow跳到下一个节点才是链表后半部分的第一个节点上
+            slow = slow.next;
+        }
+
+        // 栈里面的数据挨个出栈
+        // 和链表后半部分的挨个节点值进行比较
+        while (!stack.isEmpty()) {
+            if (slow.val != stack.pop()) {
+                // 只要有一对不相等，那就不是回文链表
+                // 直接返回false
+                return false;
+            }
+
+            // 跳到下一个节点
+            slow = slow.next;
+        }
+
+        // 到了这里说明是回文链表
+        // 返回true
+        return true;
+    }
+}
+```
+

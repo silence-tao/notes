@@ -5051,6 +5051,105 @@ class Solution {
 }
 ```
 
+## 470. 用 Rand7() 实现 Rand10()
+
+原题链接：[470. 用 Rand7() 实现 Rand10()](https://leetcode.cn/problems/implement-rand10-using-rand7/)
+
+> 给定方法 rand7 可生成 [1,7] 范围内的均匀随机整数，试写一个方法 rand10 生成 [1,10] 范围内的均匀随机整数。
+>
+> 你只能调用 rand7() 且不能调用其他方法。请不要使用系统的 Math.random() 方法。
+>
+> 每个测试用例将有一个内部参数 n，即你实现的函数 rand10() 在测试时将被调用的次数。请注意，这不是传递给 rand10() 的参数。
+>
+> **进阶:**
+>
+> - `rand7()`调用次数的 [期望值](https://en.wikipedia.org/wiki/Expected_value) 是多少 ?
+> - 你能否尽量少调用 `rand7()` ?
+
+### 1.拒绝采样
+
+``` java
+/**
+ * The rand7() API is already defined in the parent class SolBase.
+ * public int rand7();
+ * @return a random integer in the range 1 to 7
+ */
+class Solution extends SolBase {
+    public int rand10() {
+        // 已知 rand_N() 可以等概率的生成[1, N]范围的随机数
+        // 那么：
+        // (rand_X() - 1) × Y + rand_Y() ==> 可以等概率的生成[1, X * Y]范围的随机数
+        // 即实现了 rand_XY()
+
+        // 又有rand_Z()，且Z是V的整数倍
+        // 那么rand_V() = (rand_Z() % V) + 1
+
+        while (true) {
+            // 先实现rand49()
+            int z = (rand7() - 1) * 7 + rand7();
+
+            // 然后通过拒绝采样将生成区间在[41, 49]的数字淘汰掉
+            if (z <= 40) {
+                // 这样z = rand40()
+                // 那么rand10() = (z % 10) + 1
+                return (z % 10) + 1;
+            }
+        }
+    }
+}
+```
+
+### 2.拒绝采样优化
+
+``` java
+/**
+ * The rand7() API is already defined in the parent class SolBase.
+ * public int rand7();
+ * @return a random integer in the range 1 to 7
+ */
+class Solution extends SolBase {
+    public int rand10() {
+        // 已知 rand_N() 可以等概率的生成[1, N]范围的随机数
+        // 那么：
+        // (rand_X() - 1) × Y + rand_Y() ==> 可以等概率的生成[1, X * Y]范围的随机数
+        // 即实现了 rand_XY()
+
+        // 又有rand_Z()，且Z是V的整数倍
+        // 那么rand_V() = (rand_Z() % V) + 1
+
+        while (true) {
+            // 先实现rand49()
+            int z = (rand7() - 1) * 7 + rand7();
+
+            // 然后通过拒绝采样将生成区间在[41, 49]的数字淘汰掉
+            if (z <= 40) {
+                // 这样z = rand40()
+                // 那么rand10() = (z % 10) + 1
+                return (z % 10) + 1;
+            }
+
+            // rand9()
+            z = z - 40;
+            // rand63()
+            z = (z - 1) * 7 + rand7();
+            if (z <= 60) {
+                // rand60()
+                return (z % 10) + 1;
+            }
+
+            // rand3();
+            z = z - 60;
+            // rand21()
+            z = (z - 1) * 7 + rand7();
+            if (z <= 20) {
+                // rand20()
+                return (z % 10) + 1;
+            }
+        }
+    }
+}
+```
+
 ## 234. 回文链表
 
 原题链接：[234. 回文链表](https://leetcode.cn/problems/palindrome-linked-list/)

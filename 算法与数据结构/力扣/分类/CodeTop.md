@@ -5221,3 +5221,108 @@ class Solution {
 }
 ```
 
+## 39. 组合总和
+
+原题链接：[39. 组合总和](https://leetcode.cn/problems/combination-sum/)
+
+> 给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。
+>
+> candidates 中的 同一个 数字可以 无限制重复被选取 。如果至少一个数字的被选数量不同，则两种组合是不同的。 
+>
+> 对于给定的输入，保证和为 target 的不同组合数少于 150 个。
+>
+> 提示：
+>
+> - 1 <= candidates.length <= 30
+> - 1 <= candidates[i] <= 200
+> - candidate 中的每个元素都 互不相同
+> - 1 <= target <= 500
+
+### 1.搜索回溯
+
+``` java
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+
+        // 搜索回溯
+        dfs(candidates, target, res, list, 0);
+
+        return res;
+    }
+
+    /**
+     * 搜索回溯
+     */
+    private void dfs(int[] candidates, int target, List<List<Integer>> res, List<Integer> list, int pos) {
+        if (pos == candidates.length) {
+            // pos遍历完，直接返回
+            return ;
+        }
+
+        if (target == 0) {
+            // 刚好满足组合
+            // 将结果放入res集合中
+            res.add(new ArrayList<>(list));
+
+            // 然后直接返回
+            return ;
+        }
+
+        // 跳过当前元素
+        dfs(candidates, target, res, list, pos + 1);
+
+        // 选择当前元素
+        if (target - candidates[pos] >= 0) {
+            list.add(candidates[pos]);
+
+            // 继续选择当前元素
+            dfs(candidates, target - candidates[pos], res, list, pos);
+
+            // 当前元素使用完就要删除
+            list.remove(list.size() - 1);
+        }
+    }
+}
+```
+
+## 169. 多数元素
+
+原题链接：[169. 多数元素](https://leetcode.cn/problems/majority-element/)
+
+> 给定一个大小为 n 的数组 nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。
+>
+> 你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+>
+> **提示：**
+>
+> - `n == nums.length`
+> - `1 <= n <= 5 * 104`
+> - `-109 <= nums[i] <= 109`
+
+### 1.哈希
+
+``` java
+class Solution {
+    public int majorityElement(int[] nums) {
+        int length = nums.length;
+
+        // 用map保存每一个元素出现的次数
+        Map<Integer, Integer> memory = new HashMap<>();
+        // 遍历数组
+        for (int i = 0; i < length; i++) {
+            // 元素个数+1
+            memory.put(nums[i], memory.getOrDefault(nums[i], 0) + 1);
+            // 如果元素个数大于length / 2
+            if (memory.get(nums[i]) > length / 2) {
+                // 就直接返回当前元素
+                return nums[i];
+            }
+        }
+
+        return 0;
+    }
+}
+```
+

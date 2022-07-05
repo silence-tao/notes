@@ -5326,6 +5326,66 @@ class Solution {
 }
 ```
 
+## 48. 旋转图像
+
+原题链接：[48. 旋转图像](https://leetcode.cn/problems/rotate-image/)
+
+> 给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。
+>
+> 你必须在 原地 旋转图像，这意味着你需要直接修改输入的二维矩阵。请不要 使用另一个矩阵来旋转图像。
+>
+> 提示：
+>
+> - n == matrix.length == matrix[i].length
+> - 1 <= n <= 20
+> - -1000 <= matrix[i][j] <= 1000
+
+### 1.迭代法
+
+``` java
+class Solution {
+    public void rotate(int[][] matrix) {
+        int n = matrix.length;
+
+        // 右边和下边的边界
+        int border = n - 1;
+        // 矩阵的层数
+        int level = n / 2;
+
+        // 每一层都要旋转，所以先遍历层数
+        for (int i = 0; i < level; i++) {
+            // 遍历每一层矩阵的第一行
+            for (int j = i, pos = 0; j < border; j++, pos++) {
+                // 取出matrix[i][j]
+                int t = matrix[i][j], c;
+
+                // 将matrix[i][j]放到matrix[j][border]
+                c = matrix[j][border];
+                matrix[j][border] = t;
+                t = c;
+
+                // 将matrix[j][border]放到matrix[border][border - pos]
+                c = matrix[border][border - pos];
+                matrix[border][border - pos] = t;
+                t = c;
+
+                // 将matrix[border][border - pos]放到matrix[border - pos][i]
+                c = matrix[border - pos][i];
+                matrix[border - pos][i] = t;
+                t = c;
+
+                // 最后将matrix[border - pos][i]放回matrix[i][j]
+                // 就完成了一层中单个元素的旋转
+                matrix[i][j] = t;
+            }
+
+            // 然后边界-1
+            border--;
+        }
+    }
+}
+```
+
 ## 112. 路径总和
 
 原题链接：[112. 路径总和](https://leetcode.cn/problems/path-sum/)
@@ -5380,5 +5440,89 @@ class Solution {
 }
 ```
 
+## 718. 最长重复子数组
 
+原题链接：[718. 最长重复子数组](https://leetcode.cn/problems/maximum-length-of-repeated-subarray/)
+
+> 给两个整数数组 `nums1` 和 `nums2` ，返回 *两个数组中 **公共的** 、长度最长的子数组的长度* 。
+>
+>  **提示：**
+>
+> - `1 <= nums1.length, nums2.length <= 1000`
+> - `0 <= nums1[i], nums2[i] <= 100`
+
+### 1.动态规划
+
+``` java
+class Solution {
+    public int findLength(int[] nums1, int[] nums2) {
+        int len1 = nums1.length, len2 = nums2.length;
+
+        // 用二维的dp数组保存最长公共子数组
+        // 其中dp[i][j]表示nums1[i:]与nums2[j:]的最长公共子数组
+        int[][] dp = new int[len1 + 1][len2 + 1];
+        int max = 0;
+        for (int i = len1 - 1; i >= 0; i--) {
+            for (int j = len2 - 1; j >= 0; j--) {
+                // 当nums1[i] == nums2[j]时，dp[i][j] = dp[i + 1][j + 1] + 1
+                // 否则dp[i][j] = 0
+                dp[i][j] = nums1[i] == nums2[j] ? dp[i + 1][j + 1] + 1 : 0;
+
+                // 更新最大长度
+                max = Math.max(dp[i][j], max); 
+            }
+        }
+
+        return max;
+    }
+}
+```
+
+## 226. 翻转二叉树
+
+原题链接：[226. 翻转二叉树](https://leetcode.cn/problems/invert-binary-tree/)
+
+> 给你一棵二叉树的根节点 `root` ，翻转这棵二叉树，并返回其根节点。
+>
+> **提示：**
+>
+> - 树中节点数目范围在 `[0, 100]` 内
+> - `-100 <= Node.val <= 100`
+
+### 1.后序遍历
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return root;
+        }
+
+        // 先暂存left节点
+        TreeNode left = root.left;
+        // 然后left == right，这里传right也会返回right
+        root.left = invertTree(root.right);
+        // right == left，这里传left也会返回left
+        root.right = invertTree(left);
+
+        // 返回当前节点即可
+        return root;
+    }
+}
+```
 

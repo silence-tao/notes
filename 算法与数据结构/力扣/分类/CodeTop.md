@@ -5526,3 +5526,170 @@ class Solution {
 }
 ```
 
+## 34. 在排序数组中查找元素的第一个和最后一个位置
+
+原题链接：[34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
+
+> 给你一个按照非递减顺序排列的整数数组 nums，和一个目标值 target。请你找出给定目标值在数组中的开始位置和结束位置。
+>
+> 如果数组中不存在目标值 target，返回 [-1, -1]。
+>
+> 你必须设计并实现时间复杂度为 O(log n) 的算法解决此问题。
+>
+> 提示：
+>
+> - 0 <= nums.length <= 105
+> - -109 <= nums[i] <= 109
+> - nums 是一个非递减数组
+> - -109 <= target <= 109
+
+### 1.二分查找
+
+``` java
+class Solution {
+    public int[] searchRange(int[] nums, int target) {
+        int[] res = new int[] {-1, -1};
+        int length;
+        if ((length = nums.length) == 0) {
+            return res;
+        }
+
+        // 二分查找
+        int left = 0, right = length - 1;
+        // 将区间[0, length)分为[left, mid]和(mid, rigth]两部分
+        // 然后比较nums[mid]和target，并根据结果缩小范围
+        while (left < right) {
+            // 计算mid，避免溢出用>>运算符
+            int mid = (left + right) >> 1;
+            // 如果nums[mid] < target说明target不在区间[left, mid]
+            if (nums[mid] < target) {
+                // 缩小left，left右移
+                left = mid + 1;
+            } else {
+                // 否则缩小right，right左移
+                right = mid;
+            }
+        }
+
+        // 上面的while循环会以left == right结束
+        // 如果nums[left] != target，说明nums不存在等于target的元素
+        if (nums[left] != target) {
+            // 直接返回res
+            return res;
+        }
+
+        // 开始位置就是left
+        res[0] = left;
+        // 从left往后遍历nums，直到最后一个等于target的元素
+        for (int i = left; i < length; i++) {
+            if (nums[i] == target) {
+                // 更新结束位置
+                res[1] = i;
+            } else {
+                break ;
+            }
+        }
+
+        // 返回结果
+        return res;
+    }
+}
+```
+
+## 221. 最大正方形
+
+原题链接：[221. 最大正方形](https://leetcode.cn/problems/maximal-square/)
+
+> 在一个由 `'0'` 和 `'1'` 组成的二维矩阵内，找到只包含 `'1'` 的最大正方形，并返回其面积。
+>
+> 提示：
+>
+> - m == matrix.length
+> - n == matrix[i].length
+> - 1 <= m, n <= 300
+> - matrix[i][j] 为 '0' 或 '1'
+
+### 1.迭代搜索法
+
+``` java
+class Solution {
+    public int maximalSquare(char[][] matrix) {
+        int m = matrix.length, n = matrix[0].length;
+
+        int max = 0;
+        // 遍历二维矩阵，从每一个元素出发
+        // 搜索只包含1的正方形
+        // 然后在所有的正方形中取面积的最大值
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                // 从当前的matrix[i][j]出发
+                // 搜索只包含1的正方形，并更新面积最大值
+                max = Math.max(max, maximalSquare(matrix, i, j));
+            }
+        }
+
+        return max;
+    }
+
+    /**
+     * 迭代搜索法
+     * 搜索以matrix[i][j]为起点且只包含1的正方形
+     * 返回正方形的面积
+     */
+    private int maximalSquare(char[][] matrix, int i, int j) {
+        if (matrix[i][j] == '0') {
+            // 当前不为1，直接返回0
+            return 0;
+        }
+
+        int m = matrix.length, n = matrix[0].length;
+        // 先从matrix[i][j]出发找到只包含1的长方形
+        // 其中length表示长方形的长度，height表示长方形的宽度
+        int length = m + 1, height = 0;
+
+        // 以matrix[i][j]为起点，从左往右，从上往下
+        // 搜索只包含1的长方形
+        // 并不断缩小边界m和n
+        for (int row = i; row < m; row++) {
+            // l表示当前行只包含1的长度
+            int l = 0;
+            for (int col = j; col < n; col++) {
+                if (matrix[row][col] == '1') {
+                    l++;
+                } else {
+                    break ;
+                }
+            }
+
+            // 长度为0
+            if (l == 0) {
+                // 则直接退出循环
+                break ;
+            }
+
+            // 高度+1
+            height++;
+
+            // 更新长度，取length和当前长度l的最小值
+            length = Math.min(length, l);
+
+            // 缩小边界m和n
+            // 因为最终要取的是正方形，正方形边长都是一样的
+            // 所以下一层要遍历的边界m不需要超过i + length
+            m = Math.min(i + length, m);
+            // 并且要遍历的高度边界n也不需要超过j + length
+            n = Math.min(j + length, n);
+        }
+
+        // 最后取长方形宽高的最小值
+        // 就是只包含1的正方形的边长
+        length = Math.min(length, height);
+
+        // 正方形边长乘积就是面积
+        return length * length;
+    }
+}
+```
+
+
+

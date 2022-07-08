@@ -5691,5 +5691,126 @@ class Solution {
 }
 ```
 
+## 162. 寻找峰值
 
+原题链接：[162. 寻找峰值](https://leetcode.cn/problems/find-peak-element/)
+
+> 峰值元素是指其值严格大于左右相邻值的元素。
+>
+> 给你一个整数数组 nums，找到峰值元素并返回其索引。数组可能包含多个峰值，在这种情况下，返回 任何一个峰值 所在位置即可。
+>
+> 你可以假设 nums[-1] = nums[n] = -∞ 。
+>
+> 你必须实现时间复杂度为 O(log n) 的算法来解决此问题。
+>
+> 提示：
+>
+> - 1 <= nums.length <= 1000
+> - -231 <= nums[i] <= 231 - 1
+> - 对于所有有效的 i 都有 nums[i] != nums[i + 1]
+
+### 1.迭代法
+
+``` java
+class Solution {
+    public int findPeakElement(int[] nums) {
+        int length = nums.length;
+
+        int res = 0;
+        // 遍历数组，找出那个严格大于左右相邻值的元素
+        for (int i = 0; i < length; i++) {
+            // 如果是第一个元素，那么它的左边就是Integer.MIN_VALUE
+            int left = i == 0 ? Integer.MIN_VALUE : nums[i - 1];
+            // 如果是最后一个元素，那么它的右边就是Integer.MIN_VALUE
+            int right = i == length - 1 ? Integer.MIN_VALUE : nums[i + 1];
+
+            // 比较是否为峰值元素
+            if (left < nums[i] && nums[i] > right) {
+                // 是的话就更新到结果res里面
+                res = i;
+
+                // 然后退出循环
+                break ;
+            }
+        }
+
+        // 返回结果
+        return res;
+    }
+}
+```
+
+## 14. 最长公共前缀
+
+原题链接：[14. 最长公共前缀](https://leetcode.cn/problems/longest-common-prefix/)
+
+> 编写一个函数来查找字符串数组中的最长公共前缀。
+>
+> 如果不存在公共前缀，返回空字符串 `""`。
+>
+> **提示：**
+>
+> - `1 <= strs.length <= 200`
+> - `0 <= strs[i].length <= 200`
+> - `strs[i]` 仅由小写英文字母组成
+
+### 1.迭代法
+
+``` java
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        int length = strs.length;
+
+        // 把每个字符串看成是一行，每个字符看成是一列
+        // 然后从第一列逐列比较，只要每一列的字符都想相同就跳到下一列
+        // 直到遇到某一列有不同的字符或者某行字符遍历完了
+
+        // 遍历到列的位置
+        int pos = 0;
+        // 使用StringBuilder存放结果
+        StringBuilder builder = new StringBuilder();
+        // 当前列比较的字符
+        char c;
+        // 逐列遍历字符
+        // 因为是在所有行中取最小的长度作为遍历的总长度
+        // 这里暂时取第一行的长度作为总长度
+        // 后面遇到最短的字符，可以直接跳出循环
+        while (pos < strs[0].length()) {
+            // 取第一行的第pos列的字符作为比较的基准
+            c = strs[0].charAt(pos);
+            int i = 1;
+            // 然后从第二行开始比较每一行第pos列的字符是否都相同
+            for (; i < length; i++) {
+                // 如果pos已经超过了当前行的长度
+                if (pos >= strs[i].length()) {
+                    // 那就直接跳出循环
+                    break ;
+                }
+
+                // 如果当前行的第pos个字符不等于c
+                if (c != strs[i].charAt(pos)) {
+                    // 也直接跳出循环
+                    break ;
+                }
+            }
+
+            // i != length表示pos已经超过了第i行字符串的长度
+            // 或者第i行字符串的第pos个字符不等于c
+            if (i != length) {
+                // 这里也直接跳出外层循环
+                break ;
+            }
+
+            // 否则当前列的字符都相同
+            // 将字符c加入到结果builder中
+            builder.append(c);
+            // 跳到下一列
+            pos++;
+        }
+
+        // 将结果转为字符串返回
+        return builder.toString();
+    }
+}
+```
 

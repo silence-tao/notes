@@ -355,7 +355,195 @@ commit;
 rollback;
 ```
 
+### 9.优化器追踪
 
+会话级别开启优化器追踪：
+
+``` bash
+mysql> set session optimizer_trace = 'enabled=on';
+Query OK, 0 rows affected (0.00 sec)
+```
+
+执行语句：
+
+``` bash
+mysql> select id from user_01 where phone like '%156%';
+```
+
+查看优化器追踪：
+
+``` bash
+mysql> select * from information_schema.optimizer_trace;
+```
+
+优化器追踪结果：
+
+``` json
+{
+  "steps": [
+    {
+      "join_preparation": {
+        "select#": 1,
+        "steps": [
+          {
+            "expanded_query": "/* select#1 */ select `user_01`.`id` AS `id` from `user_01` where (`user_01`.`phone` like '%156%')"
+          }
+        ]
+      }
+    },
+    {
+      "join_optimization": {
+        "select#": 1,
+        "steps": [
+          {
+            "condition_processing": {
+              "condition": "WHERE",
+              "original_condition": "(`user_01`.`phone` like '%156%')",
+              "steps": [
+                {
+                  "transformation": "equality_propagation",
+                  "resulting_condition": "(`user_01`.`phone` like '%156%')"
+                },
+                {
+                  "transformation": "constant_propagation",
+                  "resulting_condition": "(`user_01`.`phone` like '%156%')"
+                },
+                {
+                  "transformation": "trivial_condition_removal",
+                  "resulting_condition": "(`user_01`.`phone` like '%156%')"
+                }
+              ]
+            }
+          },
+          {
+            "substitute_generated_columns": {
+            }
+          },
+          {
+            "table_dependencies": [
+              {
+                "table": "`user_01`",
+                "row_may_be_null": false,
+                "map_bit": 0,
+                "depends_on_map_bits": [
+                ]
+              }
+            ]
+          },
+          {
+            "ref_optimizer_key_uses": [
+            ]
+          },
+          {
+            "rows_estimation": [
+              {
+                "table": "`user_01`",
+                "range_analysis": {
+                  "table_scan": {
+                    "rows": 100082,
+                    "cost": 10098.6
+                  },
+                  "potential_range_indexes": [
+                    {
+                      "index": "PRIMARY",
+                      "usable": false,
+                      "cause": "not_applicable"
+                    },
+                    {
+                      "index": "index_phone",
+                      "usable": true,
+                      "key_parts": [
+                        "phone",
+                        "id"
+                      ]
+                    }
+                  ],
+                  "best_covering_index_scan": {
+                    "index": "index_phone",
+                    "cost": 10130.5,
+                    "chosen": false,
+                    "cause": "cost"
+                  },
+                  "setup_range_conditions": [
+                  ],
+                  "group_index_range": {
+                    "chosen": false,
+                    "cause": "not_group_by_or_distinct"
+                  },
+                  "skip_scan_range": {
+                    "chosen": false,
+                    "cause": "disjuntive_predicate_present"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "considered_execution_plans": [
+              {
+                "plan_prefix": [
+                ],
+                "table": "`user_01`",
+                "best_access_path": {
+                  "considered_access_paths": [
+                    {
+                      "rows_to_scan": 100082,
+                      "access_type": "scan",
+                      "resulting_rows": 100082,
+                      "cost": 10096.5,
+                      "chosen": true
+                    }
+                  ]
+                },
+                "condition_filtering_pct": 100,
+                "rows_for_plan": 100082,
+                "cost_for_plan": 10096.5,
+                "chosen": true
+              }
+            ]
+          },
+          {
+            "attaching_conditions_to_tables": {
+              "original_condition": "(`user_01`.`phone` like '%156%')",
+              "attached_conditions_computation": [
+              ],
+              "attached_conditions_summary": [
+                {
+                  "table": "`user_01`",
+                  "attached": "(`user_01`.`phone` like '%156%')"
+                }
+              ]
+            }
+          },
+          {
+            "finalizing_table_conditions": [
+              {
+                "table": "`user_01`",
+                "original_table_condition": "(`user_01`.`phone` like '%156%')",
+                "final_table_condition   ": "(`user_01`.`phone` like '%156%')"
+              }
+            ]
+          },
+          {
+            "refine_plan": [
+              {
+                "table": "`user_01`"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "join_execution": {
+        "select#": 1,
+        "steps": [
+        ]
+      }
+    }
+  ]
+}
+```
 
 
 

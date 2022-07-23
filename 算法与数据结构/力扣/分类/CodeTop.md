@@ -5814,3 +5814,671 @@ class Solution {
 }
 ```
 
+## 240. 搜索二维矩阵 II
+
+原题链接：[240. 搜索二维矩阵 II](https://leetcode.cn/problems/search-a-2d-matrix-ii/)
+
+> 编写一个高效的算法来搜索 m x n 矩阵 matrix 中的一个目标值 target 。该矩阵具有以下特性：
+>
+> - 每行的元素从左到右升序排列。
+> - 每列的元素从上到下升序排列。
+>
+> 提示：
+>
+> - m == matrix.length
+> - n == matrix[i].length
+> - 1 <= n, m <= 300
+> - -109 <= matrix[i][j] <= 109
+> - 每行的所有元素从左到右升序排列
+> - 每列的所有元素从上到下升序排列
+> - -109 <= target <= 109
+
+### 1.二分查找
+
+``` java
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int m = matrix.length, n = matrix[0].length;
+
+        // 逐层做二分查找
+        for (int i = 0; i < m; i++) {
+            // 如果target小于这一层的第一个元素
+            if (target < matrix[i][0]) {
+                // 那么当前层和后面层的元素肯定都大于target
+                // 肯定找不到和target相等的元素了，这里直接返回false
+                return false;
+            }
+
+            // 如果target大于当前层的最后一个元素
+            if (target > matrix[i][n - 1]) {
+                // 那么当前层肯定找不到和target相等的元素了
+                // 直接continue跳到下一层继续搜索
+                continue ;
+            }
+
+            // 然后在当前层进行二分查找
+            int left = 0, right = n - 1;
+            // 将区间[left, right]分为[left, mid]、[mid + 1, right]两部分
+            while (left < right) {
+                int mid = (left + right) >>> 1;
+                if (matrix[i][mid] < target) {
+                    // target可能在区间[mid + 1, right]
+                    // 缩小left
+                    left = mid + 1;
+                } else {
+                    // target可能在区间[left, mid]
+                    // 缩小right
+                    right = mid;
+                }
+            }
+
+            // 当target == matrix[i][left]时
+            if (target == matrix[i][left]) {
+                // 搜索到target，返回true
+                return true;
+            }
+        }
+
+        // 否则没搜索到，返回false
+        return false;
+    }
+}
+```
+
+## 83. 删除排序链表中的重复元素
+
+原题链接：[83. 删除排序链表中的重复元素](https://leetcode.cn/problems/remove-duplicates-from-sorted-list/)
+
+> 给定一个已排序的链表的头 `head` ， *删除所有重复的元素，使每个元素只出现一次* 。返回 *已排序的链表* 。
+>
+> **提示：**
+>
+> - 链表中节点数目在范围 `[0, 300]` 内
+> - `-100 <= Node.val <= 100`
+> - 题目数据保证链表已经按升序 **排列**
+
+### 1.迭代法
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        // 如果是空链表或者只有一个节点
+        if (head == null || head.next == null) {
+            // 直接返回head
+            return head;
+        }
+
+        ListNode node = head;
+        // 遍历链表直到倒数第二个节点
+        while (node != null && node.next != null) {
+            // 如果当前节点值与next节点值相等
+            if (node.val == node.next.val) {
+                // 直接让当前节点next指向next节点的next节点
+                // 即从链表中删除了与当前节点值相等的next节点
+                node.next = node.next.next;
+            } else {
+                // 否则直接跳到下一个节点
+                node = node.next;
+            }
+        }
+
+        return head;
+    }
+}
+```
+
+## 62. 不同路径
+
+原题链接：[62. 不同路径](https://leetcode.cn/problems/unique-paths/)
+
+> 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。
+>
+> 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。
+>
+> 问总共有多少条不同的路径？
+>
+> **提示：**
+>
+> - `1 <= m, n <= 100`
+> - 题目数据保证答案小于等于 `2 * 109`
+
+### 1.递归
+
+力扣上会超时
+
+``` java
+class Solution {
+
+    int path = 0;
+    public int uniquePaths(int m, int n) {
+        boolean[][] visited = new boolean[m][n];
+        
+        uniquePaths(visited, m, n, 0, 0);
+
+        return path;
+    }
+
+    private void uniquePaths(boolean[][] visited, int m, int n, int i, int j) {
+        if (i < 0 || i >= m || j < 0 || j >= n || visited[i][j]) {
+            return ;
+        }
+
+        if (i == m - 1 && j == n - 1) {
+            path++;
+
+            return ;
+        }
+
+        visited[i][j] = true;
+
+        uniquePaths(visited, m, n, i + 1, j);
+        uniquePaths(visited, m, n, i, j + 1);
+
+        visited[i][j] = false;
+    }
+}
+```
+
+### 2.动态规划
+
+``` java
+class Solution {
+    public int uniquePaths(int m, int n) {
+        // 定义二维数组dp用来保存起始点到网格任意点的不同路径
+        int[][] dp = new int[m][n];
+
+        // 初始化：起始点到网格第一行所有点的路径只有一条
+        for (int j = 0; j < n; j++) {
+            dp[0][j] = 1;
+        }
+
+        // 初始化：起始点到网格第一列所有点的路径只有一条
+        for (int i = 0; i < m; i++) {
+            dp[i][0] = 1;
+        }
+
+        // 动态转移方程：dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+
+        // dp[m - 1][n - 1]就是起始点到网格右下角的路径
+        return dp[m - 1][n - 1];
+    }
+}
+```
+
+## 128. 最长连续序列
+
+掌握程度：★☆☆
+
+原题链接：[128. 最长连续序列](https://leetcode.cn/problems/longest-consecutive-sequence/)
+
+> 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
+>
+> 请你设计并实现时间复杂度为 O(n) 的算法解决此问题。
+>
+> **提示：**
+>
+> - `0 <= nums.length <= 105`
+> - `-109 <= nums[i] <= 109`
+
+### 1.哈希
+
+``` java
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        int max = 0, length;
+        if ((length = nums.length) == 0) {
+            return max;
+        }
+
+        // 用HasSet保存数组nums出现的元素
+        Set<Integer> memory = new HashSet<>(length);
+        for (int i = 0; i < length; i++) {
+            memory.add(nums[i]);
+        }
+
+        // 遍历数组，统计连续序列
+        for (int i = 0; i < length; i++) {
+            int num = nums[i];
+            // 如果num - 1不在memory中，说明num是序列的第一位
+            if (!memory.contains(num - 1)) {
+                int sum = 1;
+                // 对num逐次递增1，看看是否在memory中
+                while (memory.contains(++num)) {
+                    // 如果在sum就加1
+                    sum++;
+                }
+
+                // 最后更新结果max
+                max = Math.max(max, sum);
+            }
+        }
+
+        return max;
+    }
+}
+```
+
+### 2.排序
+
+``` java
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        int length;
+        if ((length = nums.length) == 0) {
+            return 0;
+        }
+
+        // 先对数组排序
+        Arrays.sort(nums);
+        int max = 1, sum = 1;
+        // 然后遍历有序数组
+        for (int i = 0; i < length - 1; i++) {
+            // 如果nums[i] == nums[i + 1] - 1
+            if (nums[i] == nums[i + 1] - 1) {
+                // 表示连续，sum加1
+                sum++;
+            } else if (nums[i] != nums[i + 1]) {
+                // 否则重置sum
+                // 这里nums[i] != nums[i + 1]时才重置sum
+                // 是为了跳过nums[i] == nums[i + 1]的情况
+                sum = 1;
+            }
+
+            // 然后更新结果max
+            max = Math.max(max, sum);
+        }
+
+        return max;
+    }
+}
+```
+
+## 394. 字符串解码
+
+掌握程度：★★☆
+
+原题链接：[394. 字符串解码](https://leetcode.cn/problems/decode-string/)
+
+> 给定一个经过编码的字符串，返回它解码后的字符串。
+>
+> 编码规则为: k[encoded_string]，表示其中方括号内部的 encoded_string 正好重复 k 次。注意 k 保证为正整数。
+>
+> 你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。
+>
+> 此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 k ，例如不会出现像 3a 或 2[4] 的输入。
+>
+> 提示：
+>
+> - 1 <= s.length <= 30
+> - s 由小写英文字母、数字和方括号 '[]' 组成
+> - s 保证是一个 有效 的输入。
+> - s 中所有整数的取值范围为 [1, 300] 
+
+### 1.递归
+
+``` java
+class Solution {
+
+    // 定义一个全局的pos用来控制字符遍历的位置
+    int pos = 0;
+    public String decodeString(String s) {
+        int length = s.length();
+
+        // builder用于保存结果
+        StringBuilder builder = new StringBuilder();
+        // num表示当前要重复的次数
+        int num = 0;
+        while (pos < length) {
+            char c = s.charAt(pos++);
+            if (c == '[') {
+                // 遇到字符[表示后面的字符需要重复
+                // 通过递归的方式获取需要重复的字符串
+                String str = decodeString(s);
+
+                // 根据重复次数将字符串append到builder中
+                while (num-- > 0) {
+                    builder.append(str);
+                }
+
+                // 然后重置num为0
+                num = 0;
+
+                continue ;
+            }
+
+            if (c == ']') {
+                // 遇到字符]表示重复的字符串结束
+                // 直接跳出循环
+                break ;
+            }
+
+            if (c >= '0' && c <= '9') {
+                // 表示c为数字，即需要重复的次数
+                // num * 10是因为重复次数可能是十位数百位数
+                num = (c - '0') + num * 10;
+            } else {
+                // 到了这里c就是字母，直接append到builder就好了
+                builder.append(c);
+            }
+        }
+
+        // 返回字符串
+        return builder.toString();
+    }
+}
+```
+
+## 24. 两两交换链表中的节点
+
+掌握程度：★★★
+
+原题链接：[24. 两两交换链表中的节点](https://leetcode.cn/problems/swap-nodes-in-pairs/)
+
+> 给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。
+>
+> **提示：**
+>
+> - 链表中节点的数目在范围 `[0, 100]` 内
+> - `0 <= Node.val <= 100`
+
+### 1.迭代法
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        // 如果是空链表或者链表只有一个节点
+        if (head == null || head.next == null) {
+            // 直接返回head
+            return head;
+        }
+
+        // 创建一个新的头节点，并让head作为newHead的next节点
+        ListNode newHead = new ListNode(0, head);
+        // pre就作为要交换的两个节点的前继节点
+        ListNode pre = newHead;
+        // 从新的头节点开始遍历链表
+        while (pre.next != null && pre.next.next != null) {
+            // first和second是要交换的两个节点
+            ListNode first = pre.next;
+            ListNode second = first.next;
+
+            // 第一个节点的next指向第二个节点的next
+            first.next = second.next;
+            // 第二个节点的next指向第一个节点
+            second.next = first;
+            // 前继节点指向second节点，就完成了交换
+            pre.next = second;
+
+            // 再让前继节点指向first节点
+            // 切换为下一次要交换节点的前继节点
+            pre = first;
+        }
+
+        // newHead的next节点就是交换后的新链表
+        return newHead.next;
+    }
+}
+```
+
+## 695. 岛屿的最大面积
+
+掌握程度：★★★
+
+原题链接：[695. 岛屿的最大面积](https://leetcode.cn/problems/max-area-of-island/)
+
+> 给你一个大小为 m x n 的二进制矩阵 grid 。
+>
+> 岛屿 是由一些相邻的 1 (代表土地) 构成的组合，这里的「相邻」要求两个 1 必须在 水平或者竖直的四个方向上 相邻。你可以假设 grid 的四个边缘都被 0（代表水）包围着。
+>
+> 岛屿的面积是岛上值为 1 的单元格的数目。
+>
+> 计算并返回 grid 中最大的岛屿面积。如果没有岛屿，则返回面积为 0 。
+>
+> **提示：**
+>
+> - `m == grid.length`
+> - `n == grid[i].length`
+> - `1 <= m, n <= 50`
+> - `grid[i][j]` 为 `0` 或 `1`
+
+### 1.深度优先搜索
+
+``` java
+class Solution {
+    public int maxAreaOfIsland(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+
+        int max = 0;
+        // 挨个遍历矩阵
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                // 从i,j位置搜索岛屿并更新结果
+                max = Math.max(max, dfs(grid, m, n, i, j));
+            }
+        }
+
+        return max;
+    }
+
+    /**
+     * 深度优先搜索
+     */
+    private int dfs(int[][] grid, int m, int n, int i, int j) {
+        if (i < 0 || i >= m || j < 0 || j >= n || grid[i][j] == 0) {
+            return 0;
+        }
+
+        // 记录当前的1，所以sum初始值为1
+        int sum = 1;
+        // 将当前位置置为0，表示已经访问过了
+        grid[i][j] = 0;
+
+        // 按上右下左的顺序搜索，并把数量加到sum中
+        sum += dfs(grid, m, n, i - 1, j);
+        sum += dfs(grid, m, n, i, j + 1);
+        sum += dfs(grid, m, n, i + 1, j);
+        sum += dfs(grid, m, n, i, j - 1);
+
+        return sum;
+    }
+}
+```
+
+## 122. 买卖股票的最佳时机 II
+
+原题链接：[122. 买卖股票的最佳时机 II](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/)
+
+> 给你一个整数数组 prices ，其中 prices[i] 表示某支股票第 i 天的价格。
+>
+> 在每一天，你可以决定是否购买和/或出售股票。你在任何时候 最多 只能持有 一股 股票。你也可以先购买，然后在 同一天 出售。
+>
+> 返回 你能获得的 最大 利润 。
+>
+> **提示：**
+>
+> - `1 <= prices.length <= 3 * 104`
+> - `0 <= prices[i] <= 104`
+
+### 1.贪心算法
+
+``` java
+class Solution {
+    public int maxProfit(int[] prices) {
+        int sum = 0, length = prices.length;
+
+        // 遍历数组prices
+        for (int i = 1; i < length; i++) {
+            // 因为股票价格是预知的
+            // 所以只要当天的股票价格大于前一天的
+            if (prices[i - 1] < prices[i]) {
+                // 就进行交易
+                sum += prices[i] - prices[i - 1];
+            }
+        }
+
+        return sum;
+    }
+}
+```
+
+## 912. 排序数组
+
+掌握程度：★☆☆
+
+原题链接：[912. 排序数组](https://leetcode.cn/problems/sort-an-array/)
+
+> 给你一个整数数组 `nums`，请你将该数组升序排列。
+>
+>  **提示：**
+>
+> - `1 <= nums.length <= 5 * 104`
+> - `-5 * 104 <= nums[i] <= 5 * 104`
+
+### 1.双路快排
+
+``` java
+class Solution {
+    public int[] sortArray(int[] nums) {
+        int length = nums.length;
+
+        helper(nums, 0, length - 1);
+
+        return nums;
+    }
+
+    /**
+     * 双路快排
+     */
+    private void helper(int[] nums, int l, int r) {
+        if (l >= r) {
+            return ;
+        }
+
+        int e = nums[l];
+        int lt = l, gt = r + 1, i = l + 1;
+        while (i < gt) {
+            if (nums[i] < e) {
+                swap(nums, ++lt, i++);
+            } else if (nums[i] > e) {
+                swap(nums, --gt, i);
+            } else {
+                i++;
+            }
+        }
+
+        swap(nums, l, lt);
+
+        helper(nums, l, lt - 1);
+        helper(nums, gt, r);
+    }
+
+    /**
+     * 交换数组中两个位置的值
+     */
+    private void swap(int[] nums, int i, int j) {
+        if (i == j) {
+            return ;
+        }
+
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+```
+
+### 2.堆排序
+
+``` java
+class Solution {
+    public int[] sortArray(int[] nums) {
+        int length = nums.length;
+        // heapify：构建一个最大堆
+        for (int i = (length - 1) / 2; i >= 0; i--) {
+            shiftDown(nums, length, i);
+        }
+
+        // 原地堆排序
+        // 将最大堆堆顶元素nums[0]与堆中最后一个叶子节点元素nums[i]交换位置
+        // 然后通过shiftDown维护区间[0, i)范围内最大堆的性质
+        // 直到只剩下根节点
+        for (int i = length - 1; i > 0; i--) {
+            // 交换堆顶与最后一个叶子的位置
+            swap(nums, 0, i);
+            // 维护区间[0, i)范围内最大堆的性质
+            shiftDown(nums, i, 0);
+        }
+
+        return nums;
+    }
+
+    /**
+     * 将以nums[k]为根节点
+     * 且在区间[0, length)范围内的子树构建成最大堆
+     */
+    private void shiftDown(int[] nums, int length, int k) {
+        // nums[2 * k + 1]表示根节点num[k]的左节点
+        // nums[2 * k + 2]表示根节点num[k]的右节点
+        while (2 * k + 1 < length) {
+            int j = 2 * k + 1;
+            // 取根节点nums[i]左右节点中较大的节点
+            if (j + 1 < length && nums[j] < nums[j + 1]) {
+                j = j + 1;
+            }
+
+            // 如果根节点比左右节点中较大的节点还大
+            // 说明当前以nums[k]为根节点的树已经是最大堆
+            if (nums[k] > nums[j]) {
+                // 直接break退出循环
+                break ;
+            }
+
+            // 交换nums[k]与nums[j]
+            // 以维护最大堆的性质
+            swap(nums, k, j);
+
+            // 然后切换根节点为nums[j]
+            // 继续维护nums[k]的子树为最大堆
+            k = j;
+        }
+    }
+
+    /**
+     * 交换数组中i和j两个元素的位置
+     */
+    private void swap(int[] nums, int i, int j) {
+        if (i == j) {
+            return ;
+        }
+
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+```

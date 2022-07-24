@@ -6482,3 +6482,441 @@ class Solution {
     }
 }
 ```
+
+## 152. 乘积最大子数组
+
+掌握程度：☆☆☆
+
+原题链接：[152. 乘积最大子数组](https://leetcode.cn/problems/maximum-product-subarray/)
+
+> 给你一个整数数组 nums ，请你找出数组中乘积最大的非空连续子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积。
+>
+> 测试用例的答案是一个 32-位 整数。
+>
+> 子数组 是数组的连续子序列。
+>
+> 提示:
+>
+> - 1 <= nums.length <= 2 * 104
+> - -10 <= nums[i] <= 10
+> - nums 的任何前缀或后缀的乘积都 保证 是一个 32-位 整数
+
+### 1.动态规划
+
+``` java
+class Solution {
+    public int maxProduct(int[] nums) {
+        int length = nums.length;
+
+        // 用min和max分别表示乘积过程中产生的最小最大值
+        int min = 1, max = 1, res = Integer.MIN_VALUE;
+        // 遍历数组nums，挨个做乘积
+        for (int i = 0; i < length; i++) {
+            if (nums[i] < 0) {
+                // 当前元素小于0时，交换min和max的值
+                // 这样做的目的是如果出现了偶数个负数的话
+                // 根据负负得正，min和负数相乘将会得到更大的正数
+                // 所以这里交换min和max
+                int t = min;
+                min = max;
+                max = t;
+            }
+
+            // 更新最大值max：取nums[i]和max * nums[i]两者的最大值
+            max = Math.max(nums[i], max * nums[i]);
+            // 更新最小值min：取nums[i]和min * nums[i]两者的最小值
+            min = Math.min(nums[i], min * nums[i]);
+
+            // 再更新结果res
+            res = Math.max(res, max);
+        }
+
+        // 返回结果
+        return res;
+    }
+}
+```
+
+## 153. 寻找旋转排序数组中的最小值
+
+掌握程度：★☆☆
+
+原题链接：[153. 寻找旋转排序数组中的最小值](https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array/)
+
+> 已知一个长度为 n 的数组，预先按照升序排列，经由 1 到 n 次 旋转 后，得到输入数组。例如，原数组 nums = [0,1,2,4,5,6,7] 在变化后可能得到：
+> 若旋转 4 次，则可以得到 [4,5,6,7,0,1,2]
+> 若旋转 7 次，则可以得到 [0,1,2,4,5,6,7]
+> 注意，数组 [a[0], a[1], a[2], ..., a[n-1]] 旋转一次 的结果为数组 [a[n-1], a[0], a[1], a[2], ..., a[n-2]] 。
+>
+> 给你一个元素值 互不相同 的数组 nums ，它原来是一个升序排列的数组，并按上述情形进行了多次旋转。请你找出并返回数组中的 最小元素 。
+>
+> 你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。
+>
+> 提示：
+>
+> - n == nums.length
+> - 1 <= n <= 5000
+> - -5000 <= nums[i] <= 5000
+> - nums 中的所有整数 互不相同
+> - nums 原来是一个升序排序的数组，并进行了 1 至 n 次旋转
+
+### 1.二分查找
+
+``` java
+class Solution {
+    public int findMin(int[] nums) {
+        int length = nums.length;
+
+        // 二分查找
+        int left = 0, right = length - 1;
+        while (left < right) {
+            int mid = (left + right) >>> 1;
+            if (nums[mid] > nums[right]) {
+                // 只要nums[mid] > nums[right]就说明最小值在mid的右边
+                // 所以此时要缩小左区间
+                left = mid + 1;
+            } else {
+                // 否则缩小右区间
+                right = mid;
+            }
+        }
+
+        // nums[left]就是最小值
+        return nums[left];
+    }
+}
+```
+
+## 227. 基本计算器 II
+
+掌握程度：★☆☆
+
+原题链接：[227. 基本计算器 II](https://leetcode.cn/problems/basic-calculator-ii/)
+
+> 给你一个字符串表达式 s ，请你实现一个基本计算器来计算并返回它的值。
+>
+> 整数除法仅保留整数部分。
+>
+> 你可以假设给定的表达式总是有效的。所有中间结果将在 [-231, 231 - 1] 的范围内。
+>
+> 注意：不允许使用任何将字符串作为数学表达式计算的内置函数，比如 eval() 。
+>
+> 提示：
+>
+> - 1 <= s.length <= 3 * 105
+> - s 由整数和算符 ('+', '-', '*', '/') 组成，中间由一些空格隔开
+> - s 表示一个 有效表达式
+> - 表达式中的所有整数都是非负整数，且在范围 [0, 231 - 1] 内
+> - 题目数据保证答案是一个 32-bit 整数
+
+### 1.迭代法
+
+``` java
+class Solution {
+
+    public int calculate(String s) {
+        int length = s.length();
+
+        // 表示遇到数字时前一个运算符号
+        char sign = '+';
+        // 用stack来保存被转换为加法运算的数字
+        LinkedList<Integer> stack = new LinkedList<>();
+        // 用num表示当前遍历过程中得到的整数
+        int num = 0;
+
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+
+            if ('0' <= c && c <= '9') {
+                // 将整数转换到num中
+                num = (c - '0') + num * 10;
+            }
+
+            if ((c == ' ' || '0' <= c && c <= '9') && i < length - 1) {
+                // 只要不是最后一个空格或者数字，那就continue
+                continue ;
+            }
+
+            // 到了这里说明c是运算符
+            // 这个时候需要判断当前正在num前一个运算符是什么
+            // 然后决定放进栈stack的数字是否需要进行运算
+            // 这个步骤的目的就是将所有复杂的运算都转为加法运算
+            // 加法直接入栈；减法转为负数；乘除法先计算出结果再压入栈中
+            if (sign == '+') {
+                // 前一个运算符是+号
+                // 直接将num压入栈中
+                stack.push(num);
+            } else if (sign == '-') {
+                // 前一个运算符是-号
+                // num取反再压入栈中
+                stack.push(-num);
+            } else if (sign == '*') {
+                // 前一个运算符是*号
+                // 根据运算法则，乘法优先于+-法的运算
+                // 所以这里先将栈顶元素弹出与num相乘
+                // 再将乘积压入栈中
+                stack.push(stack.pop() * num);
+            } else {
+                // 到了这里说明前一个运算符是/号
+                // 根据运算法则，除法优先于+-法的运算
+                // 所以这里先将栈顶元素弹出与num相除
+                // 再将商压入栈中
+                stack.push(stack.pop() / num);
+            }
+
+            // 初始化num，以备下一次转换数字
+            num = 0;
+            // 然后将c作为下一个整数的前置运算符
+            sign = c;
+        }
+
+        // 清空栈中的元素，然后累加结果到sum中
+        int sum = 0;
+        while (!stack.isEmpty()) {
+            sum += stack.pop();
+        }
+
+        return sum;
+    }
+}
+```
+
+## 179. 最大数
+
+掌握程度：★☆☆
+
+原题链接：[179. 最大数](https://leetcode.cn/problems/largest-number/)
+
+> 给定一组非负整数 `nums`，重新排列每个数的顺序（每个数不可拆分）使之组成一个最大的整数。
+>
+> **注意：**输出结果可能非常大，所以你需要返回一个字符串而不是整数。
+>
+> **提示：**
+>
+> - `1 <= nums.length <= 100`
+> - `0 <= nums[i] <= 109`
+
+### 1.排序
+
+``` java
+class Solution {
+    public String largestNumber(int[] nums) {
+        int length = nums.length;
+
+        // zero用于统计nums数组中0出现的次数
+        int zero = 0;
+        // 将nums数组中每一个整数转为字符串并放入list集合中
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < length; i++) {
+            if (nums[i] == 0) {
+                // 统计0出现的次数
+                zero++;
+            }
+
+            // 将整数转为字符串并放入list集合中
+            list.add(Integer.toString(nums[i]));
+        }
+
+        // 如果数组中0出现的次数等于数组长度
+        if (zero == length) {
+            // 那么能组成的最大整数就是0
+            return "0";
+        }
+
+        // 对集合里面的字符串排序：字符串的字符从左往右比较
+        // 左边字符较大的字符串排在前面
+        Collections.sort(list, (a, b) -> (b + a).compareTo(a + b));
+
+        // 然后将排序后的字符按list集合的顺序拼接起来就组成了最大的整数
+        StringBuilder builder = new StringBuilder();
+        for (String str : list) {
+            builder.append(str);
+        }
+
+        return builder.toString();
+    }
+}
+```
+
+## 662. 二叉树最大宽度
+
+掌握程度：★☆☆
+
+原题链接：[662. 二叉树最大宽度](https://leetcode.cn/problems/maximum-width-of-binary-tree/)
+
+> 给定一个二叉树，编写一个函数来获取这个树的最大宽度。树的宽度是所有层中的最大宽度。这个二叉树与满二叉树（full binary tree）结构相同，但一些节点为空。
+>
+> 每一层的宽度被定义为两个端点（该层最左和最右的非空节点，两端点间的null节点也计入长度）之间的长度。
+>
+> **注意:** 答案在32位有符号整数的表示范围内。
+
+### 1.深度搜索
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    // res用来记录结果
+    int res = 0;
+    // 给二叉树的每一层节点从左到右编号（从0开始）
+    // 使用哈希结构memory用来记录每一层最左边节点的编号
+    Map<Integer, Integer> memory;
+    public int widthOfBinaryTree(TreeNode root) {
+        res = 0;
+        memory = new HashMap<>();
+
+        dfs(root, 0, 0);
+
+        return res;
+    }
+
+    /**
+     * 深度搜索：先序遍历
+     * depth：深度即二叉树节点的层数
+     * position：当前层节点的编号
+     */
+    private void dfs(TreeNode root, int depth, int position) {
+        if (root == null) {
+            return ;
+        }
+
+        // 因为深度搜索的时候，每一层总是最左边的节点先被访问
+        // 所以可以根据depth是否存在于memory中
+        // 判断当前节点是不是当前层depth最左边的节点
+        if (!memory.containsKey(depth)) {
+            // 不在说明是最左边的节点，保存层数depth和编号position的关系
+            memory.put(depth, position);
+        }
+
+        // position - memory.get(depth) + 1就是当前节点到最左边节点的距离
+        // 用这个值来更新结果res
+        res = Math.max(res, position - memory.get(depth) + 1);
+
+        // 再继续搜索root的左右子节点
+        // 深度depth + 1
+        // 左子节点的位置position为当前position * 2
+        dfs(root.left, depth + 1, position * 2);
+        // 右子节点的位置position为当前position * 2 + 1
+        dfs(root.right, depth + 1, position * 2 + 1);
+    }
+}
+```
+
+## 468. 验证IP地址
+
+掌握程度：★☆☆
+
+原题链接：[468. 验证IP地址](https://leetcode.cn/problems/validate-ip-address/)
+
+> 给定一个字符串 queryIP。如果是有效的 IPv4 地址，返回 "IPv4" ；如果是有效的 IPv6 地址，返回 "IPv6" ；如果不是上述类型的 IP 地址，返回 "Neither" 。
+>
+> 有效的IPv4地址 是 “x1.x2.x3.x4” 形式的IP地址。 其中 0 <= xi <= 255 且 xi 不能包含 前导零。例如: “192.168.1.1” 、 “192.168.1.0” 为有效IPv4地址， “192.168.01.1” 为无效IPv4地址; “192.168.1.00” 、 “192.168@1.1” 为无效IPv4地址。
+>
+> 一个有效的IPv6地址 是一个格式为“x1:x2:x3:x4:x5:x6:x7:x8” 的IP地址，其中:
+>
+> - 1 <= xi.length <= 4
+>
+> - xi 是一个 十六进制字符串 ，可以包含数字、小写英文字母( 'a' 到 'f' )和大写英文字母( 'A' 到 'F' )。
+>
+> - 在 xi 中允许前导零。
+>
+> 例如 "2001:0db8:85a3:0000:0000:8a2e:0370:7334" 和 "2001:db8:85a3:0:0:8A2E:0370:7334" 是有效的 IPv6 地址，而 "2001:0db8:85a3::8A2E:037j:7334" 和 "02001:0db8:85a3:0000:0000:8a2e:0370:7334" 是无效的 IPv6 地址。
+>
+> **提示：**
+>
+> - `queryIP` 仅由英文字母，数字，字符 `'.'` 和 `':'` 组成。
+
+### 1.迭代法
+
+``` java
+class Solution {
+    
+    // 组成十六进制的字符
+    String hexStr = "0123456789abcdefABCDEF";
+    public String validIPAddress(String queryIP) {
+        int length = queryIP.length();
+        
+        if (queryIP.indexOf(".") > 0) {
+            // 可能为IPv4
+            // 以.切割字符串queryIP，传-1会匹配尽可能多的次数
+            // 并且不会丢弃最后一个空格
+            String[] strs = queryIP.split("\\.", -1);
+            if (strs.length != 4) {
+                // 长度不等于4不符合IPv4
+                return "Neither";
+            }
+
+            for (String str : strs) {
+                int len;
+                if ((len = str.length()) == 0 || len > 3 || len > 1 && str.charAt(0) == '0') {
+                    // 某一位长度为0或者大于3或者有前导0都不符合IPv4
+                    return "Neither";
+                }
+
+                int num = 0;
+                try {
+                    num = Integer.valueOf(str);
+                } catch (Exception e) {
+                    num = -1;
+                }
+
+                if (num < 0 || num > 255) {
+                    // 数值小于0或者大于255都不符合IPv4
+                    return "Neither";
+                }
+            }
+
+            // 到了这里表示当前符合IPv4
+            return "IPv4";
+        } else if (queryIP.indexOf(":") > 0) {
+            // 可能为IPv6
+            // 以:切割字符串queryIP，传-1会匹配尽可能多的次数
+            // 并且不会丢弃最后一个空格
+            String[] strs = queryIP.split(":", -1);
+            if (strs.length != 8) {
+                // 长度不等于8不符合IPv6
+                return "Neither";
+            }
+
+            for (String str : strs) {
+                int len = str.length();
+                if (len < 1 || len > 4) {
+                    // 某一位长度小于0或者大于4都不符合IPv6
+                    return "Neither";
+                }
+
+                for (int i = 0; i < str.length(); i++) {
+                    char c = str.charAt(i);
+                    if (hexStr.indexOf(c) == -1) {
+                        // 某一位只要有一个字符不是十六进制字符那就不符合IPv6
+                        return "Neither";
+                    }
+                }
+            }
+
+            // 到了这里表示当前符合IPv6
+            return "IPv6";
+        }
+
+        // 到了这里表示queryIP既不属于IPv4也不属于IPv6
+        return "Neither";
+    }
+}
+```
+
+
+

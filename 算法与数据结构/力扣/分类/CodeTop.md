@@ -4,6 +4,8 @@
 
 ## 206. 反转链表
 
+掌握程度：★★★
+
 原题链接：[206. 反转链表](https://leetcode-cn.com/problems/reverse-linked-list)
 
 > 给你单链表的头节点 `head` ，请你反转链表，并返回反转后的链表。
@@ -90,6 +92,8 @@ class Solution {
 
 ## 3. 无重复字符的最长子串
 
+掌握程度：★☆☆
+
 原题链接：[3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/)
 
 > 给定一个字符串 `s` ，请你找出其中不含有重复字符的 **最长子串** 的长度。
@@ -141,6 +145,8 @@ class Solution {
 ```
 
 ## 146. LRU 缓存
+
+掌握程度：★☆☆
 
 原题链接：[146. LRU 缓存](https://leetcode-cn.com/problems/lru-cache/)
 
@@ -245,6 +251,8 @@ class LRUCache {
 
 ## 215. 数组中的第K个最大元素
 
+掌握程度：★★☆
+
 原题链接：[215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)
 
 > 给定整数数组 `nums` 和整数 `k`，请返回数组中第 `**k**` 个最大的元素。
@@ -271,6 +279,8 @@ class Solution {
 ```
 
 ## 25. K 个一组翻转链表
+
+掌握程度：★★★
 
 原题链接：[25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
 
@@ -356,6 +366,8 @@ class Solution {
 ```
 
 ## 912. 排序数组
+
+掌握程度：★☆☆
 
 原题链接：[912. 排序数组](https://leetcode-cn.com/problems/sort-an-array/)
 
@@ -492,6 +504,8 @@ class Solution {
 
 ## 15. 三数之和
 
+掌握程度：★☆☆
+
 原题链接：[15. 三数之和](https://leetcode-cn.com/problems/3sum/)
 
 > 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。
@@ -571,6 +585,8 @@ class Solution {
 
 ## 53. 最大子数组和
 
+掌握程度：★☆☆
+
 原题链接：[53. 最大子数组和](https://leetcode-cn.com/problems/maximum-subarray/)
 
 > 给你一个整数数组 `nums` ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
@@ -603,6 +619,8 @@ class Solution {
 ```
 
 ## 1. 两数之和
+
+掌握程度：★★★
 
 原题链接：[1. 两数之和](https://leetcode-cn.com/problems/two-sum/)
 
@@ -647,6 +665,8 @@ class Solution {
 ```
 
 ## 21. 合并两个有序链表
+
+掌握程度：★★★
 
 原题链接：[21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
 
@@ -716,6 +736,8 @@ class Solution {
 
 ## 141. 环形链表
 
+掌握程度：★★★
+
 原题链接：[141. 环形链表](https://leetcode-cn.com/problems/linked-list-cycle/)
 
 > 给你一个链表的头节点 head ，判断链表中是否有环。
@@ -772,6 +794,8 @@ public class Solution {
 ```
 
 ## 102. 二叉树的层序遍历
+
+掌握程度：★★★
 
 原题链接：[102. 二叉树的层序遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/)
 
@@ -853,6 +877,8 @@ class Solution {
 
 ## 121. 买卖股票的最佳时机
 
+掌握程度：★★★
+
 原题链接：[121. 买卖股票的最佳时机](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
 
 > 给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
@@ -892,6 +918,8 @@ class Solution {
 ```
 
 ## 103. 二叉树的锯齿形层序遍历
+
+掌握程度：★☆☆
 
 原题链接：[103. 二叉树的锯齿形层序遍历](https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/)
 
@@ -985,6 +1013,8 @@ class Solution {
 
 ## 160. 相交链表
 
+掌握程度：★★★
+
 原题链接：[160. 相交链表](https://leetcode-cn.com/problems/intersection-of-two-linked-lists/)
 
 > 给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表不存在相交节点，返回 null 。
@@ -1074,6 +1104,8 @@ public class Solution {
 
 ## 20. 有效的括号
 
+掌握程度：★★★
+
 原题链接：[20. 有效的括号](https://leetcode-cn.com/problems/valid-parentheses/)
 
 > 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
@@ -1141,6 +1173,8 @@ class Solution {
 
 ## 236. 二叉树的最近公共祖先
 
+掌握程度：★☆☆
+
 原题链接：[236. 二叉树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/)
 
 > 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
@@ -1202,6 +1236,8 @@ class Solution {
 
 ## 88. 合并两个有序数组
 
+掌握程度：★★★
+
 原题链接：[88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
 
 > 给你两个按 非递减顺序 排列的整数数组 nums1 和 nums2，另有两个整数 m 和 n ，分别表示 nums1 和 nums2 中的元素数目。
@@ -1254,6 +1290,8 @@ class Solution {
 ```
 
 ## 33. 搜索旋转排序数组
+
+掌握程度：★☆☆
 
 原题链接：[33. 搜索旋转排序数组](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/)
 
@@ -1323,6 +1361,8 @@ class Solution {
 
 ## 5. 最长回文子串
 
+掌握程度：★☆☆
+
 原题链接：[5. 最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
 
 > 给你一个字符串 `s`，找到 `s` 中最长的回文子串。
@@ -1379,6 +1419,8 @@ class Solution {
 ```
 
 ## 200. 岛屿数量
+
+掌握程度：★☆☆
 
 原题链接：[200. 岛屿数量](https://leetcode-cn.com/problems/number-of-islands/)
 
@@ -1448,6 +1490,8 @@ class Solution {
 
 ## 46. 全排列
 
+掌握程度：★☆☆
+
 原题链接：[46. 全排列](https://leetcode-cn.com/problems/permutations/)
 
 > 给定一个不含重复数字的数组 `nums` ，返回其 *所有可能的全排列* 。你可以 **按任意顺序** 返回答案。
@@ -1511,6 +1555,8 @@ class Solution {
 
 ## 415. 字符串相加
 
+掌握程度：★☆☆
+
 原题链接：[415. 字符串相加](https://leetcode-cn.com/problems/add-strings/)
 
 > 给定两个字符串形式的非负整数 num1 和num2 ，计算它们的和并同样以字符串形式返回。
@@ -1569,6 +1615,8 @@ class Solution {
 ```
 
 ## 92. 反转链表 II
+
+掌握程度：★☆☆
 
 原题链接：[92. 反转链表 II](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
 
@@ -1653,6 +1701,8 @@ class Solution {
 ```
 
 ## 23. 合并K个升序链表
+
+掌握程度：★★★
 
 原题链接：[23. 合并K个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/)
 
@@ -1751,6 +1801,8 @@ class Solution {
 
 ## 142. 环形链表 II
 
+掌握程度：★★★
+
 原题链接：[142. 环形链表 II](https://leetcode-cn.com/problems/linked-list-cycle-ii/)
 
 > 给定一个链表的头节点  head ，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
@@ -1824,6 +1876,8 @@ public class Solution {
 ```
 
 ## 54. 螺旋矩阵
+
+掌握程度：★☆☆
 
 原题链接：[54. 螺旋矩阵](https://leetcode-cn.com/problems/spiral-matrix/)
 
@@ -1908,6 +1962,8 @@ class Solution {
 
 ## 300. 最长递增子序列
 
+掌握程度：★☆☆
+
 原题链接：[300. 最长递增子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/)
 
 > 给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。
@@ -1952,6 +2008,8 @@ class Solution {
 
 ## 704. 二分查找
 
+掌握程度：★★★
+
 原题链接：[704. 二分查找](https://leetcode-cn.com/problems/binary-search/)
 
 > 给定一个 n 个元素有序的（升序）整型数组 nums 和一个目标值 target  ，写一个函数搜索 nums 中的 target，如果目标值存在返回下标，否则返回 -1。
@@ -1994,6 +2052,8 @@ class Solution {
 ```
 
 ## 42. 接雨水
+
+掌握程度：★☆☆
 
 原题链接：[42. 接雨水](https://leetcode-cn.com/problems/trapping-rain-water/)
 
@@ -2041,6 +2101,8 @@ class Solution {
 ```
 
 ## 143. 重排链表
+
+掌握程度：★☆☆
 
 原题链接：[143. 重排链表](https://leetcode-cn.com/problems/reorder-list/)
 
@@ -2129,6 +2191,8 @@ class Solution {
 
 ## 94. 二叉树的中序遍历
 
+掌握程度：★★★
+
 原题链接：[94. 二叉树的中序遍历](https://leetcode-cn.com/problems/binary-tree-inorder-traversal/)
 
 > 给定一个二叉树的根节点 `root` ，返回 *它的 **中序** 遍历* 。
@@ -2187,6 +2251,8 @@ class Solution {
 ```
 
 ## 124. 二叉树中的最大路径和
+
+掌握程度：☆☆☆
 
 原题链接：[124. 二叉树中的最大路径和](https://leetcode-cn.com/problems/binary-tree-maximum-path-sum/)
 
@@ -2255,6 +2321,8 @@ class Solution {
 ```
 
 ## 232. 用栈实现队列
+
+掌握程度：★★★
 
 原题链接：[232. 用栈实现队列](https://leetcode-cn.com/problems/implement-queue-using-stacks/)
 
@@ -2345,6 +2413,8 @@ class MyQueue {
 
 ## 199. 二叉树的右视图
 
+掌握程度：★★★
+
 原题链接：[199. 二叉树的右视图](https://leetcode-cn.com/problems/binary-tree-right-side-view/)
 
 > 给定一个二叉树的 **根节点** `root`，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
@@ -2418,6 +2488,8 @@ class Solution {
 
 ## 70. 爬楼梯
 
+掌握程度：★★★
+
 原题链接：[70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
 
 > 假设你正在爬楼梯。需要 `n` 阶你才能到达楼顶。
@@ -2456,6 +2528,8 @@ class Solution {
 ```
 
 ## 19. 删除链表的倒数第 N 个结点
+
+掌握程度：★☆☆
 
 原题链接：[19. 删除链表的倒数第 N 个结点](https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/)
 
@@ -2526,6 +2600,8 @@ class Solution {
 
 ## 69. x 的平方根
 
+掌握程度：★☆☆
+
 原题链接：[69. x 的平方根 ](https://leetcode-cn.com/problems/sqrtx/)
 
 > 给你一个非负整数 x ，计算并返回 x 的 算术平方根 。
@@ -2571,6 +2647,8 @@ class Solution {
 ```
 
 ## 56. 合并区间
+
+掌握程度：★☆☆
 
 原题链接：[56. 合并区间](https://leetcode-cn.com/problems/merge-intervals/)
 
@@ -2618,6 +2696,8 @@ class Solution {
 ```
 
 ## 4. 寻找两个正序数组的中位数
+
+掌握程度：★☆☆
 
 原题链接：[4. 寻找两个正序数组的中位数](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/)
 
@@ -2674,6 +2754,8 @@ class Solution {
 ```
 
 ## 82. 删除排序链表中的重复元素 II
+
+掌握程度：★☆☆
 
 原题链接：[82. 删除排序链表中的重复元素 II](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/)
 
@@ -2732,6 +2814,8 @@ class Solution {
 ```
 
 ## 72. 编辑距离
+
+掌握程度：☆☆☆
 
 原题链接：[72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)
 
@@ -2797,6 +2881,8 @@ class Solution {
 ```
 
 ## 2. 两数相加
+
+掌握程度：★★★
 
 原题链接：[2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
 
@@ -2876,6 +2962,8 @@ class Solution {
 ```
 
 ## 148. 排序链表
+
+掌握程度：★☆☆
 
 原题链接：[148. 排序链表](https://leetcode-cn.com/problems/sort-list/)
 
@@ -2981,6 +3069,8 @@ class Solution {
 
 ## 8. 字符串转换整数 (atoi)
 
+掌握程度：★☆☆
+
 原题链接：[8. 字符串转换整数 (atoi)](https://leetcode-cn.com/problems/string-to-integer-atoi/)
 
 > 请你来实现一个 myAtoi(string s) 函数，使其能将字符串转换成一个 32 位有符号整数（类似 C/C++ 中的 atoi 函数）。
@@ -3080,6 +3170,8 @@ class Solution {
 
 ## 剑指 Offer 22. 链表中倒数第k个节点
 
+掌握程度：★★★
+
 原题链接：[剑指 Offer 22. 链表中倒数第k个节点](https://leetcode.cn/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/)
 
 > 输入一个链表，输出该链表中倒数第k个节点。为了符合大多数人的习惯，本题从1开始计数，即链表的尾节点是倒数第1个节点。
@@ -3121,6 +3213,8 @@ class Solution {
 ```
 
 ## 41. 缺失的第一个正数
+
+掌握程度：★★★
 
 原题链接：[41. 缺失的第一个正数](https://leetcode.cn/problems/first-missing-positive/)
 
@@ -3165,6 +3259,8 @@ class Solution {
 ```
 
 ## 31. 下一个排列
+
+掌握程度：★☆☆
 
 原题链接：[31. 下一个排列](https://leetcode.cn/problems/next-permutation/)
 
@@ -3242,6 +3338,8 @@ class Solution {
 
 ## 22. 括号生成
 
+掌握程度：★★☆
+
 原题链接：[22. 括号生成](https://leetcode.cn/problems/generate-parentheses/)
 
 > 数字 `n` 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 **有效的** 括号组合。
@@ -3305,6 +3403,8 @@ class Solution {
 
 ## 1143. 最长公共子序列
 
+掌握程度：★☆☆
+
 原题链接：[1143. 最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/)
 
 > 给定两个字符串 text1 和 text2，返回这两个字符串的最长 公共子序列 的长度。如果不存在 公共子序列 ，返回 0 。
@@ -3352,6 +3452,8 @@ class Solution {
 ```
 
 ## 93. 复原 IP 地址
+
+掌握程度：★☆☆
 
 原题链接：[93. 复原 IP 地址](https://leetcode.cn/problems/restore-ip-addresses/)
 
@@ -3443,6 +3545,8 @@ class Solution {
 ```
 
 ## 151. 颠倒字符串中的单词
+
+掌握程度：★★★
 
 原题链接：[151. 颠倒字符串中的单词](https://leetcode.cn/problems/reverse-words-in-a-string/)
 
@@ -3564,6 +3668,8 @@ class Solution {
 
 ## 144. 二叉树的前序遍历
 
+掌握程度：★★★
+
 原题链接：[144. 二叉树的前序遍历](https://leetcode.cn/problems/binary-tree-preorder-traversal/)
 
 > 给你二叉树的根节点 `root` ，返回它节点值的 **前序** 遍历。
@@ -3623,6 +3729,8 @@ class Solution {
 ```
 
 ## 105. 从前序与中序遍历序列构造二叉树
+
+掌握程度：★☆☆
 
 原题链接：[105. 从前序与中序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
 
@@ -3850,6 +3958,8 @@ class Solution {
 
 ## 239. 滑动窗口最大值
 
+掌握程度：★☆☆
+
 原题链接：[239. 滑动窗口最大值](https://leetcode.cn/problems/sliding-window-maximum/)
 
 > 给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。
@@ -3918,6 +4028,8 @@ class Solution {
 ```
 
 ## 76. 最小覆盖子串
+
+掌握程度：★☆☆
 
 原题链接：[76. 最小覆盖子串](https://leetcode.cn/problems/minimum-window-substring/)
 
@@ -4018,6 +4130,8 @@ class Solution {
 
 ## 129. 求根节点到叶节点数字之和
 
+掌握程度：★★☆
+
 原题链接：[129. 求根节点到叶节点数字之和](https://leetcode.cn/problems/sum-root-to-leaf-numbers/)
 
 > 给你一个二叉树的根节点 root ，树中每个节点都存放有一个 0 到 9 之间的数字。
@@ -4095,6 +4209,8 @@ class Solution {
 
 ## 104. 二叉树的最大深度
 
+掌握程度：★★★
+
 原题链接：[104. 二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree/)
 
 > 给定一个二叉树，找出其最大深度。
@@ -4134,7 +4250,7 @@ class Solution {
 }
 ```
 
-### 3.递归
+### 2.递归
 
 ``` java
 /**
@@ -4173,6 +4289,8 @@ class Solution {
 ```
 
 ## 110. 平衡二叉树
+
+掌握程度：★★☆
 
 原题链接：[110. 平衡二叉树](https://leetcode.cn/problems/balanced-binary-tree/)
 
@@ -4236,6 +4354,8 @@ class Solution {
 ```
 
 ## 155. 最小栈
+
+掌握程度：★★★
 
 原题链接：[155. 最小栈](https://leetcode.cn/problems/min-stack/)
 
@@ -4320,6 +4440,8 @@ class MinStack {
 
 ## 543. 二叉树的直径
 
+掌握程度：★★★
+
 原题链接：[543. 二叉树的直径](https://leetcode.cn/problems/diameter-of-binary-tree/)
 
 > 给定一棵二叉树，你需要计算它的直径长度。一棵二叉树的直径长度是任意两个结点路径长度中的最大值。这条路径可能穿过也可能不穿过根结点。
@@ -4384,6 +4506,8 @@ class Solution {
 ```
 
 ## 322. 零钱兑换
+
+掌握程度：★☆☆
 
 原题链接：[322. 零钱兑换](https://leetcode.cn/problems/coin-change/)
 
@@ -4492,6 +4616,8 @@ class Solution {
 
 ## 113. 路径总和 II
 
+掌握程度：★★★
+
 原题链接：[113. 路径总和 II](https://leetcode.cn/problems/path-sum-ii/)
 
 > 给你二叉树的根节点 root 和一个整数目标和 targetSum ，找出所有 从根节点到叶子节点 路径总和等于给定目标和的路径。
@@ -4583,6 +4709,8 @@ class Solution {
 
 ## 78. 子集
 
+掌握程度：★★★
+
 原题链接：[78. 子集](https://leetcode.cn/problems/subsets/)
 
 > 给你一个整数数组 `nums` ，数组中的元素 **互不相同** 。返回该数组所有可能的子集（幂集）。
@@ -4645,6 +4773,8 @@ class Solution {
 
 ## 32. 最长有效括号
 
+掌握程度：☆☆☆
+
 原题链接：[32. 最长有效括号](https://leetcode.cn/problems/longest-valid-parentheses/)
 
 > 给你一个只包含 `'('` 和 `')'` 的字符串，找出最长有效（格式正确且连续）括号子串的长度。
@@ -4697,6 +4827,8 @@ class Solution {
 ```
 
 ## 43. 字符串相乘
+
+掌握程度：★☆☆
 
 原题链接：[43. 字符串相乘](https://leetcode.cn/problems/multiply-strings/)
 
@@ -4756,6 +4888,8 @@ class Solution {
 ```
 
 ## 98. 验证二叉搜索树
+
+掌握程度：★★★
 
 原题链接：[98. 验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/)
 
@@ -4833,6 +4967,8 @@ class Solution {
 
 ## 101. 对称二叉树
 
+掌握程度：★★★
+
 原题链接：[101. 对称二叉树](https://leetcode.cn/problems/symmetric-tree/)
 
 > 给你一个二叉树的根节点 `root` ， 检查它是否轴对称。
@@ -4897,6 +5033,8 @@ class Solution {
 ```
 
 ## 165. 比较版本号
+
+掌握程度：★★★
 
 原题链接：[165. 比较版本号](https://leetcode.cn/problems/compare-version-numbers/)
 
@@ -5001,6 +5139,8 @@ class Solution {
 
 ## 64. 最小路径和
 
+掌握程度：★★★
+
 原题链接：[64. 最小路径和](https://leetcode.cn/problems/minimum-path-sum/)
 
 > 给定一个包含非负整数的 `*m* x *n*` 网格 `grid` ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
@@ -5052,6 +5192,8 @@ class Solution {
 ```
 
 ## 470. 用 Rand7() 实现 Rand10()
+
+掌握程度：★★☆
 
 原题链接：[470. 用 Rand7() 实现 Rand10()](https://leetcode.cn/problems/implement-rand10-using-rand7/)
 
@@ -5152,6 +5294,8 @@ class Solution extends SolBase {
 
 ## 234. 回文链表
 
+掌握程度：★★★
+
 原题链接：[234. 回文链表](https://leetcode.cn/problems/palindrome-linked-list/)
 
 > 给你一个单链表的头节点 `head` ，请你判断该链表是否为回文链表。如果是，返回 `true` ；否则，返回 `false` 。
@@ -5223,6 +5367,8 @@ class Solution {
 
 ## 39. 组合总和
 
+掌握程度：★☆☆
+
 原题链接：[39. 组合总和](https://leetcode.cn/problems/combination-sum/)
 
 > 给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。
@@ -5289,6 +5435,8 @@ class Solution {
 
 ## 169. 多数元素
 
+掌握程度：★★★
+
 原题链接：[169. 多数元素](https://leetcode.cn/problems/majority-element/)
 
 > 给定一个大小为 n 的数组 nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。
@@ -5327,6 +5475,8 @@ class Solution {
 ```
 
 ## 48. 旋转图像
+
+掌握程度：★☆☆
 
 原题链接：[48. 旋转图像](https://leetcode.cn/problems/rotate-image/)
 
@@ -5388,6 +5538,8 @@ class Solution {
 
 ## 112. 路径总和
 
+掌握程度：★★★
+
 原题链接：[112. 路径总和](https://leetcode.cn/problems/path-sum/)
 
 > 给你二叉树的根节点 root 和一个表示目标和的整数 targetSum 。判断该树中是否存在 根节点到叶子节点 的路径，这条路径上所有节点值相加等于目标和 targetSum 。如果存在，返回 true ；否则，返回 false 。
@@ -5442,6 +5594,8 @@ class Solution {
 
 ## 718. 最长重复子数组
 
+掌握程度：★☆☆
+
 原题链接：[718. 最长重复子数组](https://leetcode.cn/problems/maximum-length-of-repeated-subarray/)
 
 > 给两个整数数组 `nums1` 和 `nums2` ，返回 *两个数组中 **公共的** 、长度最长的子数组的长度* 。
@@ -5479,6 +5633,8 @@ class Solution {
 ```
 
 ## 226. 翻转二叉树
+
+掌握程度：★★★
 
 原题链接：[226. 翻转二叉树](https://leetcode.cn/problems/invert-binary-tree/)
 
@@ -5527,6 +5683,8 @@ class Solution {
 ```
 
 ## 34. 在排序数组中查找元素的第一个和最后一个位置
+
+掌握程度：★★★
 
 原题链接：[34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
@@ -5597,6 +5755,8 @@ class Solution {
 ```
 
 ## 221. 最大正方形
+
+掌握程度：★☆☆
 
 原题链接：[221. 最大正方形](https://leetcode.cn/problems/maximal-square/)
 
@@ -5693,6 +5853,8 @@ class Solution {
 
 ## 162. 寻找峰值
 
+掌握程度：★★☆
+
 原题链接：[162. 寻找峰值](https://leetcode.cn/problems/find-peak-element/)
 
 > 峰值元素是指其值严格大于左右相邻值的元素。
@@ -5741,6 +5903,8 @@ class Solution {
 ```
 
 ## 14. 最长公共前缀
+
+掌握程度：★★★
 
 原题链接：[14. 最长公共前缀](https://leetcode.cn/problems/longest-common-prefix/)
 
@@ -5816,6 +5980,8 @@ class Solution {
 
 ## 240. 搜索二维矩阵 II
 
+掌握程度：★★☆
+
 原题链接：[240. 搜索二维矩阵 II](https://leetcode.cn/problems/search-a-2d-matrix-ii/)
 
 > 编写一个高效的算法来搜索 m x n 矩阵 matrix 中的一个目标值 target 。该矩阵具有以下特性：
@@ -5887,6 +6053,8 @@ class Solution {
 
 ## 83. 删除排序链表中的重复元素
 
+掌握程度：★★★
+
 原题链接：[83. 删除排序链表中的重复元素](https://leetcode.cn/problems/remove-duplicates-from-sorted-list/)
 
 > 给定一个已排序的链表的头 `head` ， *删除所有重复的元素，使每个元素只出现一次* 。返回 *已排序的链表* 。
@@ -5938,6 +6106,8 @@ class Solution {
 ```
 
 ## 62. 不同路径
+
+掌握程度：★★☆
 
 原题链接：[62. 不同路径](https://leetcode.cn/problems/unique-paths/)
 
@@ -6918,5 +7088,182 @@ class Solution {
 }
 ```
 
+## 138. 复制带随机指针的链表
 
+掌握程度：★★☆
+
+原题链接：[138. 复制带随机指针的链表](https://leetcode.cn/problems/copy-list-with-random-pointer/)
+
+> 给你一个长度为 n 的链表，每个节点包含一个额外增加的随机指针 random ，该指针可以指向链表中的任何节点或空节点。
+>
+> 构造这个链表的 深拷贝。 深拷贝应该正好由 n 个 全新 节点组成，其中每个新节点的值都设为其对应的原节点的值。新节点的 next 指针和 random 指针也都应指向复制链表中的新节点，并使原链表和复制链表中的这些指针能够表示相同的链表状态。复制链表中的指针都不应指向原链表中的节点 。
+>
+> 例如，如果原链表中有 X 和 Y 两个节点，其中 X.random --> Y 。那么在复制链表中对应的两个节点 x 和 y ，同样有 x.random --> y 。
+>
+> 返回复制链表的头节点。
+>
+> 用一个由 n 个节点组成的链表来表示输入/输出中的链表。每个节点用一个 [val, random_index] 表示：
+>
+> val：一个表示 Node.val 的整数。
+> random_index：随机指针指向的节点索引（范围从 0 到 n-1）；如果不指向任何节点，则为  null 。
+> 你的代码 只 接受原链表的头节点 head 作为传入参数。
+>
+> **提示：**
+>
+> - `0 <= n <= 1000`
+> - `-104 <= Node.val <= 104`
+> - `Node.random` 为 `null` 或指向链表中的节点。
+
+### 1.迭代法
+
+``` java
+/*
+// Definition for a Node.
+class Node {
+    int val;
+    Node next;
+    Node random;
+
+    public Node(int val) {
+        this.val = val;
+        this.next = null;
+        this.random = null;
+    }
+}
+*/
+
+class Solution {
+    public Node copyRandomList(Node head) {
+        if (head == null) {
+            return null;
+        }
+
+        // 先将每个节点复制一份
+        // 复制的节点就接到原节点的后面
+        Node node = head;
+        while (node != null) {
+            Node next = node.next;
+
+            Node temp = new Node(node.val);
+            node.next = temp;
+            temp.next = next;
+
+            node = next;;
+        }
+
+        // 填充随机指针
+        node = head;
+        while (node != null) {
+            // 含有随机指针的节点
+            if (node.random != null) {
+                // 复制出来的新节点的随机指针指向原节点随机指针指向节点的next
+                node.next.random = node.random.next;
+            }
+
+            node = node.next.next;
+        }
+
+        // 将原节点和新节点拆分为两个链表
+        node = head;
+        // 表示新链表的头节点
+        Node newHead = new Node(0);
+        Node cur = newHead;
+        while (node != null) {
+            Node next = node.next.next;
+            // cur指向新节点
+            cur.next = node.next;
+            cur = cur.next;
+            // node指向原节点
+            node.next = next;
+            node = node.next;
+        }
+        
+        // newHead的next就是新链表的头节点
+        return newHead.next;
+    }
+}
+```
+
+## 136. 只出现一次的数字
+
+掌握程度：★★☆
+
+原题链接：[136. 只出现一次的数字](https://leetcode.cn/problems/single-number/)
+
+> 给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+>
+> 说明：
+>
+> 你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？
+>
+
+### 1.异或运算
+
+``` java
+class Solution {
+    public int singleNumber(int[] nums) {
+        int length = nums.length;
+
+        // 根据异或运算法则：相同整数异或的结果为0
+        int res = nums[0];
+        for (int i = 1; i < length; i++) {
+            // 逐个元素进行异或运算
+            // 最终结果就是那个支出现一次的元素
+            res ^= nums[i];
+        }
+
+        return res;
+    }
+}
+```
+
+## 198. 打家劫舍
+
+掌握程度：★☆☆
+
+原题链接：[198. 打家劫舍](https://leetcode.cn/problems/house-robber/)
+
+> 你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+>
+> 给定一个代表每个房屋存放金额的非负整数数组，计算你 不触动警报装置的情况下 ，一夜之内能够偷窃到的最高金额。
+>
+> **提示：**
+>
+> - `1 <= nums.length <= 100`
+> - `0 <= nums[i] <= 400`
+
+### 1.动态规划
+
+``` java
+class Solution {
+    public int rob(int[] nums) {
+        int length;
+        if ((length = nums.length) == 0) {
+            return 0;
+        }
+
+        if (length == 1) {
+            return nums[0];
+        }
+
+        // 用dp数组表示前 i 间房屋能偷窃到的最高总金额
+        int[] dp = new int[length];
+        // 只有一间房屋能偷窃到的最高总金额为num[0]
+        dp[0] = nums[0];
+        // 有两间房屋能偷窃到的最高总金额为max(nums[0], nums[1])
+        dp[1] = Math.max(nums[0], nums[1]);
+        // 超过两间房屋能偷窃到的最高金额为
+        // dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1])
+        // 偷窃第i间房时：dp[i] = dp[i - 2] + nums[i]
+        // 不偷窃第i间房时：dp[i] = dp[i - 1]
+
+        for (int i = 2; i < length; i++) {
+            dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
+        }
+
+        // dp[length - 1]就是能够偷窃到的最高金额
+        return dp[length - 1];
+    }
+}
+```
 

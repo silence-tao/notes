@@ -4,6 +4,8 @@
 
 ## 206. 反转链表
 
+掌握程度：★★★
+
 原题链接：[206. 反转链表](https://leetcode-cn.com/problems/reverse-linked-list)
 
 > 给你单链表的头节点 `head` ，请你反转链表，并返回反转后的链表。
@@ -90,6 +92,8 @@ class Solution {
 
 ## 3. 无重复字符的最长子串
 
+掌握程度：★☆☆
+
 原题链接：[3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/)
 
 > 给定一个字符串 `s` ，请你找出其中不含有重复字符的 **最长子串** 的长度。
@@ -141,6 +145,8 @@ class Solution {
 ```
 
 ## 146. LRU 缓存
+
+掌握程度：★☆☆
 
 原题链接：[146. LRU 缓存](https://leetcode-cn.com/problems/lru-cache/)
 
@@ -245,6 +251,8 @@ class LRUCache {
 
 ## 215. 数组中的第K个最大元素
 
+掌握程度：★★☆
+
 原题链接：[215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)
 
 > 给定整数数组 `nums` 和整数 `k`，请返回数组中第 `**k**` 个最大的元素。
@@ -271,6 +279,8 @@ class Solution {
 ```
 
 ## 25. K 个一组翻转链表
+
+掌握程度：★★★
 
 原题链接：[25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
 
@@ -356,6 +366,8 @@ class Solution {
 ```
 
 ## 912. 排序数组
+
+掌握程度：★☆☆
 
 原题链接：[912. 排序数组](https://leetcode-cn.com/problems/sort-an-array/)
 
@@ -492,6 +504,8 @@ class Solution {
 
 ## 15. 三数之和
 
+掌握程度：★☆☆
+
 原题链接：[15. 三数之和](https://leetcode-cn.com/problems/3sum/)
 
 > 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。
@@ -571,6 +585,8 @@ class Solution {
 
 ## 53. 最大子数组和
 
+掌握程度：★☆☆
+
 原题链接：[53. 最大子数组和](https://leetcode-cn.com/problems/maximum-subarray/)
 
 > 给你一个整数数组 `nums` ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
@@ -603,6 +619,8 @@ class Solution {
 ```
 
 ## 1. 两数之和
+
+掌握程度：★★★
 
 原题链接：[1. 两数之和](https://leetcode-cn.com/problems/two-sum/)
 
@@ -647,6 +665,8 @@ class Solution {
 ```
 
 ## 21. 合并两个有序链表
+
+掌握程度：★★★
 
 原题链接：[21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
 
@@ -716,6 +736,8 @@ class Solution {
 
 ## 141. 环形链表
 
+掌握程度：★★★
+
 原题链接：[141. 环形链表](https://leetcode-cn.com/problems/linked-list-cycle/)
 
 > 给你一个链表的头节点 head ，判断链表中是否有环。
@@ -772,6 +794,8 @@ public class Solution {
 ```
 
 ## 102. 二叉树的层序遍历
+
+掌握程度：★★★
 
 原题链接：[102. 二叉树的层序遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/)
 
@@ -853,6 +877,8 @@ class Solution {
 
 ## 121. 买卖股票的最佳时机
 
+掌握程度：★★★
+
 原题链接：[121. 买卖股票的最佳时机](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
 
 > 给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
@@ -892,6 +918,8 @@ class Solution {
 ```
 
 ## 103. 二叉树的锯齿形层序遍历
+
+掌握程度：★☆☆
 
 原题链接：[103. 二叉树的锯齿形层序遍历](https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/)
 
@@ -985,6 +1013,8 @@ class Solution {
 
 ## 160. 相交链表
 
+掌握程度：★★★
+
 原题链接：[160. 相交链表](https://leetcode-cn.com/problems/intersection-of-two-linked-lists/)
 
 > 给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表不存在相交节点，返回 null 。
@@ -1074,6 +1104,8 @@ public class Solution {
 
 ## 20. 有效的括号
 
+掌握程度：★★★
+
 原题链接：[20. 有效的括号](https://leetcode-cn.com/problems/valid-parentheses/)
 
 > 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
@@ -1141,6 +1173,8 @@ class Solution {
 
 ## 236. 二叉树的最近公共祖先
 
+掌握程度：★☆☆
+
 原题链接：[236. 二叉树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/)
 
 > 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
@@ -1202,6 +1236,8 @@ class Solution {
 
 ## 88. 合并两个有序数组
 
+掌握程度：★★★
+
 原题链接：[88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
 
 > 给你两个按 非递减顺序 排列的整数数组 nums1 和 nums2，另有两个整数 m 和 n ，分别表示 nums1 和 nums2 中的元素数目。
@@ -1254,6 +1290,8 @@ class Solution {
 ```
 
 ## 33. 搜索旋转排序数组
+
+掌握程度：★☆☆
 
 原题链接：[33. 搜索旋转排序数组](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/)
 
@@ -1323,6 +1361,8 @@ class Solution {
 
 ## 5. 最长回文子串
 
+掌握程度：★☆☆
+
 原题链接：[5. 最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
 
 > 给你一个字符串 `s`，找到 `s` 中最长的回文子串。
@@ -1379,6 +1419,8 @@ class Solution {
 ```
 
 ## 200. 岛屿数量
+
+掌握程度：★☆☆
 
 原题链接：[200. 岛屿数量](https://leetcode-cn.com/problems/number-of-islands/)
 
@@ -1448,6 +1490,8 @@ class Solution {
 
 ## 46. 全排列
 
+掌握程度：★☆☆
+
 原题链接：[46. 全排列](https://leetcode-cn.com/problems/permutations/)
 
 > 给定一个不含重复数字的数组 `nums` ，返回其 *所有可能的全排列* 。你可以 **按任意顺序** 返回答案。
@@ -1511,6 +1555,8 @@ class Solution {
 
 ## 415. 字符串相加
 
+掌握程度：★☆☆
+
 原题链接：[415. 字符串相加](https://leetcode-cn.com/problems/add-strings/)
 
 > 给定两个字符串形式的非负整数 num1 和num2 ，计算它们的和并同样以字符串形式返回。
@@ -1569,6 +1615,8 @@ class Solution {
 ```
 
 ## 92. 反转链表 II
+
+掌握程度：★☆☆
 
 原题链接：[92. 反转链表 II](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
 
@@ -1653,6 +1701,8 @@ class Solution {
 ```
 
 ## 23. 合并K个升序链表
+
+掌握程度：★★★
 
 原题链接：[23. 合并K个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/)
 
@@ -1751,6 +1801,8 @@ class Solution {
 
 ## 142. 环形链表 II
 
+掌握程度：★★★
+
 原题链接：[142. 环形链表 II](https://leetcode-cn.com/problems/linked-list-cycle-ii/)
 
 > 给定一个链表的头节点  head ，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
@@ -1824,6 +1876,8 @@ public class Solution {
 ```
 
 ## 54. 螺旋矩阵
+
+掌握程度：★☆☆
 
 原题链接：[54. 螺旋矩阵](https://leetcode-cn.com/problems/spiral-matrix/)
 
@@ -1908,6 +1962,8 @@ class Solution {
 
 ## 300. 最长递增子序列
 
+掌握程度：★☆☆
+
 原题链接：[300. 最长递增子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/)
 
 > 给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。
@@ -1952,6 +2008,8 @@ class Solution {
 
 ## 704. 二分查找
 
+掌握程度：★★★
+
 原题链接：[704. 二分查找](https://leetcode-cn.com/problems/binary-search/)
 
 > 给定一个 n 个元素有序的（升序）整型数组 nums 和一个目标值 target  ，写一个函数搜索 nums 中的 target，如果目标值存在返回下标，否则返回 -1。
@@ -1994,6 +2052,8 @@ class Solution {
 ```
 
 ## 42. 接雨水
+
+掌握程度：★☆☆
 
 原题链接：[42. 接雨水](https://leetcode-cn.com/problems/trapping-rain-water/)
 
@@ -2041,6 +2101,8 @@ class Solution {
 ```
 
 ## 143. 重排链表
+
+掌握程度：★☆☆
 
 原题链接：[143. 重排链表](https://leetcode-cn.com/problems/reorder-list/)
 
@@ -2129,6 +2191,8 @@ class Solution {
 
 ## 94. 二叉树的中序遍历
 
+掌握程度：★★★
+
 原题链接：[94. 二叉树的中序遍历](https://leetcode-cn.com/problems/binary-tree-inorder-traversal/)
 
 > 给定一个二叉树的根节点 `root` ，返回 *它的 **中序** 遍历* 。
@@ -2187,6 +2251,8 @@ class Solution {
 ```
 
 ## 124. 二叉树中的最大路径和
+
+掌握程度：☆☆☆
 
 原题链接：[124. 二叉树中的最大路径和](https://leetcode-cn.com/problems/binary-tree-maximum-path-sum/)
 
@@ -2255,6 +2321,8 @@ class Solution {
 ```
 
 ## 232. 用栈实现队列
+
+掌握程度：★★★
 
 原题链接：[232. 用栈实现队列](https://leetcode-cn.com/problems/implement-queue-using-stacks/)
 
@@ -2345,6 +2413,8 @@ class MyQueue {
 
 ## 199. 二叉树的右视图
 
+掌握程度：★★★
+
 原题链接：[199. 二叉树的右视图](https://leetcode-cn.com/problems/binary-tree-right-side-view/)
 
 > 给定一个二叉树的 **根节点** `root`，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
@@ -2418,6 +2488,8 @@ class Solution {
 
 ## 70. 爬楼梯
 
+掌握程度：★★★
+
 原题链接：[70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
 
 > 假设你正在爬楼梯。需要 `n` 阶你才能到达楼顶。
@@ -2456,6 +2528,8 @@ class Solution {
 ```
 
 ## 19. 删除链表的倒数第 N 个结点
+
+掌握程度：★☆☆
 
 原题链接：[19. 删除链表的倒数第 N 个结点](https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/)
 
@@ -2526,6 +2600,8 @@ class Solution {
 
 ## 69. x 的平方根
 
+掌握程度：★☆☆
+
 原题链接：[69. x 的平方根 ](https://leetcode-cn.com/problems/sqrtx/)
 
 > 给你一个非负整数 x ，计算并返回 x 的 算术平方根 。
@@ -2571,6 +2647,8 @@ class Solution {
 ```
 
 ## 56. 合并区间
+
+掌握程度：★☆☆
 
 原题链接：[56. 合并区间](https://leetcode-cn.com/problems/merge-intervals/)
 
@@ -2618,6 +2696,8 @@ class Solution {
 ```
 
 ## 4. 寻找两个正序数组的中位数
+
+掌握程度：★☆☆
 
 原题链接：[4. 寻找两个正序数组的中位数](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/)
 
@@ -2674,6 +2754,8 @@ class Solution {
 ```
 
 ## 82. 删除排序链表中的重复元素 II
+
+掌握程度：★☆☆
 
 原题链接：[82. 删除排序链表中的重复元素 II](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/)
 
@@ -2732,6 +2814,8 @@ class Solution {
 ```
 
 ## 72. 编辑距离
+
+掌握程度：☆☆☆
 
 原题链接：[72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)
 
@@ -2797,6 +2881,8 @@ class Solution {
 ```
 
 ## 2. 两数相加
+
+掌握程度：★★★
 
 原题链接：[2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
 
@@ -2876,6 +2962,8 @@ class Solution {
 ```
 
 ## 148. 排序链表
+
+掌握程度：★☆☆
 
 原题链接：[148. 排序链表](https://leetcode-cn.com/problems/sort-list/)
 
@@ -2981,6 +3069,8 @@ class Solution {
 
 ## 8. 字符串转换整数 (atoi)
 
+掌握程度：★☆☆
+
 原题链接：[8. 字符串转换整数 (atoi)](https://leetcode-cn.com/problems/string-to-integer-atoi/)
 
 > 请你来实现一个 myAtoi(string s) 函数，使其能将字符串转换成一个 32 位有符号整数（类似 C/C++ 中的 atoi 函数）。
@@ -3080,6 +3170,8 @@ class Solution {
 
 ## 剑指 Offer 22. 链表中倒数第k个节点
 
+掌握程度：★★★
+
 原题链接：[剑指 Offer 22. 链表中倒数第k个节点](https://leetcode.cn/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/)
 
 > 输入一个链表，输出该链表中倒数第k个节点。为了符合大多数人的习惯，本题从1开始计数，即链表的尾节点是倒数第1个节点。
@@ -3121,6 +3213,8 @@ class Solution {
 ```
 
 ## 41. 缺失的第一个正数
+
+掌握程度：★★★
 
 原题链接：[41. 缺失的第一个正数](https://leetcode.cn/problems/first-missing-positive/)
 
@@ -3165,6 +3259,8 @@ class Solution {
 ```
 
 ## 31. 下一个排列
+
+掌握程度：★☆☆
 
 原题链接：[31. 下一个排列](https://leetcode.cn/problems/next-permutation/)
 
@@ -3242,6 +3338,8 @@ class Solution {
 
 ## 22. 括号生成
 
+掌握程度：★★☆
+
 原题链接：[22. 括号生成](https://leetcode.cn/problems/generate-parentheses/)
 
 > 数字 `n` 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 **有效的** 括号组合。
@@ -3305,6 +3403,8 @@ class Solution {
 
 ## 1143. 最长公共子序列
 
+掌握程度：★☆☆
+
 原题链接：[1143. 最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/)
 
 > 给定两个字符串 text1 和 text2，返回这两个字符串的最长 公共子序列 的长度。如果不存在 公共子序列 ，返回 0 。
@@ -3352,6 +3452,8 @@ class Solution {
 ```
 
 ## 93. 复原 IP 地址
+
+掌握程度：★☆☆
 
 原题链接：[93. 复原 IP 地址](https://leetcode.cn/problems/restore-ip-addresses/)
 
@@ -3443,6 +3545,8 @@ class Solution {
 ```
 
 ## 151. 颠倒字符串中的单词
+
+掌握程度：★★★
 
 原题链接：[151. 颠倒字符串中的单词](https://leetcode.cn/problems/reverse-words-in-a-string/)
 
@@ -3564,6 +3668,8 @@ class Solution {
 
 ## 144. 二叉树的前序遍历
 
+掌握程度：★★★
+
 原题链接：[144. 二叉树的前序遍历](https://leetcode.cn/problems/binary-tree-preorder-traversal/)
 
 > 给你二叉树的根节点 `root` ，返回它节点值的 **前序** 遍历。
@@ -3623,6 +3729,8 @@ class Solution {
 ```
 
 ## 105. 从前序与中序遍历序列构造二叉树
+
+掌握程度：★☆☆
 
 原题链接：[105. 从前序与中序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
 
@@ -3850,6 +3958,8 @@ class Solution {
 
 ## 239. 滑动窗口最大值
 
+掌握程度：★☆☆
+
 原题链接：[239. 滑动窗口最大值](https://leetcode.cn/problems/sliding-window-maximum/)
 
 > 给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。
@@ -3918,6 +4028,8 @@ class Solution {
 ```
 
 ## 76. 最小覆盖子串
+
+掌握程度：★☆☆
 
 原题链接：[76. 最小覆盖子串](https://leetcode.cn/problems/minimum-window-substring/)
 
@@ -4018,6 +4130,8 @@ class Solution {
 
 ## 129. 求根节点到叶节点数字之和
 
+掌握程度：★★☆
+
 原题链接：[129. 求根节点到叶节点数字之和](https://leetcode.cn/problems/sum-root-to-leaf-numbers/)
 
 > 给你一个二叉树的根节点 root ，树中每个节点都存放有一个 0 到 9 之间的数字。
@@ -4095,6 +4209,8 @@ class Solution {
 
 ## 104. 二叉树的最大深度
 
+掌握程度：★★★
+
 原题链接：[104. 二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree/)
 
 > 给定一个二叉树，找出其最大深度。
@@ -4134,7 +4250,7 @@ class Solution {
 }
 ```
 
-### 3.递归
+### 2.递归
 
 ``` java
 /**
@@ -4173,6 +4289,8 @@ class Solution {
 ```
 
 ## 110. 平衡二叉树
+
+掌握程度：★★☆
 
 原题链接：[110. 平衡二叉树](https://leetcode.cn/problems/balanced-binary-tree/)
 
@@ -4236,6 +4354,8 @@ class Solution {
 ```
 
 ## 155. 最小栈
+
+掌握程度：★★★
 
 原题链接：[155. 最小栈](https://leetcode.cn/problems/min-stack/)
 
@@ -4320,6 +4440,8 @@ class MinStack {
 
 ## 543. 二叉树的直径
 
+掌握程度：★★★
+
 原题链接：[543. 二叉树的直径](https://leetcode.cn/problems/diameter-of-binary-tree/)
 
 > 给定一棵二叉树，你需要计算它的直径长度。一棵二叉树的直径长度是任意两个结点路径长度中的最大值。这条路径可能穿过也可能不穿过根结点。
@@ -4384,6 +4506,8 @@ class Solution {
 ```
 
 ## 322. 零钱兑换
+
+掌握程度：★☆☆
 
 原题链接：[322. 零钱兑换](https://leetcode.cn/problems/coin-change/)
 
@@ -4492,6 +4616,8 @@ class Solution {
 
 ## 113. 路径总和 II
 
+掌握程度：★★★
+
 原题链接：[113. 路径总和 II](https://leetcode.cn/problems/path-sum-ii/)
 
 > 给你二叉树的根节点 root 和一个整数目标和 targetSum ，找出所有 从根节点到叶子节点 路径总和等于给定目标和的路径。
@@ -4583,6 +4709,8 @@ class Solution {
 
 ## 78. 子集
 
+掌握程度：★★★
+
 原题链接：[78. 子集](https://leetcode.cn/problems/subsets/)
 
 > 给你一个整数数组 `nums` ，数组中的元素 **互不相同** 。返回该数组所有可能的子集（幂集）。
@@ -4645,6 +4773,8 @@ class Solution {
 
 ## 32. 最长有效括号
 
+掌握程度：☆☆☆
+
 原题链接：[32. 最长有效括号](https://leetcode.cn/problems/longest-valid-parentheses/)
 
 > 给你一个只包含 `'('` 和 `')'` 的字符串，找出最长有效（格式正确且连续）括号子串的长度。
@@ -4697,6 +4827,8 @@ class Solution {
 ```
 
 ## 43. 字符串相乘
+
+掌握程度：★☆☆
 
 原题链接：[43. 字符串相乘](https://leetcode.cn/problems/multiply-strings/)
 
@@ -4756,6 +4888,8 @@ class Solution {
 ```
 
 ## 98. 验证二叉搜索树
+
+掌握程度：★★★
 
 原题链接：[98. 验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/)
 
@@ -4833,6 +4967,8 @@ class Solution {
 
 ## 101. 对称二叉树
 
+掌握程度：★★★
+
 原题链接：[101. 对称二叉树](https://leetcode.cn/problems/symmetric-tree/)
 
 > 给你一个二叉树的根节点 `root` ， 检查它是否轴对称。
@@ -4897,6 +5033,8 @@ class Solution {
 ```
 
 ## 165. 比较版本号
+
+掌握程度：★★★
 
 原题链接：[165. 比较版本号](https://leetcode.cn/problems/compare-version-numbers/)
 
@@ -5001,6 +5139,8 @@ class Solution {
 
 ## 64. 最小路径和
 
+掌握程度：★★★
+
 原题链接：[64. 最小路径和](https://leetcode.cn/problems/minimum-path-sum/)
 
 > 给定一个包含非负整数的 `*m* x *n*` 网格 `grid` ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
@@ -5052,6 +5192,8 @@ class Solution {
 ```
 
 ## 470. 用 Rand7() 实现 Rand10()
+
+掌握程度：★★☆
 
 原题链接：[470. 用 Rand7() 实现 Rand10()](https://leetcode.cn/problems/implement-rand10-using-rand7/)
 
@@ -5152,6 +5294,8 @@ class Solution extends SolBase {
 
 ## 234. 回文链表
 
+掌握程度：★★★
+
 原题链接：[234. 回文链表](https://leetcode.cn/problems/palindrome-linked-list/)
 
 > 给你一个单链表的头节点 `head` ，请你判断该链表是否为回文链表。如果是，返回 `true` ；否则，返回 `false` 。
@@ -5223,6 +5367,8 @@ class Solution {
 
 ## 39. 组合总和
 
+掌握程度：★☆☆
+
 原题链接：[39. 组合总和](https://leetcode.cn/problems/combination-sum/)
 
 > 给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。
@@ -5289,6 +5435,8 @@ class Solution {
 
 ## 169. 多数元素
 
+掌握程度：★★★
+
 原题链接：[169. 多数元素](https://leetcode.cn/problems/majority-element/)
 
 > 给定一个大小为 n 的数组 nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。
@@ -5327,6 +5475,8 @@ class Solution {
 ```
 
 ## 48. 旋转图像
+
+掌握程度：★☆☆
 
 原题链接：[48. 旋转图像](https://leetcode.cn/problems/rotate-image/)
 
@@ -5388,6 +5538,8 @@ class Solution {
 
 ## 112. 路径总和
 
+掌握程度：★★★
+
 原题链接：[112. 路径总和](https://leetcode.cn/problems/path-sum/)
 
 > 给你二叉树的根节点 root 和一个表示目标和的整数 targetSum 。判断该树中是否存在 根节点到叶子节点 的路径，这条路径上所有节点值相加等于目标和 targetSum 。如果存在，返回 true ；否则，返回 false 。
@@ -5442,6 +5594,8 @@ class Solution {
 
 ## 718. 最长重复子数组
 
+掌握程度：★☆☆
+
 原题链接：[718. 最长重复子数组](https://leetcode.cn/problems/maximum-length-of-repeated-subarray/)
 
 > 给两个整数数组 `nums1` 和 `nums2` ，返回 *两个数组中 **公共的** 、长度最长的子数组的长度* 。
@@ -5479,6 +5633,8 @@ class Solution {
 ```
 
 ## 226. 翻转二叉树
+
+掌握程度：★★★
 
 原题链接：[226. 翻转二叉树](https://leetcode.cn/problems/invert-binary-tree/)
 
@@ -5527,6 +5683,8 @@ class Solution {
 ```
 
 ## 34. 在排序数组中查找元素的第一个和最后一个位置
+
+掌握程度：★★★
 
 原题链接：[34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
@@ -5597,6 +5755,8 @@ class Solution {
 ```
 
 ## 221. 最大正方形
+
+掌握程度：★☆☆
 
 原题链接：[221. 最大正方形](https://leetcode.cn/problems/maximal-square/)
 
@@ -5693,6 +5853,8 @@ class Solution {
 
 ## 162. 寻找峰值
 
+掌握程度：★★☆
+
 原题链接：[162. 寻找峰值](https://leetcode.cn/problems/find-peak-element/)
 
 > 峰值元素是指其值严格大于左右相邻值的元素。
@@ -5741,6 +5903,8 @@ class Solution {
 ```
 
 ## 14. 最长公共前缀
+
+掌握程度：★★★
 
 原题链接：[14. 最长公共前缀](https://leetcode.cn/problems/longest-common-prefix/)
 
@@ -5810,6 +5974,1295 @@ class Solution {
 
         // 将结果转为字符串返回
         return builder.toString();
+    }
+}
+```
+
+## 240. 搜索二维矩阵 II
+
+掌握程度：★★☆
+
+原题链接：[240. 搜索二维矩阵 II](https://leetcode.cn/problems/search-a-2d-matrix-ii/)
+
+> 编写一个高效的算法来搜索 m x n 矩阵 matrix 中的一个目标值 target 。该矩阵具有以下特性：
+>
+> - 每行的元素从左到右升序排列。
+> - 每列的元素从上到下升序排列。
+>
+> 提示：
+>
+> - m == matrix.length
+> - n == matrix[i].length
+> - 1 <= n, m <= 300
+> - -109 <= matrix[i][j] <= 109
+> - 每行的所有元素从左到右升序排列
+> - 每列的所有元素从上到下升序排列
+> - -109 <= target <= 109
+
+### 1.二分查找
+
+``` java
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int m = matrix.length, n = matrix[0].length;
+
+        // 逐层做二分查找
+        for (int i = 0; i < m; i++) {
+            // 如果target小于这一层的第一个元素
+            if (target < matrix[i][0]) {
+                // 那么当前层和后面层的元素肯定都大于target
+                // 肯定找不到和target相等的元素了，这里直接返回false
+                return false;
+            }
+
+            // 如果target大于当前层的最后一个元素
+            if (target > matrix[i][n - 1]) {
+                // 那么当前层肯定找不到和target相等的元素了
+                // 直接continue跳到下一层继续搜索
+                continue ;
+            }
+
+            // 然后在当前层进行二分查找
+            int left = 0, right = n - 1;
+            // 将区间[left, right]分为[left, mid]、[mid + 1, right]两部分
+            while (left < right) {
+                int mid = (left + right) >>> 1;
+                if (matrix[i][mid] < target) {
+                    // target可能在区间[mid + 1, right]
+                    // 缩小left
+                    left = mid + 1;
+                } else {
+                    // target可能在区间[left, mid]
+                    // 缩小right
+                    right = mid;
+                }
+            }
+
+            // 当target == matrix[i][left]时
+            if (target == matrix[i][left]) {
+                // 搜索到target，返回true
+                return true;
+            }
+        }
+
+        // 否则没搜索到，返回false
+        return false;
+    }
+}
+```
+
+## 83. 删除排序链表中的重复元素
+
+掌握程度：★★★
+
+原题链接：[83. 删除排序链表中的重复元素](https://leetcode.cn/problems/remove-duplicates-from-sorted-list/)
+
+> 给定一个已排序的链表的头 `head` ， *删除所有重复的元素，使每个元素只出现一次* 。返回 *已排序的链表* 。
+>
+> **提示：**
+>
+> - 链表中节点数目在范围 `[0, 300]` 内
+> - `-100 <= Node.val <= 100`
+> - 题目数据保证链表已经按升序 **排列**
+
+### 1.迭代法
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        // 如果是空链表或者只有一个节点
+        if (head == null || head.next == null) {
+            // 直接返回head
+            return head;
+        }
+
+        ListNode node = head;
+        // 遍历链表直到倒数第二个节点
+        while (node != null && node.next != null) {
+            // 如果当前节点值与next节点值相等
+            if (node.val == node.next.val) {
+                // 直接让当前节点next指向next节点的next节点
+                // 即从链表中删除了与当前节点值相等的next节点
+                node.next = node.next.next;
+            } else {
+                // 否则直接跳到下一个节点
+                node = node.next;
+            }
+        }
+
+        return head;
+    }
+}
+```
+
+## 62. 不同路径
+
+掌握程度：★★☆
+
+原题链接：[62. 不同路径](https://leetcode.cn/problems/unique-paths/)
+
+> 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。
+>
+> 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。
+>
+> 问总共有多少条不同的路径？
+>
+> **提示：**
+>
+> - `1 <= m, n <= 100`
+> - 题目数据保证答案小于等于 `2 * 109`
+
+### 1.递归
+
+力扣上会超时
+
+``` java
+class Solution {
+
+    int path = 0;
+    public int uniquePaths(int m, int n) {
+        boolean[][] visited = new boolean[m][n];
+        
+        uniquePaths(visited, m, n, 0, 0);
+
+        return path;
+    }
+
+    private void uniquePaths(boolean[][] visited, int m, int n, int i, int j) {
+        if (i < 0 || i >= m || j < 0 || j >= n || visited[i][j]) {
+            return ;
+        }
+
+        if (i == m - 1 && j == n - 1) {
+            path++;
+
+            return ;
+        }
+
+        visited[i][j] = true;
+
+        uniquePaths(visited, m, n, i + 1, j);
+        uniquePaths(visited, m, n, i, j + 1);
+
+        visited[i][j] = false;
+    }
+}
+```
+
+### 2.动态规划
+
+``` java
+class Solution {
+    public int uniquePaths(int m, int n) {
+        // 定义二维数组dp用来保存起始点到网格任意点的不同路径
+        int[][] dp = new int[m][n];
+
+        // 初始化：起始点到网格第一行所有点的路径只有一条
+        for (int j = 0; j < n; j++) {
+            dp[0][j] = 1;
+        }
+
+        // 初始化：起始点到网格第一列所有点的路径只有一条
+        for (int i = 0; i < m; i++) {
+            dp[i][0] = 1;
+        }
+
+        // 动态转移方程：dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+
+        // dp[m - 1][n - 1]就是起始点到网格右下角的路径
+        return dp[m - 1][n - 1];
+    }
+}
+```
+
+## 128. 最长连续序列
+
+掌握程度：★☆☆
+
+原题链接：[128. 最长连续序列](https://leetcode.cn/problems/longest-consecutive-sequence/)
+
+> 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
+>
+> 请你设计并实现时间复杂度为 O(n) 的算法解决此问题。
+>
+> **提示：**
+>
+> - `0 <= nums.length <= 105`
+> - `-109 <= nums[i] <= 109`
+
+### 1.哈希
+
+``` java
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        int max = 0, length;
+        if ((length = nums.length) == 0) {
+            return max;
+        }
+
+        // 用HasSet保存数组nums出现的元素
+        Set<Integer> memory = new HashSet<>(length);
+        for (int i = 0; i < length; i++) {
+            memory.add(nums[i]);
+        }
+
+        // 遍历数组，统计连续序列
+        for (int i = 0; i < length; i++) {
+            int num = nums[i];
+            // 如果num - 1不在memory中，说明num是序列的第一位
+            if (!memory.contains(num - 1)) {
+                int sum = 1;
+                // 对num逐次递增1，看看是否在memory中
+                while (memory.contains(++num)) {
+                    // 如果在sum就加1
+                    sum++;
+                }
+
+                // 最后更新结果max
+                max = Math.max(max, sum);
+            }
+        }
+
+        return max;
+    }
+}
+```
+
+### 2.排序
+
+``` java
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        int length;
+        if ((length = nums.length) == 0) {
+            return 0;
+        }
+
+        // 先对数组排序
+        Arrays.sort(nums);
+        int max = 1, sum = 1;
+        // 然后遍历有序数组
+        for (int i = 0; i < length - 1; i++) {
+            // 如果nums[i] == nums[i + 1] - 1
+            if (nums[i] == nums[i + 1] - 1) {
+                // 表示连续，sum加1
+                sum++;
+            } else if (nums[i] != nums[i + 1]) {
+                // 否则重置sum
+                // 这里nums[i] != nums[i + 1]时才重置sum
+                // 是为了跳过nums[i] == nums[i + 1]的情况
+                sum = 1;
+            }
+
+            // 然后更新结果max
+            max = Math.max(max, sum);
+        }
+
+        return max;
+    }
+}
+```
+
+## 394. 字符串解码
+
+掌握程度：★★☆
+
+原题链接：[394. 字符串解码](https://leetcode.cn/problems/decode-string/)
+
+> 给定一个经过编码的字符串，返回它解码后的字符串。
+>
+> 编码规则为: k[encoded_string]，表示其中方括号内部的 encoded_string 正好重复 k 次。注意 k 保证为正整数。
+>
+> 你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。
+>
+> 此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 k ，例如不会出现像 3a 或 2[4] 的输入。
+>
+> 提示：
+>
+> - 1 <= s.length <= 30
+> - s 由小写英文字母、数字和方括号 '[]' 组成
+> - s 保证是一个 有效 的输入。
+> - s 中所有整数的取值范围为 [1, 300] 
+
+### 1.递归
+
+``` java
+class Solution {
+
+    // 定义一个全局的pos用来控制字符遍历的位置
+    int pos = 0;
+    public String decodeString(String s) {
+        int length = s.length();
+
+        // builder用于保存结果
+        StringBuilder builder = new StringBuilder();
+        // num表示当前要重复的次数
+        int num = 0;
+        while (pos < length) {
+            char c = s.charAt(pos++);
+            if (c == '[') {
+                // 遇到字符[表示后面的字符需要重复
+                // 通过递归的方式获取需要重复的字符串
+                String str = decodeString(s);
+
+                // 根据重复次数将字符串append到builder中
+                while (num-- > 0) {
+                    builder.append(str);
+                }
+
+                // 然后重置num为0
+                num = 0;
+
+                continue ;
+            }
+
+            if (c == ']') {
+                // 遇到字符]表示重复的字符串结束
+                // 直接跳出循环
+                break ;
+            }
+
+            if (c >= '0' && c <= '9') {
+                // 表示c为数字，即需要重复的次数
+                // num * 10是因为重复次数可能是十位数百位数
+                num = (c - '0') + num * 10;
+            } else {
+                // 到了这里c就是字母，直接append到builder就好了
+                builder.append(c);
+            }
+        }
+
+        // 返回字符串
+        return builder.toString();
+    }
+}
+```
+
+## 24. 两两交换链表中的节点
+
+掌握程度：★★★
+
+原题链接：[24. 两两交换链表中的节点](https://leetcode.cn/problems/swap-nodes-in-pairs/)
+
+> 给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。
+>
+> **提示：**
+>
+> - 链表中节点的数目在范围 `[0, 100]` 内
+> - `0 <= Node.val <= 100`
+
+### 1.迭代法
+
+``` java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        // 如果是空链表或者链表只有一个节点
+        if (head == null || head.next == null) {
+            // 直接返回head
+            return head;
+        }
+
+        // 创建一个新的头节点，并让head作为newHead的next节点
+        ListNode newHead = new ListNode(0, head);
+        // pre就作为要交换的两个节点的前继节点
+        ListNode pre = newHead;
+        // 从新的头节点开始遍历链表
+        while (pre.next != null && pre.next.next != null) {
+            // first和second是要交换的两个节点
+            ListNode first = pre.next;
+            ListNode second = first.next;
+
+            // 第一个节点的next指向第二个节点的next
+            first.next = second.next;
+            // 第二个节点的next指向第一个节点
+            second.next = first;
+            // 前继节点指向second节点，就完成了交换
+            pre.next = second;
+
+            // 再让前继节点指向first节点
+            // 切换为下一次要交换节点的前继节点
+            pre = first;
+        }
+
+        // newHead的next节点就是交换后的新链表
+        return newHead.next;
+    }
+}
+```
+
+## 695. 岛屿的最大面积
+
+掌握程度：★★★
+
+原题链接：[695. 岛屿的最大面积](https://leetcode.cn/problems/max-area-of-island/)
+
+> 给你一个大小为 m x n 的二进制矩阵 grid 。
+>
+> 岛屿 是由一些相邻的 1 (代表土地) 构成的组合，这里的「相邻」要求两个 1 必须在 水平或者竖直的四个方向上 相邻。你可以假设 grid 的四个边缘都被 0（代表水）包围着。
+>
+> 岛屿的面积是岛上值为 1 的单元格的数目。
+>
+> 计算并返回 grid 中最大的岛屿面积。如果没有岛屿，则返回面积为 0 。
+>
+> **提示：**
+>
+> - `m == grid.length`
+> - `n == grid[i].length`
+> - `1 <= m, n <= 50`
+> - `grid[i][j]` 为 `0` 或 `1`
+
+### 1.深度优先搜索
+
+``` java
+class Solution {
+    public int maxAreaOfIsland(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+
+        int max = 0;
+        // 挨个遍历矩阵
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                // 从i,j位置搜索岛屿并更新结果
+                max = Math.max(max, dfs(grid, m, n, i, j));
+            }
+        }
+
+        return max;
+    }
+
+    /**
+     * 深度优先搜索
+     */
+    private int dfs(int[][] grid, int m, int n, int i, int j) {
+        if (i < 0 || i >= m || j < 0 || j >= n || grid[i][j] == 0) {
+            return 0;
+        }
+
+        // 记录当前的1，所以sum初始值为1
+        int sum = 1;
+        // 将当前位置置为0，表示已经访问过了
+        grid[i][j] = 0;
+
+        // 按上右下左的顺序搜索，并把数量加到sum中
+        sum += dfs(grid, m, n, i - 1, j);
+        sum += dfs(grid, m, n, i, j + 1);
+        sum += dfs(grid, m, n, i + 1, j);
+        sum += dfs(grid, m, n, i, j - 1);
+
+        return sum;
+    }
+}
+```
+
+## 122. 买卖股票的最佳时机 II
+
+原题链接：[122. 买卖股票的最佳时机 II](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/)
+
+> 给你一个整数数组 prices ，其中 prices[i] 表示某支股票第 i 天的价格。
+>
+> 在每一天，你可以决定是否购买和/或出售股票。你在任何时候 最多 只能持有 一股 股票。你也可以先购买，然后在 同一天 出售。
+>
+> 返回 你能获得的 最大 利润 。
+>
+> **提示：**
+>
+> - `1 <= prices.length <= 3 * 104`
+> - `0 <= prices[i] <= 104`
+
+### 1.贪心算法
+
+``` java
+class Solution {
+    public int maxProfit(int[] prices) {
+        int sum = 0, length = prices.length;
+
+        // 遍历数组prices
+        for (int i = 1; i < length; i++) {
+            // 因为股票价格是预知的
+            // 所以只要当天的股票价格大于前一天的
+            if (prices[i - 1] < prices[i]) {
+                // 就进行交易
+                sum += prices[i] - prices[i - 1];
+            }
+        }
+
+        return sum;
+    }
+}
+```
+
+## 912. 排序数组
+
+掌握程度：★☆☆
+
+原题链接：[912. 排序数组](https://leetcode.cn/problems/sort-an-array/)
+
+> 给你一个整数数组 `nums`，请你将该数组升序排列。
+>
+>  **提示：**
+>
+> - `1 <= nums.length <= 5 * 104`
+> - `-5 * 104 <= nums[i] <= 5 * 104`
+
+### 1.双路快排
+
+``` java
+class Solution {
+    public int[] sortArray(int[] nums) {
+        int length = nums.length;
+
+        helper(nums, 0, length - 1);
+
+        return nums;
+    }
+
+    /**
+     * 双路快排
+     */
+    private void helper(int[] nums, int l, int r) {
+        if (l >= r) {
+            return ;
+        }
+
+        int e = nums[l];
+        int lt = l, gt = r + 1, i = l + 1;
+        while (i < gt) {
+            if (nums[i] < e) {
+                swap(nums, ++lt, i++);
+            } else if (nums[i] > e) {
+                swap(nums, --gt, i);
+            } else {
+                i++;
+            }
+        }
+
+        swap(nums, l, lt);
+
+        helper(nums, l, lt - 1);
+        helper(nums, gt, r);
+    }
+
+    /**
+     * 交换数组中两个位置的值
+     */
+    private void swap(int[] nums, int i, int j) {
+        if (i == j) {
+            return ;
+        }
+
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+```
+
+### 2.堆排序
+
+``` java
+class Solution {
+    public int[] sortArray(int[] nums) {
+        int length = nums.length;
+        // heapify：构建一个最大堆
+        for (int i = (length - 1) / 2; i >= 0; i--) {
+            shiftDown(nums, length, i);
+        }
+
+        // 原地堆排序
+        // 将最大堆堆顶元素nums[0]与堆中最后一个叶子节点元素nums[i]交换位置
+        // 然后通过shiftDown维护区间[0, i)范围内最大堆的性质
+        // 直到只剩下根节点
+        for (int i = length - 1; i > 0; i--) {
+            // 交换堆顶与最后一个叶子的位置
+            swap(nums, 0, i);
+            // 维护区间[0, i)范围内最大堆的性质
+            shiftDown(nums, i, 0);
+        }
+
+        return nums;
+    }
+
+    /**
+     * 将以nums[k]为根节点
+     * 且在区间[0, length)范围内的子树构建成最大堆
+     */
+    private void shiftDown(int[] nums, int length, int k) {
+        // nums[2 * k + 1]表示根节点num[k]的左节点
+        // nums[2 * k + 2]表示根节点num[k]的右节点
+        while (2 * k + 1 < length) {
+            int j = 2 * k + 1;
+            // 取根节点nums[i]左右节点中较大的节点
+            if (j + 1 < length && nums[j] < nums[j + 1]) {
+                j = j + 1;
+            }
+
+            // 如果根节点比左右节点中较大的节点还大
+            // 说明当前以nums[k]为根节点的树已经是最大堆
+            if (nums[k] > nums[j]) {
+                // 直接break退出循环
+                break ;
+            }
+
+            // 交换nums[k]与nums[j]
+            // 以维护最大堆的性质
+            swap(nums, k, j);
+
+            // 然后切换根节点为nums[j]
+            // 继续维护nums[k]的子树为最大堆
+            k = j;
+        }
+    }
+
+    /**
+     * 交换数组中i和j两个元素的位置
+     */
+    private void swap(int[] nums, int i, int j) {
+        if (i == j) {
+            return ;
+        }
+
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+```
+
+## 152. 乘积最大子数组
+
+掌握程度：☆☆☆
+
+原题链接：[152. 乘积最大子数组](https://leetcode.cn/problems/maximum-product-subarray/)
+
+> 给你一个整数数组 nums ，请你找出数组中乘积最大的非空连续子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积。
+>
+> 测试用例的答案是一个 32-位 整数。
+>
+> 子数组 是数组的连续子序列。
+>
+> 提示:
+>
+> - 1 <= nums.length <= 2 * 104
+> - -10 <= nums[i] <= 10
+> - nums 的任何前缀或后缀的乘积都 保证 是一个 32-位 整数
+
+### 1.动态规划
+
+``` java
+class Solution {
+    public int maxProduct(int[] nums) {
+        int length = nums.length;
+
+        // 用min和max分别表示乘积过程中产生的最小最大值
+        int min = 1, max = 1, res = Integer.MIN_VALUE;
+        // 遍历数组nums，挨个做乘积
+        for (int i = 0; i < length; i++) {
+            if (nums[i] < 0) {
+                // 当前元素小于0时，交换min和max的值
+                // 这样做的目的是如果出现了偶数个负数的话
+                // 根据负负得正，min和负数相乘将会得到更大的正数
+                // 所以这里交换min和max
+                int t = min;
+                min = max;
+                max = t;
+            }
+
+            // 更新最大值max：取nums[i]和max * nums[i]两者的最大值
+            max = Math.max(nums[i], max * nums[i]);
+            // 更新最小值min：取nums[i]和min * nums[i]两者的最小值
+            min = Math.min(nums[i], min * nums[i]);
+
+            // 再更新结果res
+            res = Math.max(res, max);
+        }
+
+        // 返回结果
+        return res;
+    }
+}
+```
+
+## 153. 寻找旋转排序数组中的最小值
+
+掌握程度：★☆☆
+
+原题链接：[153. 寻找旋转排序数组中的最小值](https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array/)
+
+> 已知一个长度为 n 的数组，预先按照升序排列，经由 1 到 n 次 旋转 后，得到输入数组。例如，原数组 nums = [0,1,2,4,5,6,7] 在变化后可能得到：
+> 若旋转 4 次，则可以得到 [4,5,6,7,0,1,2]
+> 若旋转 7 次，则可以得到 [0,1,2,4,5,6,7]
+> 注意，数组 [a[0], a[1], a[2], ..., a[n-1]] 旋转一次 的结果为数组 [a[n-1], a[0], a[1], a[2], ..., a[n-2]] 。
+>
+> 给你一个元素值 互不相同 的数组 nums ，它原来是一个升序排列的数组，并按上述情形进行了多次旋转。请你找出并返回数组中的 最小元素 。
+>
+> 你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。
+>
+> 提示：
+>
+> - n == nums.length
+> - 1 <= n <= 5000
+> - -5000 <= nums[i] <= 5000
+> - nums 中的所有整数 互不相同
+> - nums 原来是一个升序排序的数组，并进行了 1 至 n 次旋转
+
+### 1.二分查找
+
+``` java
+class Solution {
+    public int findMin(int[] nums) {
+        int length = nums.length;
+
+        // 二分查找
+        int left = 0, right = length - 1;
+        while (left < right) {
+            int mid = (left + right) >>> 1;
+            if (nums[mid] > nums[right]) {
+                // 只要nums[mid] > nums[right]就说明最小值在mid的右边
+                // 所以此时要缩小左区间
+                left = mid + 1;
+            } else {
+                // 否则缩小右区间
+                right = mid;
+            }
+        }
+
+        // nums[left]就是最小值
+        return nums[left];
+    }
+}
+```
+
+## 227. 基本计算器 II
+
+掌握程度：★☆☆
+
+原题链接：[227. 基本计算器 II](https://leetcode.cn/problems/basic-calculator-ii/)
+
+> 给你一个字符串表达式 s ，请你实现一个基本计算器来计算并返回它的值。
+>
+> 整数除法仅保留整数部分。
+>
+> 你可以假设给定的表达式总是有效的。所有中间结果将在 [-231, 231 - 1] 的范围内。
+>
+> 注意：不允许使用任何将字符串作为数学表达式计算的内置函数，比如 eval() 。
+>
+> 提示：
+>
+> - 1 <= s.length <= 3 * 105
+> - s 由整数和算符 ('+', '-', '*', '/') 组成，中间由一些空格隔开
+> - s 表示一个 有效表达式
+> - 表达式中的所有整数都是非负整数，且在范围 [0, 231 - 1] 内
+> - 题目数据保证答案是一个 32-bit 整数
+
+### 1.迭代法
+
+``` java
+class Solution {
+
+    public int calculate(String s) {
+        int length = s.length();
+
+        // 表示遇到数字时前一个运算符号
+        char sign = '+';
+        // 用stack来保存被转换为加法运算的数字
+        LinkedList<Integer> stack = new LinkedList<>();
+        // 用num表示当前遍历过程中得到的整数
+        int num = 0;
+
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+
+            if ('0' <= c && c <= '9') {
+                // 将整数转换到num中
+                num = (c - '0') + num * 10;
+            }
+
+            if ((c == ' ' || '0' <= c && c <= '9') && i < length - 1) {
+                // 只要不是最后一个空格或者数字，那就continue
+                continue ;
+            }
+
+            // 到了这里说明c是运算符
+            // 这个时候需要判断当前正在num前一个运算符是什么
+            // 然后决定放进栈stack的数字是否需要进行运算
+            // 这个步骤的目的就是将所有复杂的运算都转为加法运算
+            // 加法直接入栈；减法转为负数；乘除法先计算出结果再压入栈中
+            if (sign == '+') {
+                // 前一个运算符是+号
+                // 直接将num压入栈中
+                stack.push(num);
+            } else if (sign == '-') {
+                // 前一个运算符是-号
+                // num取反再压入栈中
+                stack.push(-num);
+            } else if (sign == '*') {
+                // 前一个运算符是*号
+                // 根据运算法则，乘法优先于+-法的运算
+                // 所以这里先将栈顶元素弹出与num相乘
+                // 再将乘积压入栈中
+                stack.push(stack.pop() * num);
+            } else {
+                // 到了这里说明前一个运算符是/号
+                // 根据运算法则，除法优先于+-法的运算
+                // 所以这里先将栈顶元素弹出与num相除
+                // 再将商压入栈中
+                stack.push(stack.pop() / num);
+            }
+
+            // 初始化num，以备下一次转换数字
+            num = 0;
+            // 然后将c作为下一个整数的前置运算符
+            sign = c;
+        }
+
+        // 清空栈中的元素，然后累加结果到sum中
+        int sum = 0;
+        while (!stack.isEmpty()) {
+            sum += stack.pop();
+        }
+
+        return sum;
+    }
+}
+```
+
+## 179. 最大数
+
+掌握程度：★☆☆
+
+原题链接：[179. 最大数](https://leetcode.cn/problems/largest-number/)
+
+> 给定一组非负整数 `nums`，重新排列每个数的顺序（每个数不可拆分）使之组成一个最大的整数。
+>
+> **注意：**输出结果可能非常大，所以你需要返回一个字符串而不是整数。
+>
+> **提示：**
+>
+> - `1 <= nums.length <= 100`
+> - `0 <= nums[i] <= 109`
+
+### 1.排序
+
+``` java
+class Solution {
+    public String largestNumber(int[] nums) {
+        int length = nums.length;
+
+        // zero用于统计nums数组中0出现的次数
+        int zero = 0;
+        // 将nums数组中每一个整数转为字符串并放入list集合中
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < length; i++) {
+            if (nums[i] == 0) {
+                // 统计0出现的次数
+                zero++;
+            }
+
+            // 将整数转为字符串并放入list集合中
+            list.add(Integer.toString(nums[i]));
+        }
+
+        // 如果数组中0出现的次数等于数组长度
+        if (zero == length) {
+            // 那么能组成的最大整数就是0
+            return "0";
+        }
+
+        // 对集合里面的字符串排序：字符串的字符从左往右比较
+        // 左边字符较大的字符串排在前面
+        Collections.sort(list, (a, b) -> (b + a).compareTo(a + b));
+
+        // 然后将排序后的字符按list集合的顺序拼接起来就组成了最大的整数
+        StringBuilder builder = new StringBuilder();
+        for (String str : list) {
+            builder.append(str);
+        }
+
+        return builder.toString();
+    }
+}
+```
+
+## 662. 二叉树最大宽度
+
+掌握程度：★☆☆
+
+原题链接：[662. 二叉树最大宽度](https://leetcode.cn/problems/maximum-width-of-binary-tree/)
+
+> 给定一个二叉树，编写一个函数来获取这个树的最大宽度。树的宽度是所有层中的最大宽度。这个二叉树与满二叉树（full binary tree）结构相同，但一些节点为空。
+>
+> 每一层的宽度被定义为两个端点（该层最左和最右的非空节点，两端点间的null节点也计入长度）之间的长度。
+>
+> **注意:** 答案在32位有符号整数的表示范围内。
+
+### 1.深度搜索
+
+``` java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    // res用来记录结果
+    int res = 0;
+    // 给二叉树的每一层节点从左到右编号（从0开始）
+    // 使用哈希结构memory用来记录每一层最左边节点的编号
+    Map<Integer, Integer> memory;
+    public int widthOfBinaryTree(TreeNode root) {
+        res = 0;
+        memory = new HashMap<>();
+
+        dfs(root, 0, 0);
+
+        return res;
+    }
+
+    /**
+     * 深度搜索：先序遍历
+     * depth：深度即二叉树节点的层数
+     * position：当前层节点的编号
+     */
+    private void dfs(TreeNode root, int depth, int position) {
+        if (root == null) {
+            return ;
+        }
+
+        // 因为深度搜索的时候，每一层总是最左边的节点先被访问
+        // 所以可以根据depth是否存在于memory中
+        // 判断当前节点是不是当前层depth最左边的节点
+        if (!memory.containsKey(depth)) {
+            // 不在说明是最左边的节点，保存层数depth和编号position的关系
+            memory.put(depth, position);
+        }
+
+        // position - memory.get(depth) + 1就是当前节点到最左边节点的距离
+        // 用这个值来更新结果res
+        res = Math.max(res, position - memory.get(depth) + 1);
+
+        // 再继续搜索root的左右子节点
+        // 深度depth + 1
+        // 左子节点的位置position为当前position * 2
+        dfs(root.left, depth + 1, position * 2);
+        // 右子节点的位置position为当前position * 2 + 1
+        dfs(root.right, depth + 1, position * 2 + 1);
+    }
+}
+```
+
+## 468. 验证IP地址
+
+掌握程度：★☆☆
+
+原题链接：[468. 验证IP地址](https://leetcode.cn/problems/validate-ip-address/)
+
+> 给定一个字符串 queryIP。如果是有效的 IPv4 地址，返回 "IPv4" ；如果是有效的 IPv6 地址，返回 "IPv6" ；如果不是上述类型的 IP 地址，返回 "Neither" 。
+>
+> 有效的IPv4地址 是 “x1.x2.x3.x4” 形式的IP地址。 其中 0 <= xi <= 255 且 xi 不能包含 前导零。例如: “192.168.1.1” 、 “192.168.1.0” 为有效IPv4地址， “192.168.01.1” 为无效IPv4地址; “192.168.1.00” 、 “192.168@1.1” 为无效IPv4地址。
+>
+> 一个有效的IPv6地址 是一个格式为“x1:x2:x3:x4:x5:x6:x7:x8” 的IP地址，其中:
+>
+> - 1 <= xi.length <= 4
+>
+> - xi 是一个 十六进制字符串 ，可以包含数字、小写英文字母( 'a' 到 'f' )和大写英文字母( 'A' 到 'F' )。
+>
+> - 在 xi 中允许前导零。
+>
+> 例如 "2001:0db8:85a3:0000:0000:8a2e:0370:7334" 和 "2001:db8:85a3:0:0:8A2E:0370:7334" 是有效的 IPv6 地址，而 "2001:0db8:85a3::8A2E:037j:7334" 和 "02001:0db8:85a3:0000:0000:8a2e:0370:7334" 是无效的 IPv6 地址。
+>
+> **提示：**
+>
+> - `queryIP` 仅由英文字母，数字，字符 `'.'` 和 `':'` 组成。
+
+### 1.迭代法
+
+``` java
+class Solution {
+    
+    // 组成十六进制的字符
+    String hexStr = "0123456789abcdefABCDEF";
+    public String validIPAddress(String queryIP) {
+        int length = queryIP.length();
+        
+        if (queryIP.indexOf(".") > 0) {
+            // 可能为IPv4
+            // 以.切割字符串queryIP，传-1会匹配尽可能多的次数
+            // 并且不会丢弃最后一个空格
+            String[] strs = queryIP.split("\\.", -1);
+            if (strs.length != 4) {
+                // 长度不等于4不符合IPv4
+                return "Neither";
+            }
+
+            for (String str : strs) {
+                int len;
+                if ((len = str.length()) == 0 || len > 3 || len > 1 && str.charAt(0) == '0') {
+                    // 某一位长度为0或者大于3或者有前导0都不符合IPv4
+                    return "Neither";
+                }
+
+                int num = 0;
+                try {
+                    num = Integer.valueOf(str);
+                } catch (Exception e) {
+                    num = -1;
+                }
+
+                if (num < 0 || num > 255) {
+                    // 数值小于0或者大于255都不符合IPv4
+                    return "Neither";
+                }
+            }
+
+            // 到了这里表示当前符合IPv4
+            return "IPv4";
+        } else if (queryIP.indexOf(":") > 0) {
+            // 可能为IPv6
+            // 以:切割字符串queryIP，传-1会匹配尽可能多的次数
+            // 并且不会丢弃最后一个空格
+            String[] strs = queryIP.split(":", -1);
+            if (strs.length != 8) {
+                // 长度不等于8不符合IPv6
+                return "Neither";
+            }
+
+            for (String str : strs) {
+                int len = str.length();
+                if (len < 1 || len > 4) {
+                    // 某一位长度小于0或者大于4都不符合IPv6
+                    return "Neither";
+                }
+
+                for (int i = 0; i < str.length(); i++) {
+                    char c = str.charAt(i);
+                    if (hexStr.indexOf(c) == -1) {
+                        // 某一位只要有一个字符不是十六进制字符那就不符合IPv6
+                        return "Neither";
+                    }
+                }
+            }
+
+            // 到了这里表示当前符合IPv6
+            return "IPv6";
+        }
+
+        // 到了这里表示queryIP既不属于IPv4也不属于IPv6
+        return "Neither";
+    }
+}
+```
+
+## 138. 复制带随机指针的链表
+
+掌握程度：★★☆
+
+原题链接：[138. 复制带随机指针的链表](https://leetcode.cn/problems/copy-list-with-random-pointer/)
+
+> 给你一个长度为 n 的链表，每个节点包含一个额外增加的随机指针 random ，该指针可以指向链表中的任何节点或空节点。
+>
+> 构造这个链表的 深拷贝。 深拷贝应该正好由 n 个 全新 节点组成，其中每个新节点的值都设为其对应的原节点的值。新节点的 next 指针和 random 指针也都应指向复制链表中的新节点，并使原链表和复制链表中的这些指针能够表示相同的链表状态。复制链表中的指针都不应指向原链表中的节点 。
+>
+> 例如，如果原链表中有 X 和 Y 两个节点，其中 X.random --> Y 。那么在复制链表中对应的两个节点 x 和 y ，同样有 x.random --> y 。
+>
+> 返回复制链表的头节点。
+>
+> 用一个由 n 个节点组成的链表来表示输入/输出中的链表。每个节点用一个 [val, random_index] 表示：
+>
+> val：一个表示 Node.val 的整数。
+> random_index：随机指针指向的节点索引（范围从 0 到 n-1）；如果不指向任何节点，则为  null 。
+> 你的代码 只 接受原链表的头节点 head 作为传入参数。
+>
+> **提示：**
+>
+> - `0 <= n <= 1000`
+> - `-104 <= Node.val <= 104`
+> - `Node.random` 为 `null` 或指向链表中的节点。
+
+### 1.迭代法
+
+``` java
+/*
+// Definition for a Node.
+class Node {
+    int val;
+    Node next;
+    Node random;
+
+    public Node(int val) {
+        this.val = val;
+        this.next = null;
+        this.random = null;
+    }
+}
+*/
+
+class Solution {
+    public Node copyRandomList(Node head) {
+        if (head == null) {
+            return null;
+        }
+
+        // 先将每个节点复制一份
+        // 复制的节点就接到原节点的后面
+        Node node = head;
+        while (node != null) {
+            Node next = node.next;
+
+            Node temp = new Node(node.val);
+            node.next = temp;
+            temp.next = next;
+
+            node = next;;
+        }
+
+        // 填充随机指针
+        node = head;
+        while (node != null) {
+            // 含有随机指针的节点
+            if (node.random != null) {
+                // 复制出来的新节点的随机指针指向原节点随机指针指向节点的next
+                node.next.random = node.random.next;
+            }
+
+            node = node.next.next;
+        }
+
+        // 将原节点和新节点拆分为两个链表
+        node = head;
+        // 表示新链表的头节点
+        Node newHead = new Node(0);
+        Node cur = newHead;
+        while (node != null) {
+            Node next = node.next.next;
+            // cur指向新节点
+            cur.next = node.next;
+            cur = cur.next;
+            // node指向原节点
+            node.next = next;
+            node = node.next;
+        }
+        
+        // newHead的next就是新链表的头节点
+        return newHead.next;
+    }
+}
+```
+
+## 136. 只出现一次的数字
+
+掌握程度：★★☆
+
+原题链接：[136. 只出现一次的数字](https://leetcode.cn/problems/single-number/)
+
+> 给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+>
+> 说明：
+>
+> 你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？
+>
+
+### 1.异或运算
+
+``` java
+class Solution {
+    public int singleNumber(int[] nums) {
+        int length = nums.length;
+
+        // 根据异或运算法则：相同整数异或的结果为0
+        int res = nums[0];
+        for (int i = 1; i < length; i++) {
+            // 逐个元素进行异或运算
+            // 最终结果就是那个支出现一次的元素
+            res ^= nums[i];
+        }
+
+        return res;
+    }
+}
+```
+
+## 198. 打家劫舍
+
+掌握程度：★☆☆
+
+原题链接：[198. 打家劫舍](https://leetcode.cn/problems/house-robber/)
+
+> 你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+>
+> 给定一个代表每个房屋存放金额的非负整数数组，计算你 不触动警报装置的情况下 ，一夜之内能够偷窃到的最高金额。
+>
+> **提示：**
+>
+> - `1 <= nums.length <= 100`
+> - `0 <= nums[i] <= 400`
+
+### 1.动态规划
+
+``` java
+class Solution {
+    public int rob(int[] nums) {
+        int length;
+        if ((length = nums.length) == 0) {
+            return 0;
+        }
+
+        if (length == 1) {
+            return nums[0];
+        }
+
+        // 用dp数组表示前 i 间房屋能偷窃到的最高总金额
+        int[] dp = new int[length];
+        // 只有一间房屋能偷窃到的最高总金额为num[0]
+        dp[0] = nums[0];
+        // 有两间房屋能偷窃到的最高总金额为max(nums[0], nums[1])
+        dp[1] = Math.max(nums[0], nums[1]);
+        // 超过两间房屋能偷窃到的最高金额为
+        // dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1])
+        // 偷窃第i间房时：dp[i] = dp[i - 2] + nums[i]
+        // 不偷窃第i间房时：dp[i] = dp[i - 1]
+
+        for (int i = 2; i < length; i++) {
+            dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
+        }
+
+        // dp[length - 1]就是能够偷窃到的最高金额
+        return dp[length - 1];
     }
 }
 ```
